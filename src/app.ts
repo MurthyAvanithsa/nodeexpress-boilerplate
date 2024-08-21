@@ -14,6 +14,6 @@ app.use(filterRouter)
 
 export function startServer(options: any) {
   app.listen(options.port, () => {
-    logger.log(`Server is listening on port: ${options.port}`);
+    logger.info(`Server is listening on port: ${options.port}`);
   });
 }
