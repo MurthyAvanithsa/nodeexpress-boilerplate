@@ -4,7 +4,7 @@ import "dotenv/config";
 import feedRouter from "./routes/feed.routes";
 import filterRouter from "./routes/filter.routes";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger.json";
+import swaggerDocument from "../swagger.json";
 import * as OpenApiValidator from "express-openapi-validator";
 import bodyParser from 'body-parser';
 import path from "path";
