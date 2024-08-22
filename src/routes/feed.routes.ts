@@ -9,7 +9,7 @@ import {
     PostFeedRequestBody,
     UpdateFeedRequestBody
 } from '../types/feed.types';
-import { getFeeds, createFeed, getFeedById } from '../services/feed.services';
+import { getFeeds, createFeed, getFeedById, updateFeed, deleteFeed } from '../services/feed.services';
 
 const feedRouter = Router();
 
@@ -28,13 +28,13 @@ feedRouter.get('/feed/:feedId', async (req: Request<{ feedId: Pick<Feed, 'id'> }
     res.send(responseData);
 });
 
-feedRouter.put('/feed/:feedId', async (req: Request<{ feedId: string }, UpdateFeedResponse, UpdateFeedRequestBody>, res: Response<UpdateFeedResponse>) => {
-    const responseData: UpdateFeedResponse = { data: req.body };
-    res.send(responseData);
+feedRouter.put('/feed/:feedId', async (req: Request<{ feedId: Pick<Feed, 'id'> }, UpdateFeedResponse, UpdateFeedRequestBody>, res: Response<UpdateFeedResponse>) => {
+    const responseData: UpdateFeedResponse = { data: await updateFeed(req.params.feedId, req.body) };
+    res.send(responseData);                          
 });
 
-feedRouter.delete('/feed/:feedId', async (req: Request<{ feedId: string }>, res: Response<DeleteFeedResponse>) => {
-    const responseData: DeleteFeedResponse = { message: "" };
+feedRouter.delete('/feed/:feedId', async (req: Request<{ feedId: Pick<Feed, 'id'>}, DeleteFeedResponse, {}>, res: Response<DeleteFeedResponse>) => {
+    const responseData: DeleteFeedResponse = { data: await deleteFeed(req.params.feedId) };
     res.send(responseData);
 });
 
