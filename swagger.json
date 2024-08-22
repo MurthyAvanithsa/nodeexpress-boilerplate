@@ -1,0 +1,1044 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swagger UI",
+    "version": "1.0.0",
+    "description": "API for managing filters and feeds"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "feed"
+    },
+    {
+      "name": "filter"
+    }
+  ],
+  "paths": {
+    "/filter/{id}": {
+      "put": {
+        "summary": "Update a filter",
+        "description": "Updates the details of a specific filter by ID.",
+        "tags": ["filter"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Filter 1"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "AssetFilter"
+                  },
+                  "filterParams": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  },
+                  "code": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  }
+                },
+                "required": ["name", "type", "filterParams", "code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Filter updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Filter 1"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "AssetFilter"
+                        },
+                        "filterParams": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "code": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid input data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Filter not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a filter by ID",
+        "description": "Fetches the details of a specific filter by its ID.",
+        "tags": ["filter"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved filter details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Filter 1"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "AssetFilter"
+                        },
+                        "filterParams": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "code": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid filter ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Filter not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a filter by ID",
+        "description": "Deletes a filter identified by the given ID.",
+        "tags": ["filter"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filter deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid ID supplied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Filter not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An unexpected error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filter/": {
+      "post": {
+        "summary": "Create a new filter",
+        "description": "Creates a new filter and returns the details of the created filter.",
+        "tags": ["filter"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Filter 1"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "AssetFilter"
+                  },
+                  "filterParams": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  },
+                  "code": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  }
+                },
+                "required": ["name", "type", "filterParams", "code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Filter created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Filter 1"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "AssetFilter"
+                        },
+                        "filterParams": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "code": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid input data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An unexpected error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a list of filters",
+        "description": "Fetches a list of filters. The response includes details of each filter.",
+        "tags": ["filter"],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list of filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "1"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Filter 1"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "AssetFilter"
+                          },
+                          "filterParams": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": null
+                          },
+                          "code": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid query parameters or other issues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid query parameters"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An unexpected error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feed/{id}": {
+      "get": {
+        "summary": "Retrieve a feed by ID",
+        "description": "Fetches the details of a specific feed by its ID.",
+        "tags": ["feed"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 78
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved feed details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 78
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Dojo pbr"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "feed"
+                        },
+                        "path": {
+                          "type": "string",
+                          "example": "tbn/dojo-pbr"
+                        },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "assetFilter": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "playlistFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "queryParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "playlistId"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "string"
+                              },
+                              "required": {
+                                "type": "boolean",
+                                "example": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid ID supplied"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feed not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Feed not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An unexpected error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a feed",
+        "description": "To update an existing feed identified by the ID.",
+        "tags": ["feed"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "20"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Dojo pbr"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "feed"
+                  },
+                  "path": {
+                    "type": "string",
+                    "example": "tbn/dojo-pbr"
+                  },
+                  "config": {
+                    "type": "object",
+                    "properties": {
+                      "assetFilter": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "playlistFilters": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "queryParams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "playlistId"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "required": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "path",
+                  "config",
+                  "queryParams"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated feed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 78
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Dojo pbr"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "feed"
+                        },
+                        "path": {
+                          "type": "string",
+                          "example": "tbn/dojo-pbr"
+                        },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "assetFilter": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "playlistFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "queryParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "playlistId"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "string"
+                              },
+                              "required": {
+                                "type": "boolean",
+                                "example": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "404": {
+            "description": "Feed not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a filter",
+        "description": "To delete a filter identified by the ID.",
+        "tags": ["feed"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "20"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted filter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "1"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Filter not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/feed": {
+      "get": {
+        "summary": "Retrieve all feeds",
+        "description": "Fetches all the feeds from the server.",
+        "tags": ["feed"],
+        "responses": {
+          "200": {
+            "description": "Successful response with feed data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 78
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Dojo pbr"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": "feed"
+                          },
+                          "path": {
+                            "type": "string",
+                            "example": "tbn/dojo-pbr"
+                          }
+                        },
+                        "required": ["id", "name", "description", "path"]
+                      }
+                    }
+                  },
+                  "required": ["data"]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new feed",
+        "description": "To create a new feed with the given details.",
+        "tags": ["feed"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Dojo pbr"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "feed"
+                  },
+                  "path": {
+                    "type": "string",
+                    "example": "tbn/dojo-pbr"
+                  },
+                  "queryparams": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "playlistId"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "required": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["name", "description", "path"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created feed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 78
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Dojo pbr"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "feed"
+                        },
+                        "path": {
+                          "type": "string",
+                          "example": "tbn/dojo-pbr"
+                        },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "assetFilter": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "playlistFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "queryParams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "playlistId"
+                              },
+                              "type": {
+                                "type": "string",
+                                "example": "string"
+                              },
+                              "required": {
+                                "type": "boolean",
+                                "example": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    }
+  }
+}
