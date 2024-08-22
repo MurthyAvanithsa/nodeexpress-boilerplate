@@ -31,8 +31,8 @@ export type UpdateFeedResponse = {
 };
 
 export type DeleteFeedResponse = {
-    message: string;
+   data : Pick<Feed, 'id'>;
 };
 
-export type PostFeedRequestBody = Omit<Feed, 'id'>;
+export type PostFeedRequestBody = Omit<Feed, 'id' | 'config'>;
 export type UpdateFeedRequestBody = Feed;
