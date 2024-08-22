@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ts-node-dev --respawn ./src/index.ts",
-    "build": "tsc",
+    "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "ts-watch": "^1.0.8",
+    "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   }
 }
