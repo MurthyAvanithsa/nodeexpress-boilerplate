@@ -2,7 +2,7 @@
   "name": "dsp-boilerplate",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon",
+    "start": "ts-node-dev --respawn ./src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,8 @@
     "@types/express": "^4.17.21",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "ts-watch": "^1.0.8",
     "typescript": "^5.5.4"
   }
 }
