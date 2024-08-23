@@ -5,4 +5,4 @@ node_modules
 dist
 
 # Ignore app.log file
-app
+src/logger/app.log
