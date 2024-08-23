@@ -3,3 +3,6 @@ node_modules
 
 # Ignore the dist directory
 dist
+
+# Ignore app.log file
+app
