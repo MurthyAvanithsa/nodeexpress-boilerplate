@@ -1,44 +1,33 @@
-import express, { NextFunction, Response, Request } from "express";
-import { logger } from "./logger/log";
-import "dotenv/config";
-import feedRouter from "./routes/feed.routes";
-import filterRouter from "./routes/filter.routes";
-import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger.json";
-import * as OpenApiValidator from "express-openapi-validator";
-import bodyParser from 'body-parser';
-import path from "path";
-import { P } from "pino";
+import express, { Request, Response, NextFunction } from 'express';
+import { logger } from './logger/log';
+import 'dotenv/config';
+import feedRouter from './routes/feed.routes';
+import filterRouter from './routes/filter.routes';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
+import * as OpenApiValidator from 'express-openapi-validator';
+import { errorLogger, requestLogger } from './middleware/logger.middleware';
 
 const app = express();
-app.use(bodyParser.json());
-app.use(express.json());
-app.use(function (req, res, next) {
-  logger.info(`${req.method}  ${req.path}`);
-  next();
-});
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
+const openApiSpecPath = path.join(__dirname, 'swagger.yaml');
 
+app.use(express.json());
+app.use(requestLogger);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: "./swagger.json",
+    apiSpec: openApiSpecPath,
     validateRequests: true,
-    validateResponses: true,
+    validateResponses: true
   })
 );
-
 app.use(feedRouter);
 app.use(filterRouter);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(errorLogger);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    message: err.message,
-    errors: err.errors,
-  });
-});
-
-export function startServer(options: any) {
+export function startServer(options: { port: number }) {
   app.listen(options.port, () => {
     logger.info(`Server is listening on port: ${options.port}`);
   });
