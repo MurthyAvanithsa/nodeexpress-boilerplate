@@ -27,7 +27,7 @@ filterRouter.get("/filter/:filterId", async (req: Request<{filterId: GetFilterBy
 filterRouter.post("/filter/", async (req: Request<{}, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
     const filter: CreateFilterRequest = req.body;
     const createdFilter: CreateFilterResponse = await createFilter(filter);
-    res.send(createdFilter);
+    res.status(201).send(createdFilter);
 });
 
 filterRouter.put("/filter/:filterId", async (req: Request<{filterId: GetFilterByIdRequest}, UpdateFilterResponse, UpdateFilterRequest>, res: Response)=> {
