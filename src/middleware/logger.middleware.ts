@@ -10,7 +10,7 @@ export const errorLogger = (err: any, req: Request, res: Response, next: NextFun
     } else {
         logger.error(`Unexpected error: ${err.message}`);
         res.status(500).json({
-            error: 'An unexpected error occurred',
+            error: `An unexpected error occurred: ${err.message}`,
         });
     }
 }
