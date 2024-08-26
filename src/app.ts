@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { logger } from './logger/log';
 import 'dotenv/config';
-import feedRouter from './routes/feed.routes';
-import filterRouter from './routes/filter.routes';
+import feedRouter from './routes/routes.feed';
+import filterRouter from './routes/routes.filter';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
