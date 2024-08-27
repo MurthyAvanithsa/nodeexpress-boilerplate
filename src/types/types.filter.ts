@@ -1,4 +1,4 @@
-export type filterParams = {
+export type FilterParams = {
   name: string;
   type: string;
   required: boolean;
@@ -10,7 +10,7 @@ export type Filter = {
   type: string;
   description?: string;
   code: string | null;
-  filterParams: filterParams[];
+  filterParams: FilterParams[];
 };
 
 type UpdateAndCreateFilterRequest = {
@@ -18,7 +18,7 @@ type UpdateAndCreateFilterRequest = {
   type: string;
   description?: string;
   code: string | null;
-  filterParams: filterParams[];
+  filterParams: FilterParams[];
 };
 
 type DeleteAndGetFilterRequest = {
