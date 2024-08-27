@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: Converted from types.feed.yaml with typeconv
+  version: '1'
+  x-id: types.feed.yaml
+  x-comment: >-
+    Generated from src\types\types.feed.ts by core-types-json-schema
+    (https://github.com/grantila/core-types-json-schema) on behalf of typeconv
+    (https://github.com/grantila/typeconv)
+paths: {}
+components:
+  schemas:
+    Feed:
+      properties:
+        id:
+          title: Feed.id
+          type: string
+        name:
+          title: Feed.name
+          type: string
+        path:
+          title: Feed.path
+          type: string
+        config:
+          title: Feed.config
+          type: object
+        queryParams:
+          items:
+            $ref: '#/components/schemas/FeedQueryParams'
+            title: Feed.queryParams.[]
+          title: Feed.queryParams
+          type: array
+      required:
+        - id
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: Feed
+      type: object
+    GetFeedsResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetFeedsResponse.data.[].id
+                type: string
+              name:
+                title: GetFeedsResponse.data.[].name
+                type: string
+              path:
+                title: GetFeedsResponse.data.[].path
+                type: string
+            required:
+              - id
+              - name
+              - path
+            additionalProperties: false
+            title: GetFeedsResponse.data.[]
+            type: object
+          title: GetFeedsResponse.data
+          type: array
+      required:
+        - data
+      additionalProperties: false
+      title: GetFeedsResponse
+      type: object
+    GetFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: GetFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: GetFeedResponse
+      type: object
+    PostFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: PostFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: PostFeedResponse
+      type: object
+    UpdateFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: UpdateFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: UpdateFeedResponse
+      type: object
+    DeleteFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+          title: DeleteFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: DeleteFeedResponse
+      type: object
+    PostFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: PostFeedRequestBody
+    UpdateFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: UpdateFeedRequestBody
+    DeleteFeedRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: DeleteFeedRequest
+    GetFeedByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: GetFeedByIdRequest
+    FeedQueryParams:
+      properties:
+        name:
+          title: FeedQueryParams.name
+          type: string
+        type:
+          title: FeedQueryParams.type
+          type: string
+        required:
+          title: FeedQueryParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FeedQueryParams
+      type: object
+    DeleteAndGetFeedRequest:
+      properties:
+        id:
+          title: DeleteAndGetFeedRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFeedRequest
+      type: object
+    UpdateAndCreateFeedRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFeedRequest.name
+          type: string
+        path:
+          title: UpdateAndCreateFeedRequest.path
+          type: string
+        config:
+          title: UpdateAndCreateFeedRequest.config
+          type: object
+        queryParams:
+          items:
+            $ref: '#/components/schemas/FeedQueryParams'
+            title: UpdateAndCreateFeedRequest.queryParams.[]
+          title: UpdateAndCreateFeedRequest.queryParams
+          type: array
+      required:
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: UpdateAndCreateFeedRequest
+      type: object

@@ -1,42 +1,47 @@
-type filterParams = {
+export type filterParams = {
   name: string;
   type: string;
   required: boolean;
 };
 
-type Filter = {
+export type Filter = {
   id: string;
   name: string;
   type: string;
   description?: string;
   code: string | null;
-  filterParams: filterParams[] | null;
+  filterParams: filterParams[];
 };
 
-type GetAllFiltersResponse = {
-  data: Omit<Filter, "code" | "description" | "filterParams">[];
+type UpdateAndCreateFilterRequest = {
+  name: string;
+  type: string;
+  description?: string;
+  code: string | null;
+  filterParams: filterParams[];
 };
 
-type GetFilterByIdRequest = Pick<Filter, "id">;
-type GetFilterByIdResponse = { data: Filter };
-
-type UpdateFilterRequest = Filter;
-type CreateFilterRequest = Omit<Filter, "id">;
-type DeleteFilterRequest = Pick<Filter, "id">;
-
-type UpdateFilterResponse = { data: Filter };
-type CreateFilterResponse = { data: Filter };
-type DeleteFilterResponse = { data: Pick<Filter, "id"> };
-
-export {
-  UpdateFilterRequest,
-  UpdateFilterResponse,
-  CreateFilterRequest,
-  CreateFilterResponse,
-  DeleteFilterRequest, 
-  DeleteFilterResponse,
-  Filter,
-  GetAllFiltersResponse,
-  GetFilterByIdResponse,
-  GetFilterByIdRequest,
+type DeleteAndGetFilterRequest = {
+  id: string;
 };
+
+
+// Requests
+export type CreateFilterRequest = UpdateAndCreateFilterRequest;
+export type UpdateFilterRequest = UpdateAndCreateFilterRequest;
+export type DeleteFilterRequest = DeleteAndGetFilterRequest;
+export type GetFilterByIdRequest = DeleteAndGetFilterRequest;
+
+// Responses
+export type GetAllFiltersResponse = {
+  data: {
+    id: string;
+    name: string;
+    type: string;
+  }[];
+};
+
+export type GetFilterByIdResponse = { data: Filter };
+export type UpdateFilterResponse = { data: Filter };
+export type CreateFilterResponse = { data: Filter };
+export type DeleteFilterResponse = { data: DeleteAndGetFilterRequest };

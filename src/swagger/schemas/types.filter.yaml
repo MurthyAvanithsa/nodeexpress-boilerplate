@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: Converted from types.filter.yaml with typeconv
+  version: '1'
+  x-id: types.filter.yaml
+  x-comment: >-
+    Generated from src\types\types.filter.ts by core-types-json-schema
+    (https://github.com/grantila/core-types-json-schema) on behalf of typeconv
+    (https://github.com/grantila/typeconv)
+paths: {}
+components:
+  schemas:
+    filterParams:
+      properties:
+        name:
+          title: filterParams.name
+          type: string
+        type:
+          title: filterParams.type
+          type: string
+        required:
+          title: filterParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: filterParams
+      type: object
+    Filter:
+      properties:
+        id:
+          title: Filter.id
+          type: string
+        name:
+          title: Filter.name
+          type: string
+        type:
+          title: Filter.type
+          type: string
+        description:
+          title: Filter.description
+          type: string
+        code:
+          title: Filter.code
+          nullable: true
+          type: string
+        filterParams:
+          items:
+            $ref: '#/components/schemas/filterParams'
+            title: Filter.filterParams.[]
+          title: Filter.filterParams
+          type: array
+      required:
+        - id
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: Filter
+      type: object
+    CreateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: CreateFilterRequest
+    UpdateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: UpdateFilterRequest
+    DeleteFilterRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: DeleteFilterRequest
+    GetFilterByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: GetFilterByIdRequest
+    GetAllFiltersResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetAllFiltersResponse.data.[].id
+                type: string
+              name:
+                title: GetAllFiltersResponse.data.[].name
+                type: string
+              type:
+                title: GetAllFiltersResponse.data.[].type
+                type: string
+            required:
+              - id
+              - name
+              - type
+            additionalProperties: false
+            title: GetAllFiltersResponse.data.[]
+            type: object
+          title: GetAllFiltersResponse.data
+          type: array
+      required:
+        - data
+      additionalProperties: false
+      title: GetAllFiltersResponse
+      type: object
+    GetFilterByIdResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: GetFilterByIdResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: GetFilterByIdResponse
+      type: object
+    UpdateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: UpdateFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: UpdateFilterResponse
+      type: object
+    CreateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: CreateFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: CreateFilterResponse
+      type: object
+    DeleteFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+          title: DeleteFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: DeleteFilterResponse
+      type: object
+    UpdateAndCreateFilterRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFilterRequest.name
+          type: string
+        type:
+          title: UpdateAndCreateFilterRequest.type
+          type: string
+        description:
+          title: UpdateAndCreateFilterRequest.description
+          type: string
+        code:
+          title: UpdateAndCreateFilterRequest.code
+          nullable: true
+          type: string
+        filterParams:
+          items:
+            $ref: '#/components/schemas/filterParams'
+            title: UpdateAndCreateFilterRequest.filterParams.[]
+          title: UpdateAndCreateFilterRequest.filterParams
+          type: array
+      required:
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: UpdateAndCreateFilterRequest
+      type: object
+    DeleteAndGetFilterRequest:
+      properties:
+        id:
+          title: DeleteAndGetFilterRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFilterRequest
+      type: object
