@@ -1,117 +1,100 @@
-import { PrismaClient } from '@prisma/client';
-import {
-    UpdateFilterResponse,
-    CreateFilterResponse,
-    DeleteFilterResponse,
-    GetAllFiltersResponse,
-    GetFilterByIdResponse,
-    GetFilterByIdRequest,
-    CreateFilterRequest,
-    UpdateFilterRequest,
-    DeleteFilterRequest,
-    filterParams
-} from "../types/types.filter";
+import { PrismaClient } from "@prisma/client";
+import { Filter as filterModel, Prisma } from "@prisma/client";
+import { logger } from "../logger/log";
+import { FilterParams } from "../types/types.filter";
 
-// Initialize Prisma Client
 const prisma = new PrismaClient();
 
-// Repository Functions
+type Result<T> = {
+    data?: T;
+    error?: string;
+};
 
-// Get all filters
-async function getAllFilters(): Promise<GetAllFiltersResponse> {
-    const filters = await prisma.filter.findMany({
-        select: {
-            id: true,
-            name: true,
-            type: true
-        }
-    });
-    return {
-        data: filters
-    };
-}
-
-// Get filter by ID
-async function getFilterById(req: GetFilterByIdRequest): Promise<GetFilterByIdResponse> {
-    const filter = await prisma.filter.findUnique({
-        where: { id: req.id }
-    });
-    if (!filter) {
-        throw new Error('Filter not found');
+async function getAllFilters(): Promise<Result<Pick<filterModel, 'id' | 'name' | 'type'>[]>> {
+    try {
+        const filters = await prisma.filter.findMany({
+            select: {
+                id: true,
+                name: true,
+                type: true
+            }
+        });
+        return { data: filters };
+    } catch (error) {
+        logger.error(`Error fetching filters:${error}`);
+        return { error: "Could not fetch filters" };
     }
-    const filterParams = filter.filterParams as filterParams[];
-    return {
-        data: {
-            id: filter.id,
-            name: filter.name,
-            type: filter.type,
-            description: filter.description,
-            filterParams,
-            code: filter.code
-        }
-    };
 }
 
-// Create a new filter
-async function createFilter(req: CreateFilterRequest): Promise<CreateFilterResponse> {
-    const filterParams: Prisma.JsonValue[] = req.filterParams 
-        ? req.filterParams 
-        : undefined;
-    const filter = await prisma.filter.create({
-        data: {
-            name: req.name,
-            type: req.type,
-            filterParams: filterParams,
-            code: req.code
+async function getFilterById(filterId: string): Promise<Result<filterModel>> {
+    try {
+        const filter = await prisma.filter.findUnique({
+            where: { id: filterId }
+        });
+        if (!filter) {
+            return { error: 'Filter not found' };
         }
-    });
-    return {
-        data: {
-            id: filter.id,
-            name: filter.name,
-            type: filter.type,
-            filterParams: filter.filterParams,
-            code: filter.code
-        }
-    };
+        return { data: filter };
+    } catch (error) {
+        logger.error(`Error fetching filter by ID: ${error}`);
+        return { error: "Could not fetch filter" };
+    }
 }
 
-// // Update an existing filter
-// async function updateFilter(id: GetFilterByIdRequest, filter: UpdateFilterRequest): Promise<UpdateFilterResponse> {
-//     const updatedFilter = await prisma.filter.update({
-//         where: { id: id.id },
-//         data: {
-//             name: filter.name,
-//             type: filter.type,
-//             filterParams: filter.filterParams,
-//             code: filter.code
-//         }
-//     });
-//     return {
-//         data: {
-//             id: updatedFilter.id,
-//             name: updatedFilter.name,
-//             type: updatedFilter.type,
-//             filterParams: updatedFilter.filterParams,
-//             code: updatedFilter.code
-//         }
-//     };
-// }
+async function createFilter(req: {
+    name: string;
+    type: string;
+    description: string;
+    filterParams: FilterParams[];
+    code?: string;
+}): Promise<Result<filterModel>> {
+    try {
+        const filter = await prisma.filter.create({
+            data: {
+                name: req.name,
+                description: req.description,
+                type: req.type,
+                filterParams: req.filterParams,
+                code: req.code
+            }
+        });
+        return { data: filter };
+    } catch (error) {
+        logger.error(`Error creating filter: ${error}`);
+        return { error: "Could not create filter" };
+    }
+}
 
-// // Delete a filter
-// async function deleteFilter(req: DeleteFilterRequest): Promise<DeleteFilterResponse> {
-//     await prisma.filter.delete({
-//         where: { id: req.id }
-//     });
-//     return {
-//         data: {
-//             id: req.id
-//         }
-//     };
-// }
+async function updateFilter(filterId: string, updates: {
+    name?: string;
+    type?: string;
+    description?: string;
+    filterParams?: FilterParams[];
+    code?: string | null;
+}): Promise<Result<filterModel>> {
+    try {
+        const filter = await prisma.filter.update({
+            where: { id: filterId },
+            data: updates
+        });
+        return { data: filter };
+    } catch (error) {
+        logger.error(`Error updating filter: ${error}`);
+        return { error: "Could not update filter" };
+    }
+}
 
-// export { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter };
+async function deleteFilter(filterId: string): Promise<Result<null>> {
+    try {
+        const result = await prisma.filter.delete({
+            where: { id: filterId }
+        });
+        console.log(result, "abhi");
+        return { data: null };
+    } catch (error) {
+        logger.error(`Error deleting filter: ${error}`);
+        return { error: "Could not delete filter" };
+    }
+}
 
-export { getAllFilters, getFilterById }
-
-
+export { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter };
