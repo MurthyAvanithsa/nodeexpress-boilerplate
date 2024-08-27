@@ -11,8 +11,8 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
 
 const app = express();
-const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
-const openApiSpecPath = path.join(__dirname, 'swagger.yaml');
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
+const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
 
 app.use(express.json());
 app.use(bodyParser.json());
