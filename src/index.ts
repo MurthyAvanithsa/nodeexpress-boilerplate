@@ -9,7 +9,7 @@ program
   .command('server')
   .option('-p, --port <number>', 'port to listen on', process.env.port || "3000")  
   .action((cmd) => {
-    startServer(cmd);
+    // startServer(cmd);
   });
 
 program
