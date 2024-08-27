@@ -26,8 +26,8 @@ model Filter {
   name         String @unique
   description  String
   type         String
-  code         String
-  filterParams Json
+  code         String?
+  filterParams Json?
 }
 
 model adBreaks {
