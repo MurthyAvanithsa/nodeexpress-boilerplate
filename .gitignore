@@ -6,3 +6,7 @@ dist
 
 # Ignore app.log file
 src/logger/app.log
+
+# Ignore swagger schemas
+src/swagger/schemas/types.filter.yaml
+src/swagger/schemas/types.feed.yaml
