@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
-import { Filter as filterModel, Prisma } from "@prisma/client";
+import { prisma } from "./connection";
+import { Filter as filterModel } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FilterParams } from "../types/types.filter";
-
-const prisma = new PrismaClient();
 
 type Result<T> = {
     data?: T;
@@ -89,7 +87,6 @@ async function deleteFilter(filterId: string): Promise<Result<null>> {
         const result = await prisma.filter.delete({
             where: { id: filterId }
         });
-        console.log(result, "abhi");
         return { data: null };
     } catch (error) {
         logger.error(`Error deleting filter: ${error}`);
