@@ -15,7 +15,7 @@ async function loadSeedData() {
                         name: 'FILTER_ASSET_PREMIUM',
                         type: 'assetFilter',
                         code: null,
-                        filterParams: {}
+                        filterParams: []
                     },
                     {
                         id: '79272',
@@ -23,7 +23,7 @@ async function loadSeedData() {
                         name: 'FILTER_ASSET_ADINJECT',
                         type: 'assetFilter',
                         code: null,
-                        filterParams: {}
+                        filterParams: []
                     },
                     {
                         id: '65763',
@@ -31,7 +31,7 @@ async function loadSeedData() {
                         name: 'FILTER_PLAYLIST_JWPLAYER',
                         type: 'playlistFilter',
                         code: null,
-                        filterParams: {}
+                        filterParams: []
                     },
                     {
                         id: '1bab5',
@@ -39,7 +39,7 @@ async function loadSeedData() {
                         name: 'FILTER_ASSET_NEED_AUTHENTICATION',
                         type: 'customAssetFilter',
                         code: 'item.extensions.requiresAuthentication = true;',
-                        filterParams: {}
+                        filterParams: []
                     },
                     {
                         id: '65963',
@@ -47,7 +47,7 @@ async function loadSeedData() {
                         name: 'FILTER_MEDIA_JWPLAYER',
                         type: 'playlistFilter',
                         code: null,
-                        filterParams: {}
+                        filterParams: []
                     },
                 ]
             });
