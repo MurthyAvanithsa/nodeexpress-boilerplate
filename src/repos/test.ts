@@ -1,9 +1,55 @@
 import { logger } from "../logger/log";
 import { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter } from './repos.filter';
+import { getFeeds, getFeedById, createFeed, updateFeed, deleteFeed } from './repos.feed';
 
-async function testFilterFunctions() {
+function logTestResult(testName: string, result: any) {
+    logger.info(`Test: ${testName} - Result: ${JSON.stringify(result, null, 2)}`);
+}
+
+async function runTests() {
     try {
-        // Test createFilter
+        // Feed Repository Tests
+        let createdFeedId: string;
+        const newFeed = {
+            path: '/test/path',
+            name: 'Test Feed',
+            config: { key: 'value' },
+            queryParams: [{ name: 'param1', type: 'string', required: true }]
+        };
+
+        logger.info(`Creating feed with path: ${newFeed.path}`);
+        const createResult = await createFeed(newFeed);
+        logTestResult('Create Feed', createResult);
+
+        if (createResult.data) {
+            createdFeedId = createResult.data.id;
+
+            logger.info(`Fetching feed by ID: ${createdFeedId}`);
+            const getResult = await getFeedById(createdFeedId);
+            logTestResult('Get Feed by ID', getResult);
+
+            const updates = {
+                name: 'Updated Feed',
+                config: { newKey: 'newValue' },
+                queryParams: [{ name: 'param1', type: 'string', required: true }]
+            };
+
+            logger.info(`Updating feed with ID: ${createdFeedId}`);
+            const updateResult = await updateFeed(createdFeedId, updates);
+            logTestResult('Update Feed', updateResult);
+
+            logger.info(`Deleting feed with ID: ${createdFeedId}`);
+            const deleteResult = await deleteFeed(createdFeedId);
+            logTestResult('Delete Feed', deleteResult);
+
+            logger.info('Fetching all feeds');
+            const allFeedsResult = await getFeeds();
+            logTestResult('Get All Feeds', allFeedsResult);
+        } else {
+            logger.error('Failed to create feed');
+        }
+
+        // Filter Repository Tests
         const newFilter = {
             name: 'Test Filter1',
             type: 'assetFilter',
@@ -13,43 +59,42 @@ async function testFilterFunctions() {
         };
 
         logger.info('Creating filter...');
-        const createResult = await createFilter(newFilter);
-        logger.info(`Create result: ${JSON.stringify(createResult)}`);
+        const createFilterResult = await createFilter(newFilter);
+        logTestResult('Create Filter', createFilterResult);
 
-        if (createResult.data) {
-            const filterId = createResult.data.id;
+        if (createFilterResult.data) {
+            const filterId = createFilterResult.data.id;
 
-            // Test getFilterById
             logger.info('Fetching filter by ID...');
-            const getResult = await getFilterById(filterId);
-            logger.info(`Get result: ${JSON.stringify(getResult)}`);
+            const getFilterResult = await getFilterById(filterId);
+            logTestResult('Get Filter by ID', getFilterResult);
 
-            // Test updateFilter
-            logger.info('Updating filter...');
-            const updateResult = await updateFilter(filterId, {
+            const updateFilterData = {
                 name: 'Test Filter1',
                 type: 'assetFilter',
                 description: 'Updated Description',
-                filterParams: [], // Adjust this to match your filterParams type
+                filterParams: [],
                 code: 'Updated Code'
-            });
-            logger.info(`Update result: ${JSON.stringify(updateResult)}`);
+            };
 
-            // Test deleteFilter
+            logger.info('Updating filter...');
+            const updateFilterResult = await updateFilter(filterId, updateFilterData);
+            logTestResult('Update Filter', updateFilterResult);
+
             logger.info('Deleting filter...');
-            const deleteResult = await deleteFilter(filterId); // Make sure to pass a valid filterId
-            logger.info(`Delete result: ${JSON.stringify(deleteResult)}`);
+            const deleteFilterResult = await deleteFilter(filterId);
+            logTestResult('Delete Filter', deleteFilterResult);
 
-            // Test getAllFilters
             logger.info('Fetching all filters...');
             const allFiltersResult = await getAllFilters();
-            logger.info(`All filters result: ${JSON.stringify(allFiltersResult)}`);
+            logTestResult('Get All Filters', allFiltersResult);
         } else {
             logger.error('Failed to create filter');
         }
+
     } catch (error) {
-        logger.error(`Error during testing: ${JSON.stringify(error)}`);
+        logger.error(`Error during tests: ${JSON.stringify(error, null, 2)}`);
     }
 }
 
-testFilterFunctions();
+runTests();
