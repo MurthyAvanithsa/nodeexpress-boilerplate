@@ -6,7 +6,7 @@
     "build": "tsup && npm run copy-files",
     "copy-files": "copyfiles -u 1 \"src/swagger.yaml\" \"dist\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts"
+    "postinstall": "npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts"
   },
   "keywords": [],
   "author": "",
