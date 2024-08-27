@@ -18,7 +18,7 @@ model Feed {
   path        String @unique
   name        String
   config      Json
-  queryParams Json
+  queryParams Json[]
 }
 
 model Filter {
@@ -27,7 +27,7 @@ model Filter {
   description  String
   type         String
   code         String?
-  filterParams Json?
+  filterParams Json[] @default([])
 }
 
 model adBreaks {
