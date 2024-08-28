@@ -9,6 +9,17 @@ import path from 'path';
 import bodyParser from 'body-parser'
 import * as OpenApiValidator from 'express-openapi-validator';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
+import { createBullBoard } from '@bull-board/api';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { ExpressAdapter } from '@bull-board/express'; // Import ExpressAdapter
+import { Queue } from 'bullmq';
+
+const adBreaksQueue = new Queue('adBreaksQueue', {
+  connection: {
+    host: 'localhost',
+    port: 6379,
+  },
+});
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
@@ -28,6 +39,18 @@ app.use(
 app.use(feedRouter);
 app.use(filterRouter);
 app.use(errorLogger);
+
+onst serverAdapter = new ExpressAdapter();
+serverAdapter.setBasePath('/admin/queues');
+
+createBullBoard({
+  queues: [
+    new BullMQAdapter(adBreaksQueue), 
+  ],
+  serverAdapter,
+});
+
+app.use('/bull-board/ui', serverAdapter.getRouter()); 
 
 export function startServer(options: { port: number }) {
   app.listen(options.port, () => {
