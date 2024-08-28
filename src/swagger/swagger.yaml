@@ -153,7 +153,7 @@ paths:
       tags:
         - feed
       responses:
-        '200':
+        '204':
           description: Feed deleted successfully
           content:
             application/json:
@@ -327,7 +327,7 @@ paths:
       tags:
         - filter
       responses:
-        '200':
+        '204':
           description: Filter deleted successfully
           content:
             application/json:
@@ -384,11 +384,8 @@ components:
           type: string
         config:
           title: Feed.config
-          type: object
         queryParams:
-          items:
-            $ref: '#/components/schemas/FeedQueryParams'
-            title: Feed.queryParams.[]
+          items: {}
           title: Feed.queryParams
           type: array
       required:
@@ -423,8 +420,9 @@ components:
             type: object
           title: GetFeedsResponse.data
           type: array
-      required:
-        - data
+        error:
+          title: GetFeedsResponse.error
+          type: string
       additionalProperties: false
       title: GetFeedsResponse
       type: object
@@ -433,8 +431,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: GetFeedResponse.data
-      required:
-        - data
+        error:
+          title: GetFeedResponse.error
+          type: string
       additionalProperties: false
       title: GetFeedResponse
       type: object
@@ -443,8 +442,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: PostFeedResponse.data
-      required:
-        - data
+        error:
+          title: PostFeedResponse.error
+          type: string
       additionalProperties: false
       title: PostFeedResponse
       type: object
@@ -453,8 +453,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: UpdateFeedResponse.data
-      required:
-        - data
+        error:
+          title: UpdateFeedResponse.error
+          type: string
       additionalProperties: false
       title: UpdateFeedResponse
       type: object
@@ -463,8 +464,9 @@ components:
         data:
           $ref: '#/components/schemas/DeleteAndGetFeedRequest'
           title: DeleteFeedResponse.data
-      required:
-        - data
+        error:
+          title: DeleteFeedResponse.error
+          type: string
       additionalProperties: false
       title: DeleteFeedResponse
       type: object
@@ -552,9 +554,7 @@ components:
           nullable: true
           type: string
         filterParams:
-          items:
-            $ref: '#/components/schemas/FilterParams'
-            title: Filter.filterParams.[]
+          items: {}
           title: Filter.filterParams
           type: array
       required:
@@ -601,8 +601,9 @@ components:
             type: object
           title: GetAllFiltersResponse.data
           type: array
-      required:
-        - data
+        error:
+          title: GetAllFiltersResponse.error
+          type: string
       additionalProperties: false
       title: GetAllFiltersResponse
       type: object
@@ -611,8 +612,9 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: GetFilterByIdResponse.data
-      required:
-        - data
+        error:
+          title: GetFilterByIdResponse.error
+          type: string
       additionalProperties: false
       title: GetFilterByIdResponse
       type: object
@@ -621,8 +623,9 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: UpdateFilterResponse.data
-      required:
-        - data
+        error:
+          title: UpdateFilterResponse.error
+          type: string
       additionalProperties: false
       title: UpdateFilterResponse
       type: object
@@ -631,8 +634,9 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: CreateFilterResponse.data
-      required:
-        - data
+        error:
+          title: CreateFilterResponse.error
+          type: string
       additionalProperties: false
       title: CreateFilterResponse
       type: object
@@ -641,8 +645,9 @@ components:
         data:
           $ref: '#/components/schemas/DeleteAndGetFilterRequest'
           title: DeleteFilterResponse.data
-      required:
-        - data
+        error:
+          title: DeleteFilterResponse.error
+          type: string
       additionalProperties: false
       title: DeleteFilterResponse
       type: object
@@ -659,7 +664,6 @@ components:
           type: string
         code:
           title: UpdateAndCreateFilterRequest.code
-          nullable: true
           type: string
         filterParams:
           items:

@@ -157,7 +157,7 @@ paths:
       tags:
         - feed
       responses:
-        "200":
+        "204":
           description: Feed deleted successfully
           content:
             application/json:
@@ -336,7 +336,7 @@ paths:
       tags:
         - filter
       responses:
-        "200":
+        "204":
           description: Filter deleted successfully
           content:
             application/json:

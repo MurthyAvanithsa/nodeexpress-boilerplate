@@ -41,11 +41,8 @@ components:
           type: string
         config:
           title: Feed.config
-          type: object
         queryParams:
-          items:
-            $ref: '#/components/schemas/FeedQueryParams'
-            title: Feed.queryParams.[]
+          items: {}
           title: Feed.queryParams
           type: array
       required:
@@ -80,8 +77,9 @@ components:
             type: object
           title: GetFeedsResponse.data
           type: array
-      required:
-        - data
+        error:
+          title: GetFeedsResponse.error
+          type: string
       additionalProperties: false
       title: GetFeedsResponse
       type: object
@@ -90,8 +88,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: GetFeedResponse.data
-      required:
-        - data
+        error:
+          title: GetFeedResponse.error
+          type: string
       additionalProperties: false
       title: GetFeedResponse
       type: object
@@ -100,8 +99,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: PostFeedResponse.data
-      required:
-        - data
+        error:
+          title: PostFeedResponse.error
+          type: string
       additionalProperties: false
       title: PostFeedResponse
       type: object
@@ -110,8 +110,9 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: UpdateFeedResponse.data
-      required:
-        - data
+        error:
+          title: UpdateFeedResponse.error
+          type: string
       additionalProperties: false
       title: UpdateFeedResponse
       type: object
@@ -120,8 +121,9 @@ components:
         data:
           $ref: '#/components/schemas/DeleteAndGetFeedRequest'
           title: DeleteFeedResponse.data
-      required:
-        - data
+        error:
+          title: DeleteFeedResponse.error
+          type: string
       additionalProperties: false
       title: DeleteFeedResponse
       type: object
