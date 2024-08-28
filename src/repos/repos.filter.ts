@@ -18,9 +18,9 @@ async function getAllFilters(): Promise<Result<Pick<filterModel, 'id' | 'name' |
             }
         });
         return { data: filters };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error fetching filters:${error}`);
-        return { error: "Could not fetch filters" };
+        return { error: error.message };
     }
 }
 
@@ -30,12 +30,12 @@ async function getFilterById(filterId: string): Promise<Result<filterModel>> {
             where: { id: filterId }
         });
         if (!filter) {
-            return { error: 'Filter not found' };
+            return { error: `Filter with ID ${filterId} not found` };
         }
         return { data: filter };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error fetching filter by ID: ${error}`);
-        return { error: "Could not fetch filter" };
+        return { error: error.message };
     }
 }
 
@@ -52,9 +52,9 @@ async function createFilter(req: {
             data: req
         });
         return { data: filter };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error creating filter: ${error}`);
-        return { error: "Could not create filter" };
+        return { error: error.message };
     }
 }
 
@@ -71,9 +71,9 @@ async function updateFilter(filterId: string, updates: {
             data: updates
         });
         return { data: filter };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error updating filter: ${error}`);
-        return { error: "Could not update filter" };
+        return { error: error.message };
     }
 }
 
@@ -83,9 +83,9 @@ async function deleteFilter(filterId: string): Promise<Result<null>> {
             where: { id: filterId }
         });
         return { data: null };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error deleting filter: ${error}`);
-        return { error: "Could not delete filter" };
+        return { error: error.message };
     }
 }
 
