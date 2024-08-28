@@ -1,52 +1,68 @@
-import { Feed } from '../types/types.feed';
-async function getFeeds(): Promise<Omit<Feed, 'config' | 'queryParams'>[]> {
-    return [
-        {
-            id: 78,
-            name: "Dojo pbr",
-            description: "feed",
-            path: "tbn/dojo-pbr",
-        },
-    ];
+import {
+    GetFeedsResponse,
+    PostFeedResponse,
+    GetFeedResponse,
+    UpdateFeedResponse,
+    DeleteFeedResponse,
+    PostFeedRequestBody,
+    UpdateFeedRequestBody,
+} from '../types/types.feed';
+import * as feedRepo from '../repos/repos.feed';
+
+async function getFeeds(): Promise<GetFeedsResponse> {
+    const result = await feedRepo.getFeeds();
+    if (result.error) {
+        return { error: result.error };
+    }
+    return {
+        data: result.data!.map(feed => ({
+            id: feed.id,
+            name: feed.name,
+            path: feed.path
+        }))
+    };
 }
 
-async function getFeedById(id: Pick<Feed, 'id'>): Promise<Feed> {
-    return {
-        id: 78,
-        name: "Dojo pbr",
-        description: "feed",
-        path: "tbn/dojo-pbr",
-        config: { assetFilter: [], playlistFilters: [] },
-        queryParams: [{ name: "playlistId", type: "string", required: true }],
+async function getFeedById(id: string): Promise<GetFeedResponse> {
+    const result = await feedRepo.getFeedById(id);
+    if (result.error) {
+        return { error: result.error };
     }
+    return { data: result.data! };
 }
 
-async function createFeed(feed: Omit<Feed, 'id' | 'config'>): Promise<Feed> {
-    return {
-        id: 78,
-        name: "Dojo pbr",
-        description: "feed",
-        path: "tbn/dojo-pbr",
-        config: { assetFilter: [], playlistFilters: [] },
-        queryParams: [{ name: "playlistId", type: "string", required: true }],
+async function createFeed(req: PostFeedRequestBody): Promise<PostFeedResponse> {
+    const result = await feedRepo.createFeed({
+        path: req.path,
+        name: req.name,
+        config: req.config,
+        queryParams: req.queryParams
+    });
+    if (result.error) {
+        return { error: result.error };
     }
+    return { data: result.data! };
 }
 
-async function updateFeed(id: Pick<Feed, 'id'>, feed: Omit<Feed, "id">): Promise<Feed> {
-    return {
-        id: 78,
-        name: "Dojo pbr",
-        description: "feed",
-        path: "tbn/dojo-pbr",
-        config: { assetFilter: [], playlistFilters: [] },
-        queryParams: [{ name: "playlistId", type: "string", required: true }],
+async function updateFeed(id: string, updates: UpdateFeedRequestBody): Promise<UpdateFeedResponse> {
+    const result = await feedRepo.updateFeed(id, {
+        path: updates.path,
+        name: updates.name,
+        config: updates.config,
+        queryParams: updates.queryParams
+    });
+    if (result.error) {
+        return { error: result.error };
     }
+    return { data: result.data! };
 }
 
-async function deleteFeed(id: Pick<Feed, 'id'>): Promise<Pick<Feed, 'id'>> {
-    return {
-        id: 20
+async function deleteFeed(id: string): Promise<DeleteFeedResponse> {
+    const result = await feedRepo.deleteFeed(id);
+    if (result.error) {
+        return { error: result.error };
     }
+    return { data: { id } };
 }
 
 export { getFeeds, getFeedById, createFeed, updateFeed, deleteFeed };
