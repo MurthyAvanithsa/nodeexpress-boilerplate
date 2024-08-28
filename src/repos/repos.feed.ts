@@ -39,6 +39,7 @@ async function getFeedById(feedId: string): Promise<Result<Feed>> {
 
 // Create a new feed
 async function createFeed(req: {
+    id?: any,
     path: string;
     name: string;
     config: object;
@@ -46,12 +47,7 @@ async function createFeed(req: {
 }): Promise<Result<Feed>> {
     try {
         const feed = await prisma.feed.create({
-            data: {
-                path: req.path,
-                name: req.name,
-                config: req.config,
-                queryParams: req.queryParams
-            }
+            data: req
         });
         return { data: feed };
     } catch (error) {
