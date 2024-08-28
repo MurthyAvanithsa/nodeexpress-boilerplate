@@ -7,7 +7,8 @@
     "copy-files": "copyfiles -u 1 \"src/swagger.yaml\" \"dist\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-repo": "npx jest src/repos/repo.test.ts",
-    "postinstall": "npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts"
+    "postinstall": "npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npm run generate-openapi-spec",
+    "generate-openapi-spec": "npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node src/swagger/openapi-spec-generator.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,8 @@
     "errors": "^0.3.0",
     "express": "^4.19.2",
     "express-openapi-validator": "^5.3.1",
+    "fs": "^0.0.1-security",
+    "js-yaml": "^4.1.0",
     "pino": "^9.3.2",
     "pino-http": "^10.2.0",
     "pino-multi-stream": "^6.0.0",
@@ -33,6 +36,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.5.0",
     "@types/pino-multi-stream": "^5.1.6",
     "@types/swagger-ui-express": "^4.1.6",

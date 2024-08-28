@@ -10,6 +10,24 @@ info:
 paths: {}
 components:
   schemas:
+    FeedQueryParams:
+      properties:
+        name:
+          title: FeedQueryParams.name
+          type: string
+        type:
+          title: FeedQueryParams.type
+          type: string
+        required:
+          title: FeedQueryParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FeedQueryParams
+      type: object
     Feed:
       properties:
         id:
@@ -119,24 +137,6 @@ components:
     GetFeedByIdRequest:
       $ref: '#/components/schemas/DeleteAndGetFeedRequest'
       title: GetFeedByIdRequest
-    FeedQueryParams:
-      properties:
-        name:
-          title: FeedQueryParams.name
-          type: string
-        type:
-          title: FeedQueryParams.type
-          type: string
-        required:
-          title: FeedQueryParams.required
-          type: boolean
-      required:
-        - name
-        - type
-        - required
-      additionalProperties: false
-      title: FeedQueryParams
-      type: object
     DeleteAndGetFeedRequest:
       properties:
         id:

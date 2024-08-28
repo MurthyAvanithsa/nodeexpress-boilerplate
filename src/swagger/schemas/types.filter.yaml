@@ -10,23 +10,23 @@ info:
 paths: {}
 components:
   schemas:
-    filterParams:
+    FilterParams:
       properties:
         name:
-          title: filterParams.name
+          title: FilterParams.name
           type: string
         type:
-          title: filterParams.type
+          title: FilterParams.type
           type: string
         required:
-          title: filterParams.required
+          title: FilterParams.required
           type: boolean
       required:
         - name
         - type
         - required
       additionalProperties: false
-      title: filterParams
+      title: FilterParams
       type: object
     Filter:
       properties:
@@ -48,7 +48,7 @@ components:
           type: string
         filterParams:
           items:
-            $ref: '#/components/schemas/filterParams'
+            $ref: '#/components/schemas/FilterParams'
             title: Filter.filterParams.[]
           title: Filter.filterParams
           type: array
@@ -158,7 +158,7 @@ components:
           type: string
         filterParams:
           items:
-            $ref: '#/components/schemas/filterParams'
+            $ref: '#/components/schemas/FilterParams'
             title: UpdateAndCreateFilterRequest.filterParams.[]
           title: UpdateAndCreateFilterRequest.filterParams
           type: array

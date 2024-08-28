@@ -23,7 +23,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.feed.yaml#/components/schemas/GetFeedsResponse'
+                $ref: '#/components/schemas/GetFeedsResponse'
         '500':
           description: Internal server error
           content:
@@ -33,7 +33,6 @@ paths:
                 properties:
                   message:
                     type: string
-
     post:
       summary: Create a new feed
       tags:
@@ -43,14 +42,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/types.feed.yaml#/components/schemas/PostFeedRequestBody'
+              $ref: '#/components/schemas/PostFeedRequestBody'
       responses:
         '201':
           description: Feed created successfully
           content:
             application/json:
               schema:
-                $ref: './schemas/types.feed.yaml#/components/schemas/PostFeedResponse'
+                $ref: '#/components/schemas/PostFeedResponse'
         '400':
           description: Bad request
           content:
@@ -69,7 +68,6 @@ paths:
                 properties:
                   message:
                     type: string
-
   /feed/{feedId}:
     parameters:
       - in: path
@@ -87,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.feed.yaml#/components/schemas/GetFeedResponse'
+                $ref: '#/components/schemas/GetFeedResponse'
         '404':
           description: Feed not found
           content:
@@ -106,7 +104,6 @@ paths:
                 properties:
                   message:
                     type: string
-
     put:
       summary: Update a feed by ID
       tags:
@@ -116,14 +113,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/types.feed.yaml#/components/schemas/UpdateFeedRequestBody'
+              $ref: '#/components/schemas/UpdateFeedRequestBody'
       responses:
         '200':
           description: Feed updated successfully
           content:
             application/json:
               schema:
-                $ref: './schemas/types.feed.yaml#/components/schemas/UpdateFeedResponse'
+                $ref: '#/components/schemas/UpdateFeedResponse'
         '400':
           description: Bad request
           content:
@@ -151,7 +148,6 @@ paths:
                 properties:
                   message:
                     type: string
-
     delete:
       summary: Delete a feed by ID
       tags:
@@ -162,7 +158,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.feed.yaml#/components/schemas/DeleteFeedResponse'
+                $ref: '#/components/schemas/DeleteFeedResponse'
         '404':
           description: Feed not found
           content:
@@ -181,7 +177,6 @@ paths:
                 properties:
                   message:
                     type: string
-
   /filter:
     get:
       summary: Get all filters
@@ -193,16 +188,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.filter.yaml#/components/schemas/GetAllFiltersResponse'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/GetAllFiltersResponse'
         '400':
           description: Bad request
           content:
@@ -212,7 +198,15 @@ paths:
                 properties:
                   message:
                     type: string
-
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
     post:
       summary: Create a new filter
       tags:
@@ -222,14 +216,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/types.filter.yaml#/components/schemas/CreateFilterRequest'
+              $ref: '#/components/schemas/CreateFilterRequest'
       responses:
         '201':
           description: Filter created successfully
           content:
             application/json:
               schema:
-                $ref: './schemas/types.filter.yaml#/components/schemas/CreateFilterResponse'
+                $ref: '#/components/schemas/CreateFilterResponse'
         '400':
           description: Bad request
           content:
@@ -248,7 +242,6 @@ paths:
                 properties:
                   message:
                     type: string
-
   /filter/{filterId}:
     parameters:
       - in: path
@@ -266,7 +259,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.filter.yaml#/components/schemas/GetFilterByIdResponse'
+                $ref: '#/components/schemas/GetFilterByIdResponse'
         '404':
           description: Filter not found
           content:
@@ -285,7 +278,6 @@ paths:
                 properties:
                   message:
                     type: string
-
     put:
       summary: Update a filter by ID
       tags:
@@ -295,14 +287,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/types.filter.yaml#/components/schemas/UpdateFilterRequest'
+              $ref: '#/components/schemas/UpdateFilterRequest'
       responses:
         '200':
           description: Filter updated successfully
           content:
             application/json:
               schema:
-                $ref: './schemas/types.filter.yaml#/components/schemas/UpdateFilterResponse'
+                $ref: '#/components/schemas/UpdateFilterResponse'
         '400':
           description: Bad request
           content:
@@ -330,7 +322,6 @@ paths:
                 properties:
                   message:
                     type: string
-
     delete:
       summary: Delete a filter by ID
       tags:
@@ -341,7 +332,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/types.filter.yaml#/components/schemas/DeleteFilterResponse'
+                $ref: '#/components/schemas/DeleteFilterResponse'
         '404':
           description: Filter not found
           content:
@@ -360,3 +351,337 @@ paths:
                 properties:
                   message:
                     type: string
+components:
+  schemas:
+    FeedQueryParams:
+      properties:
+        name:
+          title: FeedQueryParams.name
+          type: string
+        type:
+          title: FeedQueryParams.type
+          type: string
+        required:
+          title: FeedQueryParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FeedQueryParams
+      type: object
+    Feed:
+      properties:
+        id:
+          title: Feed.id
+          type: string
+        name:
+          title: Feed.name
+          type: string
+        path:
+          title: Feed.path
+          type: string
+        config:
+          title: Feed.config
+          type: object
+        queryParams:
+          items:
+            $ref: '#/components/schemas/FeedQueryParams'
+            title: Feed.queryParams.[]
+          title: Feed.queryParams
+          type: array
+      required:
+        - id
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: Feed
+      type: object
+    GetFeedsResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetFeedsResponse.data.[].id
+                type: string
+              name:
+                title: GetFeedsResponse.data.[].name
+                type: string
+              path:
+                title: GetFeedsResponse.data.[].path
+                type: string
+            required:
+              - id
+              - name
+              - path
+            additionalProperties: false
+            title: GetFeedsResponse.data.[]
+            type: object
+          title: GetFeedsResponse.data
+          type: array
+      required:
+        - data
+      additionalProperties: false
+      title: GetFeedsResponse
+      type: object
+    GetFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: GetFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: GetFeedResponse
+      type: object
+    PostFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: PostFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: PostFeedResponse
+      type: object
+    UpdateFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: UpdateFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: UpdateFeedResponse
+      type: object
+    DeleteFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+          title: DeleteFeedResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: DeleteFeedResponse
+      type: object
+    PostFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: PostFeedRequestBody
+    UpdateFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: UpdateFeedRequestBody
+    DeleteFeedRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: DeleteFeedRequest
+    GetFeedByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: GetFeedByIdRequest
+    DeleteAndGetFeedRequest:
+      properties:
+        id:
+          title: DeleteAndGetFeedRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFeedRequest
+      type: object
+    UpdateAndCreateFeedRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFeedRequest.name
+          type: string
+        path:
+          title: UpdateAndCreateFeedRequest.path
+          type: string
+        config:
+          title: UpdateAndCreateFeedRequest.config
+          type: object
+        queryParams:
+          items:
+            $ref: '#/components/schemas/FeedQueryParams'
+            title: UpdateAndCreateFeedRequest.queryParams.[]
+          title: UpdateAndCreateFeedRequest.queryParams
+          type: array
+      required:
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: UpdateAndCreateFeedRequest
+      type: object
+    FilterParams:
+      properties:
+        name:
+          title: FilterParams.name
+          type: string
+        type:
+          title: FilterParams.type
+          type: string
+        required:
+          title: FilterParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FilterParams
+      type: object
+    Filter:
+      properties:
+        id:
+          title: Filter.id
+          type: string
+        name:
+          title: Filter.name
+          type: string
+        type:
+          title: Filter.type
+          type: string
+        description:
+          title: Filter.description
+          type: string
+        code:
+          title: Filter.code
+          nullable: true
+          type: string
+        filterParams:
+          items:
+            $ref: '#/components/schemas/FilterParams'
+            title: Filter.filterParams.[]
+          title: Filter.filterParams
+          type: array
+      required:
+        - id
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: Filter
+      type: object
+    CreateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: CreateFilterRequest
+    UpdateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: UpdateFilterRequest
+    DeleteFilterRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: DeleteFilterRequest
+    GetFilterByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: GetFilterByIdRequest
+    GetAllFiltersResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetAllFiltersResponse.data.[].id
+                type: string
+              name:
+                title: GetAllFiltersResponse.data.[].name
+                type: string
+              type:
+                title: GetAllFiltersResponse.data.[].type
+                type: string
+            required:
+              - id
+              - name
+              - type
+            additionalProperties: false
+            title: GetAllFiltersResponse.data.[]
+            type: object
+          title: GetAllFiltersResponse.data
+          type: array
+      required:
+        - data
+      additionalProperties: false
+      title: GetAllFiltersResponse
+      type: object
+    GetFilterByIdResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: GetFilterByIdResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: GetFilterByIdResponse
+      type: object
+    UpdateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: UpdateFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: UpdateFilterResponse
+      type: object
+    CreateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: CreateFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: CreateFilterResponse
+      type: object
+    DeleteFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+          title: DeleteFilterResponse.data
+      required:
+        - data
+      additionalProperties: false
+      title: DeleteFilterResponse
+      type: object
+    UpdateAndCreateFilterRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFilterRequest.name
+          type: string
+        type:
+          title: UpdateAndCreateFilterRequest.type
+          type: string
+        description:
+          title: UpdateAndCreateFilterRequest.description
+          type: string
+        code:
+          title: UpdateAndCreateFilterRequest.code
+          nullable: true
+          type: string
+        filterParams:
+          items:
+            $ref: '#/components/schemas/FilterParams'
+            title: UpdateAndCreateFilterRequest.filterParams.[]
+          title: UpdateAndCreateFilterRequest.filterParams
+          type: array
+      required:
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: UpdateAndCreateFilterRequest
+      type: object
+    DeleteAndGetFilterRequest:
+      properties:
+        id:
+          title: DeleteAndGetFilterRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFilterRequest
+      type: object

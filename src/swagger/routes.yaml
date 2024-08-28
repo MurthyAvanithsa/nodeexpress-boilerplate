@@ -1,0 +1,362 @@
+openapi: 3.0.0
+info:
+  title: Swagger UI
+  version: 1.0.0
+  description: API for managing filters and feeds
+servers:
+  - url: http://localhost:3000
+    description: Local server
+tags:
+  - name: filter
+    description: Operations related to filters
+  - name: feed
+    description: Operations related to feeds
+paths:
+  /feed:
+    get:
+      summary: Get all feeds
+      tags:
+        - feed
+      responses:
+        "200":
+          description: A list of feeds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetFeedsResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    post:
+      summary: Create a new feed
+      tags:
+        - feed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostFeedRequestBody"
+      responses:
+        "201":
+          description: Feed created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostFeedResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /feed/{feedId}:
+    parameters:
+      - in: path
+        name: feedId
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a feed by ID
+      tags:
+        - feed
+      responses:
+        "200":
+          description: Feed details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetFeedResponse"
+        "404":
+          description: Feed not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    put:
+      summary: Update a feed by ID
+      tags:
+        - feed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFeedRequestBody"
+      responses:
+        "200":
+          description: Feed updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateFeedResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "404":
+          description: Feed not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a feed by ID
+      tags:
+        - feed
+      responses:
+        "200":
+          description: Feed deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteFeedResponse"
+        "404":
+          description: Feed not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /filter:
+    get:
+      summary: Get all filters
+      tags:
+        - filter
+      responses:
+        "200":
+          description: A list of filters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllFiltersResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    post:
+      summary: Create a new filter
+      tags:
+        - filter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFilterRequest"
+      responses:
+        "201":
+          description: Filter created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateFilterResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /filter/{filterId}:
+    parameters:
+      - in: path
+        name: filterId
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a filter by ID
+      tags:
+        - filter
+      responses:
+        "200":
+          description: Filter details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetFilterByIdResponse"
+        "404":
+          description: Filter not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    put:
+      summary: Update a filter by ID
+      tags:
+        - filter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFilterRequest"
+      responses:
+        "200":
+          description: Filter updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateFilterResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "404":
+          description: Filter not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a filter by ID
+      tags:
+        - filter
+      responses:
+        "200":
+          description: Filter deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteFilterResponse"
+        "404":
+          description: Filter not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
