@@ -1,3 +1,5 @@
+import { JsonArray, JsonValue } from "@prisma/client/runtime/library";
+
 export type FilterParams = {
   name: string;
   type: string;
@@ -10,14 +12,14 @@ export type Filter = {
   type: string;
   description?: string;
   code: string | null;
-  filterParams: FilterParams[];
+  filterParams: JsonValue[];
 };
 
 type UpdateAndCreateFilterRequest = {
   name: string;
   type: string;
   description?: string;
-  code: string | null;
+  code: string ;
   filterParams: FilterParams[];
 };
 
@@ -34,14 +36,15 @@ export type GetFilterByIdRequest = DeleteAndGetFilterRequest;
 
 // Responses
 export type GetAllFiltersResponse = {
-  data: {
+  data?: {
     id: string;
     name: string;
     type: string;
-  }[];
+  }[],
+  error?: string
 };
 
-export type GetFilterByIdResponse = { data: Filter };
-export type UpdateFilterResponse = { data: Filter };
-export type CreateFilterResponse = { data: Filter };
-export type DeleteFilterResponse = { data: DeleteAndGetFilterRequest };
+export type GetFilterByIdResponse = { data?: Filter, error?: string };
+export type UpdateFilterResponse = { data?: Filter, error?: string };
+export type CreateFilterResponse = { data?: Filter, error?: string };
+export type DeleteFilterResponse = { data?: DeleteAndGetFilterRequest, error?: string };
