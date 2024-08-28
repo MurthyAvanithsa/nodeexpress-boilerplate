@@ -1,3 +1,5 @@
+import { JsonValue } from "@prisma/client/runtime/library";
+
 export type FeedQueryParams = {
   name: string;
   type: string;
@@ -8,8 +10,8 @@ export type Feed = {
   id: string;
   name: string;
   path: string;
-  config: object;
-  queryParams: FeedQueryParams[];
+  config: JsonValue;
+  queryParams: JsonValue[];
 };
 
 type UpdateAndCreateFeedRequest = {
@@ -25,17 +27,18 @@ type DeleteAndGetFeedRequest = {
 
 // Responses
 export type GetFeedsResponse = {
-  data: {
+  data?: {
     id: string;
     name: string;
     path: string;
-  }[];
+  }[],
+  error?: string
 };
 
-export type GetFeedResponse = { data: Feed };
-export type PostFeedResponse = { data: Feed };
-export type UpdateFeedResponse = { data: Feed };
-export type DeleteFeedResponse = { data: DeleteAndGetFeedRequest };
+export type GetFeedResponse = { data?: Feed, error?: string };
+export type PostFeedResponse = { data?: Feed, error?: string };
+export type UpdateFeedResponse = { data?: Feed, error?: string };
+export type DeleteFeedResponse = { data?: DeleteAndGetFeedRequest, error?: string };
 
 // Request Bodies
 export type PostFeedRequestBody = UpdateAndCreateFeedRequest;
