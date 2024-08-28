@@ -37,7 +37,7 @@ function csvToJson(csvFilePath: string): Promise<AdBreak[]> {
     });
 }
 
-const csvFilePath = path.join(__dirname, 'ad-breaks.csv');
+const csvFilePath = path.join(__dirname, '/files/ad-breaks.csv');
 
 async function getAdBreaks() {
     try {
