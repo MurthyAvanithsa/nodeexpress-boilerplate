@@ -6,7 +6,6 @@ import { UpdateFilterRequest,
     CreateFilterResponse,
     DeleteFilterRequest, 
     DeleteFilterResponse,
-    Filter,
     GetAllFiltersResponse,
     GetFilterByIdResponse,
     GetFilterByIdRequest } from "../types/types.filter"
@@ -14,33 +13,40 @@ import { Request, Response } from 'express';
 const filterRouter = Router();
 
 filterRouter.get("/filter/", async (req: Request, res: Response)=> {
-    const filters: GetAllFiltersResponse = await getFilters();
-    res.send(filters);
+    const response: GetAllFiltersResponse = await getFilters();
+    const responseCode = response.error ? 500 : 200;
+    res.status(responseCode).json(response);
 });
 
-filterRouter.get("/filter/:filterId", async (req: Request<{filterId: GetFilterByIdRequest}, GetFilterByIdResponse, {}>, res: Response)=> {
-    const filterId = req.params.filterId;
-    const filter: GetFilterByIdResponse = await getFilterById(filterId)
-    res.send(filter);
+filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFilterByIdResponse, {}>, res: Response<GetFilterByIdResponse | { error: string }>) => {
+    const filterId = req.params.id;
+    const response: GetFilterByIdResponse = await getFilterById(filterId);
+    let responseCode;
+    response.data? responseCode = 200: response.error=="Filter not found"? responseCode=404: responseCode = 500; 
+    res.status(responseCode).json(response); 
 });
 
 filterRouter.post("/filter/", async (req: Request<{}, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
     const filter: CreateFilterRequest = req.body;
-    const createdFilter: CreateFilterResponse = await createFilter(filter);
-    res.status(201).send(createdFilter);
+    const response: CreateFilterResponse = await createFilter(filter);
+    const responseCode = response.data ? 201: 500;
+    res.status(responseCode).json(response);
 });
 
-filterRouter.put("/filter/:filterId", async (req: Request<{filterId: GetFilterByIdRequest}, UpdateFilterResponse, UpdateFilterRequest>, res: Response)=> {
-    const filterId = req.params.filterId;
+filterRouter.put("/filter/:id", async (req: Request<GetFilterByIdRequest, UpdateFilterResponse, UpdateFilterRequest>, res: Response)=> {
+    const filterId = req.params.id;
     const filter: UpdateFilterRequest = req.body;
-    const createdFilter: UpdateFilterResponse = await updateFilter(filterId, filter);
-    res.send(createdFilter);
+    const response: UpdateFilterResponse = await updateFilter(filterId, filter);
+    const responseCode = response.data? 200 : 500;
+    res.status(responseCode).json(response);
 });
 
-filterRouter.delete("/filter/:filterId", async (req: Request<{filterId: DeleteFilterRequest}, DeleteFilterResponse, DeleteFilterRequest>, res: Response)=> {
-    const filterId = req.params.filterId;
-    const filter: DeleteFilterResponse = await deleteFilter(filterId)
-    res.send(filter);
+filterRouter.delete("/filter/:id", async (req: Request<DeleteFilterRequest, DeleteFilterResponse, DeleteFilterRequest>, res: Response)=> {
+    const filterId = req.params.id;
+    const response: DeleteFilterResponse = await deleteFilter(filterId);
+    let responseCode;
+    response.data? responseCode = 204: responseCode = 500;
+    res.status(responseCode).json(response);
 });
 
 export default filterRouter;
