@@ -15,9 +15,9 @@ async function getFeeds(): Promise<Result<Feed[]>> {
     try {
         const feeds = await prisma.feed.findMany();
         return { data: feeds };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error fetching feeds: ${JSON.stringify(error, null, 2)}`);
-        return { error: "Could not fetch feeds" };
+        return { error: error.message };
     }
 }
 
@@ -31,9 +31,9 @@ async function getFeedById(feedId: string): Promise<Result<Feed>> {
             return { error: `Feed with ID ${feedId} not found` };
         }
         return { data: feed };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error fetching feed by ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: "Could not fetch feed" };
+        return { error: error.message };
     }
 }
 
@@ -50,9 +50,9 @@ async function createFeed(req: {
             data: req
         });
         return { data: feed };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error creating feed with path ${req.path}: ${JSON.stringify(error, null, 2)}`);
-        return { error: "Could not create feed" };
+        return { error: error.message };
     }
 }
 
@@ -69,9 +69,9 @@ async function updateFeed(feedId: string, updates: {
             data: updates
         });
         return { data: feed };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error updating feed with ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: "Could not update feed" };
+        return { error: error.message };
     }
 }
 
@@ -82,9 +82,9 @@ async function deleteFeed(feedId: string): Promise<Result<null>> {
             where: { id: feedId }
         });
         return { data: null };
-    } catch (error) {
+    } catch (error: any) {
         logger.error(`Error deleting feed with ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: "Could not delete feed" };
+        return { error: error.message };
     }
 }
 
