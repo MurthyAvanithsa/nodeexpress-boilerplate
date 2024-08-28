@@ -40,6 +40,7 @@ async function getFilterById(filterId: string): Promise<Result<filterModel>> {
 }
 
 async function createFilter(req: {
+    id?: any,
     name: string;
     type: string;
     description: string;
@@ -48,13 +49,7 @@ async function createFilter(req: {
 }): Promise<Result<filterModel>> {
     try {
         const filter = await prisma.filter.create({
-            data: {
-                name: req.name,
-                description: req.description,
-                type: req.type,
-                filterParams: req.filterParams,
-                code: req.code
-            }
+            data: req
         });
         return { data: filter };
     } catch (error) {
