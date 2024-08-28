@@ -29,6 +29,18 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+const serverAdapter = new ExpressAdapter();
+serverAdapter.setBasePath('/bull-board/ui');
+
+createBullBoard({
+  queues: [
+    new BullMQAdapter(adBreaksQueue), 
+  ],
+  serverAdapter,
+});
+
+app.use('/bull-board/ui', serverAdapter.getRouter()); 
 app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,
@@ -39,18 +51,6 @@ app.use(
 app.use(feedRouter);
 app.use(filterRouter);
 app.use(errorLogger);
-
-onst serverAdapter = new ExpressAdapter();
-serverAdapter.setBasePath('/admin/queues');
-
-createBullBoard({
-  queues: [
-    new BullMQAdapter(adBreaksQueue), 
-  ],
-  serverAdapter,
-});
-
-app.use('/bull-board/ui', serverAdapter.getRouter()); 
 
 export function startServer(options: { port: number }) {
   app.listen(options.port, () => {
