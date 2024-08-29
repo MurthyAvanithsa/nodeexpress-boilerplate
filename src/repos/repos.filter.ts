@@ -1,4 +1,4 @@
-import { prisma } from "./connection";
+import {connection as prisma} from "../app";
 import { Filter as filterModel } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FilterParams } from "../types/types.filter";
@@ -20,7 +20,7 @@ async function getAllFilters(): Promise<Result<Pick<filterModel, 'id' | 'name' |
         return { data: filters };
     } catch (error: any) {
         logger.error(`Error fetching filters:${error}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -35,7 +35,7 @@ async function getFilterById(filterId: string): Promise<Result<filterModel>> {
         return { data: filter };
     } catch (error: any) {
         logger.error(`Error fetching filter by ID: ${error}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -54,7 +54,7 @@ async function createFilter(req: {
         return { data: filter };
     } catch (error: any) {
         logger.error(`Error creating filter: ${error}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -73,7 +73,7 @@ async function updateFilter(filterId: string, updates: {
         return { data: filter };
     } catch (error: any) {
         logger.error(`Error updating filter: ${error}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -85,7 +85,7 @@ async function deleteFilter(filterId: string): Promise<Result<null>> {
         return { data: null };
     } catch (error: any) {
         logger.error(`Error deleting filter: ${error}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
