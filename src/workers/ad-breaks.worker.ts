@@ -1,8 +1,8 @@
 import { Worker, Job } from 'bullmq';
 
 const redisOptions = {
-    host: 'localhost',
-    port: 6379,
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
 };
 
 function startWorker(queueName: string) {
