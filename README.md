@@ -9,6 +9,7 @@
 - [Swagger Documentation](#swagger-documentation)
 - [Overview of Repository Functions](#overview-of-repository-functions)
 - [Routes](#routes-docs)
+- [JWT Middleware](#jwt-middleware)
 
 ## Quick Start
 
@@ -109,7 +110,7 @@ npm run generate-openapi-spec
 
 This script performs the same actions as the post-install process, regenerating the schemas and OpenAPI specification.
 
-## routes docs
+## Routes docs
 
 ### Feed Routes
 
@@ -976,3 +977,33 @@ src/
     }
     ```
     The `error` field contains a string describing the error that occurred.
+
+## JWT Middleware
+
+This module sets up JWT middleware using `express-jwt` to authenticate requests.
+
+### Configuration
+
+- **`secret`**: The secret key used to validate the JWT. In this example, it is set to `'jwt-secret'`.
+- **`algorithms`**: The algorithms allowed for the JWT. In this example, it is set to `['HS256']`.
+
+### Usage
+
+#### Token: 
+```
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g
+```
+
+To use this token, include it in the `headers` section of your request as follows:
+
+```javascript
+Authorization: Bearer <your-token>
+```
+
+Replace <your-token> with the actual JWT token provided above. Ensure to use this token for authenticated requests to all routes except /api-docs and /bull-board/ui.
+
+```
+In this format:
+- The `Authorization` header example is provided in a `javascript` code block.
+- The actual JWT token is included directly in the `Authorization` header for clarity and ease of copying.
+```
