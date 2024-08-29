@@ -15,6 +15,7 @@ import { ExpressAdapter } from '@bull-board/express'; // Import ExpressAdapter
 import { Queue } from 'bullmq';
 import { PrismaClient } from '@prisma/client';
 import { getPrismaClientInstance } from './repos/connection';
+import { jwtMiddleware } from "./middleware/jwt-authorization";
 
 const adBreaksQueue = new Queue('adBreaksQueue', {
   connection: {
@@ -43,6 +44,7 @@ createBullBoard({
 });
 
 app.use('/bull-board/ui', serverAdapter.getRouter());
+app.use(jwtMiddleware);
 app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,
