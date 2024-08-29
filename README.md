@@ -139,36 +139,31 @@ Prisma provides a type-safe database client and a powerful data modeling tool. K
 
 This documentation should help you get started with repository and database operations using Prisma ORM. For more detailed information, refer to the official Prisma documentation and resources.
 
-### Models
+### Post-Install Setup
+While installing dependencies, models are automatically created in the database, seeding is also done, and the Prisma client is generated.
+We can manually set up these things:
+- To set up the tables: `npx prisma migrate dev --schema ./src/prisma/schema.prisma`
+- To set up the seeding: `npx ts-node src/repos/seed.ts`
+- To generate the Prisma client: `npx prisma generate --schema ./src/prisma/schema.prisma`
+### DB Folder Structure
+```
+src/
+├── repos/              # Repository functions
+│   ├── connection.ts    # Manages database connections
+│   ├── repos.feed.ts    # Handles the feed db-operations
+│   ├── repos.filter.ts  # Handles the filter db-operations
+│   └── repo.test.ts     # Handles tests for all repo functions
+├── prisma/             # Prisma ORM related files
+│   └── schema.prisma   # Prisma schema file contains models
+│   └── migrations/     # Database migration files
+└── .env                # Environment variables file in the root directory contains the database URL
+```
+### Models Overview
+**Feed**: *Includes a unique **id** (cuid), a unique **path**, a **name**, a **config** stored as JSON, and an array of JSON **queryParams**.*
 
-- #### Feed
+**Filter**: *Features a unique **id** (cuid), a unique **name**, a **description**, a **type**, an optional **code**, and an array of JSON **filterParams** (defaulting to an empty array).*
 
-  - **id**: String @id @default(cuid()) `Automatically generates a unique id`
-  - **path**: String @unique
-  - **name**: String
-  - **config**: Json
-  - **queryParams**: Json[]
-
-- #### Filter
-
-  - **id**: String @id @default(cuid()) `Automatically generates a unique id`
-  - **name**: String @unique
-  - **description**: String
-  - **type**: String
-  - **code**: String?
-  - **filterParams**: Json[] @default([])
-
-- #### adBreaks
-  - **mediaId**: String @id @unique
-  - **markers**: Json
-
-### Getting Started
-
-- **Connect to the database:**
-
-  ```javascript
-  import prisma from "../../src/repos/connection";
-  ```
+**adBreaks**: *Identified by a unique **mediaId**, with **markers** stored as JSON.*
 
 - #### Repository Functions
 
