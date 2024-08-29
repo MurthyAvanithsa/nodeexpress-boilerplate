@@ -111,6 +111,648 @@ This script performs the same actions as the post-install process, regenerating 
 
 ## routes docs
 
+### Feed Routes
+
+#### Endpoint: `/feed`
+
+#### Method: `GET`
+
+#### Description
+Fetches all feeds data.
+
+#### Responses
+
+##### 200 OK
+- **Description**: Successfully retrieved feed data.
+- **Example**:
+  ```json
+  {
+    "data": [
+      {
+        "id": "0d40c",
+        "name": "Playlist feed",
+        "path": "/tbn/playlist-feed"
+      },
+      {
+        "id": "cm0drew770000onf86e8j91bs",
+        "name": "Playlist",
+        "path": "/tbn/mediafeed"
+      },
+      {
+        "id": "example-id",
+        "name": "Another feed",
+        "path": "/tbn/another-feed"
+      }
+    ]
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while fetching feed data.
+- **Example**:
+    ```json
+    {
+      "error": "Error message"
+    }
+    ```
+
+
+#### Endpoint: `/filter/:id`
+
+#### Method: `GET`
+
+#### URL Parameters
+- **id** (string): The ID of the filter to retrieve.
+
+#### Responses
+
+##### 200 OK
+- **Description**: Successfully retrieved the filter.
+- **Example**:
+  ```json
+  {
+    "data": {
+      "id": "0d40c",
+      "path": "/tbn/playlist-feed",
+      "name": "Playlist feed",
+      "config": {
+        "assetFilters": [
+          {
+            "name": "FILTER_ASSET_PREMIUM",
+            "type": "assetFilter",
+            "config": {
+              "excludeTags": "episode, free",
+              "includeProperties": {
+                "requiresSubscription": "false"
+              }
+            }
+          },
+          {
+            "name": "FILTER_ASSET_ADINJECT",
+            "type": "assetFilter",
+            "config": {
+              "entry": "id",
+              "includeMidRoll": true,
+              "includePostRoll": true
+            }
+          },
+          {
+            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
+            "type": "customAssetFilter",
+            "config": {
+              "clearCache": true
+            }
+          }
+        ],
+        "playlistFilters": [
+          {
+            "name": "FILTER_PLAYLIST_JWPLAYER",
+            "type": "playlistFilter",
+            "config": {
+              "excludeTags": true,
+              "includeCustomParms": false
+            }
+          }
+        ]
+      },
+      "queryParams": [
+        {
+          "name": "playlistId",
+          "required": false
+        }
+      ]
+    }
+  }
+  ```
+
+##### 404 Not Found
+- **Description**: The specified filter could not be found. This response indicates that the ID provided does not match any filter in the system.
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while fetching the filter. 
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+
+#### Endpoint: `/feed`
+
+#### Method: `POST`
+
+#### Description
+Creates a new feed.
+
+#### Request Body
+
+- `PostFeedRequestBody`
+  - **Description**: The request body should contain the details of the feed to be created.
+  - **Example**:
+    ```json
+    {
+      "path": "/tbn/dojo-pbr",
+      "name": "Playlist feed",
+      "config": {
+        "assetFilters": [
+          {
+            "name": "FILTER_ASSET_PREMIUM",
+            "type": "assetFilter",
+            "config": {
+              "excludeTags": "episode, free",
+              "includeProperties": {
+                "requiresSubscription": "false"
+              }
+            }
+          },
+          {
+            "name": "FILTER_ASSET_ADINJECT",
+            "type": "assetFilter",
+            "config": {
+              "entry": "id",
+              "includeMidRoll": true,
+              "includePostRoll": true
+            }
+          },
+          {
+            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
+            "type": "customAssetFilter",
+            "config": {
+              "clearCache": true
+            }
+          }
+        ],
+        "playlistFilters": [
+          {
+            "name": "FILTER_PLAYLIST_JWPLAYER",
+            "type": "playlistFilter",
+            "config": {
+              "excludeTags": true,
+              "includeCustomParms": false
+            }
+          }
+        ]
+      },
+      "queryParams": [
+        {
+          "name": "playlistId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    }
+    ```
+
+#### Responses
+
+##### 201 Created
+- **Description**: The feed was successfully created.
+- **Example**:
+  ```json
+  {
+    "data": {
+      "id": "cm0f29z2g0001qjb28qxs68iq",
+      "path": "/tbn/dojo-pbr",
+      "name": "Playlist feed",
+      "config": {
+        "assetFilters": [
+          {
+            "name": "FILTER_ASSET_PREMIUM",
+            "type": "assetFilter",
+            "config": {
+              "excludeTags": "episode, free",
+              "includeProperties": {
+                "requiresSubscription": "false"
+              }
+            }
+          },
+          {
+            "name": "FILTER_ASSET_ADINJECT",
+            "type": "assetFilter",
+            "config": {
+              "entry": "id",
+              "includeMidRoll": true,
+              "includePostRoll": true
+            }
+          },
+          {
+            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
+            "type": "customAssetFilter",
+            "config": {
+              "clearCache": true
+            }
+          }
+        ],
+        "playlistFilters": [
+          {
+            "name": "FILTER_PLAYLIST_JWPLAYER",
+            "type": "playlistFilter",
+            "config": {
+              "excludeTags": true,
+              "includeCustomParms": false
+            }
+          }
+        ]
+      },
+      "queryParams": [
+        {
+          "name": "playlistId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    }
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while fetching the filter. 
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+  ```
+
+
+#### Endpoint: `/feed/:id`
+  
+#### Method: `PUT`
+  
+#### Description
+  Up dates the feed information based on the provided feed ID.
+  
+#### Parameters
+  - `id` (path parameter): The ID of the feed to be updated.
+  
+#### Request Body
+  
+- **UpdateFeedRequestBody**:
+  - **Description**: The body containing the new feed information.
+  - **Example**:
+    ```json
+    {
+      "path": "/tbn/dojo-pbr",
+      "name": "Playlist feed",
+      "config": {
+        "assetFilters": [
+          {
+            "name": "FILTER_ASSET_PREMIUM",
+            "type": "assetFilter",
+            "config": {
+              "excludeTags": "episode, free",
+              "includeProperties": {
+                "requiresSubscription": "false"
+              }
+            }
+          },
+          {
+            "name": "FILTER_ASSET_ADINJECT",
+            "type": "assetFilter",
+            "config": {
+              "entry": "id",
+              "includeMidRoll": true,
+              "includePostRoll": true
+            }
+          },
+          {
+            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
+            "type": "customAssetFilter",
+            "config": {
+              "clearCache": true
+            }
+          }
+        ],
+        "playlistFilters": [
+          {
+            "name": "FILTER_PLAYLIST_JWPLAYER",
+            "type": "playlistFilter",
+            "config": {
+              "excludeTags": true,
+              "includeCustomParms": false
+            }
+          }
+        ]
+      },
+      "queryParams": [
+        {
+          "name": "playlistId",
+          "type": "string",
+          "required": false
+        }
+      ]
+    }
+    ```
+  
+#### Responses
+  
+##### 200 OK
+- **Description**: The feed was successfully updated.
+- **Example**:
+      ```json
+      {
+        "data": {
+          "id": "cm0f29z2g0001qjb28qxs68iq",
+          "path": "/tbn/dojo-pbr",
+          "name": "Playlist feed",
+          "config": {
+            "assetFilters": [
+              {
+                "name": "FILTER_ASSET_PREMIUM",
+                "type": "assetFilter",
+                "config": {
+                  "excludeTags": "episode, free",
+                  "includeProperties": {
+                    "requiresSubscription": "false"
+                  }
+                }
+              },
+              {
+                "name": "FILTER_ASSET_ADINJECT",
+                "type": "assetFilter",
+                "config": {
+                  "entry": "id",
+                  "includeMidRoll": true,
+                  "includePostRoll": true
+                }
+              },
+              {
+                "name": "FILTER_ASSET_NEED_AUTHENTICATION",
+                "type": "customAssetFilter",
+                "config": {
+                  "clearCache": true
+                }
+              }
+            ],
+            "playlistFilters": [
+              {
+                "name": "FILTER_PLAYLIST_JWPLAYER",
+                "type": "playlistFilter",
+                "config": {
+                  "excludeTags": true,
+                  "includeCustomParms": false
+                }
+              }
+            ]
+          },
+          "queryParams": [
+            {
+              "name": "playlistId",
+              "type": "string",
+              "required": false
+            }
+          ]
+        }
+      }
+      ```
+  
+##### 500 Internal Server Error
+- **Description**: An error occurred while updating the feed.
+- **Example**:
+    ```json
+    {
+    "error": "error message"
+    }
+    ```
+
+
+#### Endpoint: `DELETE /feed/:id`
+
+#### Method: `DELETE`
+
+#### Parameters
+- `id` (string, required): The unique identifier of the feed to be deleted.
+
+#### Responses
+
+##### 204 No Content
+  - **Description**: The feed was successfully deleted.
+
+#### 500 Internal Server Error
+  - **Description**: An error occurred while deleting the feed.
+  - **Example**:
+    ```json
+    {
+      "error": "Error message"
+    }
+    ```
+
+
+### Filter Routes
+
+#### Endpoint: `/filter/`
+
+#### Description
+Fetches all filters.
+
+#### Method: `GET`
+
+#### Responses
+
+##### 200 OK
+- **Description**: Successfully retrieved all filters.
+- **Example**:
+  ```json
+  {
+    "data": [
+      {
+        "id": "79272",
+        "name": "FILTER_ASSET_ADINJECT",
+        "type": "assetFilter"
+      },
+      {
+        "id": "65763",
+        "name": "FILTER_PLAYLIST_JWPLAYER",
+        "type": "playlistFilter"
+      },
+      {
+        "id": "12345",
+        "name": "FILTER_SOME_OTHER",
+        "type": "otherFilter"
+      }
+    ]
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while fetching filters.
+- **Example**:
+  ```json
+  {
+    "error": "Error message"
+  }
+
+
+#### Endpoint: `/filter/:id`
+
+#### Description
+Fetches a specific filter by its ID.
+
+#### Method: `GET`
+
+#### URL Parameters
+- `id` (string): The ID of the filter to retrieve.
+
+#### Response
+
+##### 200 OK
+- **Description**: Successfully retrieved the filter.
+- **Example**:
+  ```json
+  {
+    "data": {
+      "id": "79272",
+      "name": "FILTER_ASSET_ADINJECT",
+      "description": "To inject ad breaks",
+      "type": "assetFilter",
+      "code": null,
+      "filterParams": []
+    }
+  }
+
+##### 404 Not Found
+- **Description**: The requested filter could not be found.
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while fetching the filter.
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+
+#### Endpoint: `/filter/`
+
+#### Description
+Creates a new filter.
+
+#### Method: `POST`
+
+#### Request Body
+
+- **CreateFilterRequest**:
+  - **Description**: The body containing the new filter information.
+  - **Example**:
+    ```json
+    {
+      "name": "FILTER_GEO_LOCATION",
+      "description": "To add geo location to each playlist",
+      "type": "assetFilter",
+      "code": "",
+      "filterParams": []
+    }
+    ```
+
+#### Responses
+
+##### 201 Created
+- **Description**: The filter was successfully created.
+- **Example**:
+  ```json
+  {
+    "data": {
+      "id": "cm0f1zt570000qjb2z76lx189",
+      "name": "FILTER_GEO_LOCATION",
+      "description": "To add geo location to each playlist",
+      "type": "assetFilter",
+      "code": null,
+      "filterParams": []
+    }
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while creating the filter.
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+
+
+#### Endpoint: `/filter/:id`
+
+#### Description
+Updates an existing filter with the specified ID.
+
+#### Method: `POST`
+
+#### URL Parameters
+- `id` (string, required): The unique identifier of the filter to be updated.
+
+#### Request Body
+
+- **CreateFilterRequest**:
+  - **Description**: The body containing the updated filter information.
+  - **Example**:
+    ```json
+    {
+      "name": "FILTER_GEO_LOCATION",
+      "description": "To add geo location to each playlist",
+      "type": "assetFilter",
+      "code": "",
+      "filterParams": []
+    }
+    ```
+
+#### Responses
+
+##### 201 Created
+- **Description**: The filter was successfully updated.
+- **Example**:
+  ```json
+  {
+    "data": {
+      "id": "cm0f1zt570000qjb2z76lx189",
+      "name": "FILTER_GEO_LOCATION",
+      "description": "To add geo location to each playlist",
+      "type": "assetFilter",
+      "code": null,
+      "filterParams": []
+    }
+  }
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while updating the filter.
+- **Example**:
+  ```json
+  {
+    "error": "error message"
+  }
+
+
+#### Endpoint: `/feed/:id`
+
+#### Description
+Deletes a filter by its ID.
+
+### Method: `DELETE`
+
+#### Parameters
+- **id** (string, required): The unique identifier of the filter to be deleted.
+
+#### Responses
+
+##### 204 No Content
+- **Description**: The filter was successfully deleted.
+
+##### 500 Internal Server Error
+- **Description**: An error occurred while deleting the filter.
+- **Example**:
+  ```json
+  {
+    "error": "An error occurred while deleting the filter"
+  }
+
+
 ## Overview of Repository Functions
 
 This documentation provides an overview of repository and database operations, with a focus on using Prisma ORM.
