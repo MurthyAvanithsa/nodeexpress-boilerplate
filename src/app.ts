@@ -13,6 +13,8 @@ import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express'; // Import ExpressAdapter
 import { Queue } from 'bullmq';
+import { PrismaClient } from '@prisma/client';
+import { getPrismaClientInstance } from './repos/connection';
 
 const adBreaksQueue = new Queue('adBreaksQueue', {
   connection: {
@@ -35,12 +37,12 @@ serverAdapter.setBasePath('/bull-board/ui');
 
 createBullBoard({
   queues: [
-    new BullMQAdapter(adBreaksQueue), 
+    new BullMQAdapter(adBreaksQueue),
   ],
   serverAdapter,
 });
 
-app.use('/bull-board/ui', serverAdapter.getRouter()); 
+app.use('/bull-board/ui', serverAdapter.getRouter());
 app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,
@@ -52,8 +54,32 @@ app.use(feedRouter);
 app.use(filterRouter);
 app.use(errorLogger);
 
+export let connection: PrismaClient;
+
 export function startServer(options: { port: number }) {
-  app.listen(options.port, () => {
+  const server = app.listen(options.port, () => {
     logger.info(`Server is listening on port: ${options.port}`);
+    try {
+      connection = getPrismaClientInstance();
+    }
+    catch (error) {
+      logger.error(`Error in creation of prisma client: ${error}`);
+    }
+  });
+
+  process.on('SIGTERM', async () => {
+    logger.info('SIGTERM signal received: closing HTTP server');
+    server.close(async () => {
+      logger.info('Server closed');
+      if (connection) {
+        try {
+          await connection.$disconnect();
+          logger.info('Prisma client disconnected');
+        } catch (error) {
+          logger.error(`Error disconnecting prisma client: ${error}`);
+        }
+      }
+      process.exit(0);
+    });
   });
 }
