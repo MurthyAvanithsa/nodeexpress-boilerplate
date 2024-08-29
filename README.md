@@ -148,15 +148,15 @@ We can manually set up these things:
 ### DB Folder Structure
 ```
 src/
-├── repos/              # Repository functions
+├── repos/               # Repository functions
 │   ├── connection.ts    # Manages database connections
 │   ├── repos.feed.ts    # Handles the feed db-operations
 │   ├── repos.filter.ts  # Handles the filter db-operations
 │   └── repo.test.ts     # Handles tests for all repo functions
-├── prisma/             # Prisma ORM related files
-│   └── schema.prisma   # Prisma schema file contains models
-│   └── migrations/     # Database migration files
-└── .env                # Environment variables file in the root directory contains the database URL
+├── prisma/              # Prisma ORM related files
+│   └── schema.prisma    # Prisma schema file contains models
+│   └── migrations/      # Database migration files
+└── .env                 # Environment variables file in the root directory contains the database URL
 ```
 ### Models Overview
 **Feed**: *Includes a unique **id** (cuid), a unique **path**, a **name**, a **config** stored as JSON, and an array of JSON **queryParams**.*
@@ -164,7 +164,7 @@ src/
 **Filter**: *Features a unique **id** (cuid), a unique **name**, a **description**, a **type**, an optional **code**, and an array of JSON **filterParams** (defaulting to an empty array).*
 
 **adBreaks**: *Identified by a unique **mediaId**, with **markers** stored as JSON.*
-
+### Database Operations
 - #### Repository Functions
 
   This boilerplate provides a structured approach to managing database operations through repository functions. Below is an overview of key repository functions:
