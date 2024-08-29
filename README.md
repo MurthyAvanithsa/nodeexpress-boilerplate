@@ -1,5 +1,5 @@
 
-# Microservises-boilerplate
+# Microservices-boilerplate
 
 ### Table of Contents
 
@@ -62,6 +62,11 @@ npm start -- server [--port PORTNUMBER]
 
 
 ## Introduction
+
+- Commanderjs for creating commands
+- Expressjs is considered as a REST and API middleware 
+- PrismaJS is considered as an ORM layer 
+- PINOJS as a logging library
 
 ## Swagger Documentation
 
