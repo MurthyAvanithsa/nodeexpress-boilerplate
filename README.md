@@ -452,7 +452,7 @@ Creates a new feed.
 ##### 200 OK
 - **Description**: The feed was successfully updated.
 - **Example**:
-      ```json
+  ```json
       {
         "data": {
           "id": "cm0f29z2g0001qjb28qxs68iq",
@@ -507,7 +507,7 @@ Creates a new feed.
           ]
         }
       }
-      ```
+  ```
   
 ##### 500 Internal Server Error
 - **Description**: An error occurred while updating the feed.
