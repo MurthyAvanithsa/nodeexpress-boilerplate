@@ -1,9 +1,7 @@
-// src/repositories/feedRepo.ts
-import { PrismaClient, Feed } from "@prisma/client";
+import {connection as prisma} from "../app";
+import { Feed } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FeedQueryParams } from "../types/types.feed";
-
-const prisma = new PrismaClient();
 
 type Result<T> = {
     data?: T;
@@ -17,7 +15,7 @@ async function getFeeds(): Promise<Result<Feed[]>> {
         return { data: feeds };
     } catch (error: any) {
         logger.error(`Error fetching feeds: ${JSON.stringify(error, null, 2)}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -33,7 +31,7 @@ async function getFeedById(feedId: string): Promise<Result<Feed>> {
         return { data: feed };
     } catch (error: any) {
         logger.error(`Error fetching feed by ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -52,7 +50,7 @@ async function createFeed(req: {
         return { data: feed };
     } catch (error: any) {
         logger.error(`Error creating feed with path ${req.path}: ${JSON.stringify(error, null, 2)}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -71,7 +69,7 @@ async function updateFeed(feedId: string, updates: {
         return { data: feed };
     } catch (error: any) {
         logger.error(`Error updating feed with ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
@@ -84,7 +82,7 @@ async function deleteFeed(feedId: string): Promise<Result<null>> {
         return { data: null };
     } catch (error: any) {
         logger.error(`Error deleting feed with ID ${feedId}: ${JSON.stringify(error, null, 2)}`);
-        return { error: error = error.meta? error?.meta?.cause : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
     }
 }
 
