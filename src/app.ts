@@ -6,6 +6,7 @@ import filterRouter from './routes/routes.filter';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
+import cors from 'cors';
 import bodyParser from 'body-parser'
 import * as OpenApiValidator from 'express-openapi-validator';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
@@ -28,6 +29,7 @@ const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
 const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(requestLogger);
