@@ -1,9 +1,10 @@
 import { Queue } from 'bullmq';
 import getAdBreaks from './csv';
 
+
 const redisOptions = {
     host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
+    port: 6379,
 };
 
 const adBreaksQueue = new Queue("adBreaksQueue", { connection: redisOptions });
