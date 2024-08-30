@@ -11,7 +11,7 @@ const redisConnection = new IORedis(
 const prismaConnection = new PrismaClient({
     datasources: {
         db: {
-            url: `postgresql://${config.db.user}:${config.db.pass}@${config.db.host}?connection_limit=${config.db.connectionLimit}`,
+            url: `postgresql://${config.db.user}:${config.db.pass}@${config.db.host}/${config.db.name}?connection_limit=${config.db.connectionLimit}`,
         },
     },
   log: ['info'],

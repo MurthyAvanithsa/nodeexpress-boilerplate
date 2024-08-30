@@ -1,4 +1,4 @@
-import {connection as prisma} from "../app";
+import { prismaConnection as prisma } from "../connections";
 import { Filter as filterModel } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FilterParams } from "../types/types.filter";

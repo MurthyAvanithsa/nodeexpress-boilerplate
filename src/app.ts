@@ -14,7 +14,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express'; // Import ExpressAdapter
 import { Queue } from 'bullmq';
 import { PrismaClient } from '@prisma/client';
-import { getPrismaClientInstance } from './repos/connection';
+import { prismaConnection } from './connections';
 import { jwtMiddleware } from "./middleware/jwt-authorization";
 
 const adBreaksQueue = new Queue('adBreaksQueue', {
@@ -61,12 +61,6 @@ export let connection: PrismaClient;
 export function startServer(options: { port: number }) {
   const server = app.listen(options.port, () => {
     logger.info(`Server is listening on port: ${options.port}`);
-    try {
-      connection = getPrismaClientInstance();
-    }
-    catch (error) {
-      logger.error(`Error in creation of prisma client: ${error}`);
-    }
   });
 
   process.on('SIGTERM', async () => {
@@ -75,7 +69,7 @@ export function startServer(options: { port: number }) {
       logger.info('Server closed');
       if (connection) {
         try {
-          await connection.$disconnect();
+          await prismaConnection.$disconnect();
           logger.info('Prisma client disconnected');
         } catch (error) {
           logger.error(`Error disconnecting prisma client: ${error}`);

@@ -1,4 +1,4 @@
-import {connection as prisma} from "../app";
+import { prismaConnection as prisma } from "../connections";
 import { Feed } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FeedQueryParams } from "../types/types.feed";

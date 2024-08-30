@@ -7,6 +7,7 @@ interface Config {
         host: string,
         user: string,
         pass: string,
+        name: string,
         connectionLimit?: number
     },
     redis: {
@@ -21,8 +22,9 @@ interface Config {
 const config: Config = {
     db: {
         host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || '5432',
-        pass: process.env.DB_PASS || 'password',
+        user: process.env.DB_USER || 'postgres',
+        pass: process.env.DB_PASS || 'postgres',
+        name: process.env.DB_NAME || 'dsp',
         connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '5')
     },
     redis: {
