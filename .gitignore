@@ -12,3 +12,6 @@ src/logger/app.log
 src/swagger/swagger.yaml
 src/swagger/schemas/types.feed.yaml
 src/swagger/schemas/types.filter.yaml
+
+# ignore package-lock.json
+package-lock.json
