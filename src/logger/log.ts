@@ -1,6 +1,5 @@
 import pino from 'pino';
 import path from 'path';
-import pinoMultiStream from 'pino-multi-stream';
 
 const logFilePath = path.join(__dirname, 'app.log');
 
@@ -14,9 +13,8 @@ const fileStream = pino.destination({
   sync: false,
 });
 
-const streams = [
+export const logger = pino({
+}, pino.multistream([
   { stream: prettyStream },
   { stream: fileStream }
-];
-
-export const logger = pino({}, pinoMultiStream.multistream(streams));
+]));
