@@ -6,11 +6,23 @@ info:
 servers:
   - url: http://localhost:3000
     description: Local server
+  - url: http://localhost:5000
+    description: Example Development server
+  - url: https://api.example.com
+    description: Example Production server
 tags:
   - name: filter
     description: Operations related to filters
   - name: feed
     description: Operations related to feeds
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
 paths:
   /feed:
     get:
