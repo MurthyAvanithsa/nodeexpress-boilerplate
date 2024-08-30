@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { startServer } from './app';  
-import { startWorker } from './workers/ad-breaks.worker';
+import { startWorker } from './workers/contactscsv';
 import 'dotenv/config'
 
 const program = new Command();
