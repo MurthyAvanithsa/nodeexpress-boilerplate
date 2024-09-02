@@ -1,7 +1,8 @@
 import { Command } from 'commander';
-import { startServer } from './app';  
-import { startWorker } from './workers/contactscsv';
 import 'dotenv/config'
+import { startServer } from './app';  
+import { startWorker } from './workers/generic';
+import config from './config';
 
 const program = new Command();
 
@@ -14,7 +15,7 @@ program
 
 program
   .command('worker')
-  .option('-q, --queue <string>', 'queue name')  
+  .option('-q, --queue <string>', 'queue name', config.queue.GENERIC_WORKER_QUEUE)  
   .action((cmd) => {
     startWorker(cmd.queue);
   });
