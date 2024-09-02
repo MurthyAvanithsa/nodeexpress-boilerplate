@@ -10,22 +10,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser'
 import * as OpenApiValidator from 'express-openapi-validator';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
-import { createBullBoard } from '@bull-board/api';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
-import { ExpressAdapter } from '@bull-board/express'; // Import ExpressAdapter
-import { Queue } from 'bullmq';
-import { PrismaClient } from '@prisma/client';
 import { prismaConnection } from './connections';
 import { jwtMiddleware } from "./middleware/jwt-authorization";
-import queueRouter from './routes/routes.worker';
+import queueRouter from './routes/routes.queue';
+import bullBoardUI from './middleware/bull-board';
 import config from './config';
-
-const queue = new Queue(config.queue.GENERIC_WORKER_QUEUE, {
-  connection: {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
-  },
-});
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
@@ -36,18 +25,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(requestLogger);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-const serverAdapter = new ExpressAdapter();
-serverAdapter.setBasePath('/bull-board/ui');
-
-createBullBoard({
-  queues: [
-    new BullMQAdapter(queue),
-  ],
-  serverAdapter,
-});
-
-app.use('/bull-board/ui', serverAdapter.getRouter());
+app.use(queueRouter);
+app.use('/bull-board/ui', bullBoardUI);
 app.use(jwtMiddleware);
 app.use(
   OpenApiValidator.middleware({
@@ -58,13 +37,10 @@ app.use(
 );
 app.use(feedRouter);
 app.use(filterRouter);
-app.use(workerRouter);
 app.use(errorLogger);
 
-export let connection: PrismaClient;
-
 export function startServer(options: { port: number }) {
-  const server = app.listen(options.port, () => {
+  const server = app.listen(options.port, config.app.host, () => {
     logger.info(`Server is listening on port: ${options.port}`);
   });
 
@@ -72,7 +48,7 @@ export function startServer(options: { port: number }) {
     logger.info('SIGTERM signal received: closing HTTP server');
     server.close(async () => {
       logger.info('Server closed');
-      if (connection) {
+      if (prismaConnection) {
         try {
           await prismaConnection.$disconnect();
           logger.info('Prisma client disconnected');
