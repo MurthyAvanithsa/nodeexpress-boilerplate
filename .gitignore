@@ -15,3 +15,6 @@ src/swagger/schemas/types.filter.yaml
 
 # ignore package-lock.json
 package-lock.json
+
+# ignore .env file
+src/prisma/.env
