@@ -4,7 +4,7 @@ CREATE TABLE "Feed" (
     "path" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "config" JSONB NOT NULL,
-    "queryParams" JSONB NOT NULL,
+    "queryParams" JSONB[],
 
     CONSTRAINT "Feed_pkey" PRIMARY KEY ("id")
 );
@@ -15,8 +15,8 @@ CREATE TABLE "Filter" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "type" TEXT NOT NULL,
-    "code" TEXT NOT NULL,
-    "filterParams" JSONB NOT NULL,
+    "code" TEXT,
+    "filterParams" JSONB[] DEFAULT ARRAY[]::JSONB[],
 
     CONSTRAINT "Filter_pkey" PRIMARY KEY ("id")
 );
@@ -27,6 +27,19 @@ CREATE TABLE "adBreaks" (
     "markers" JSONB NOT NULL,
 
     CONSTRAINT "adBreaks_pkey" PRIMARY KEY ("mediaId")
+);
+
+-- CreateTable
+CREATE TABLE "JobQueue" (
+    "id" TEXT NOT NULL,
+    "queueName" TEXT NOT NULL,
+    "jobId" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "payload" JSONB NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "completedAt" TIMESTAMP(3),
+
+    CONSTRAINT "JobQueue_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
