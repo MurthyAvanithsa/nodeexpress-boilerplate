@@ -16,6 +16,10 @@ interface Config {
     },
     queue: {
         GENERIC_WORKER_QUEUE: string,
+    },
+    app: {
+        host: string,
+        port: number
     }
 }
 
@@ -33,6 +37,10 @@ const config: Config = {
     },
     queue: {
         GENERIC_WORKER_QUEUE: process.env.ADBREAKS_JOB_QUEUE || 'adbreaks-job-queue'
+    },
+    app: {
+        host: process.env.APP_HOST || 'localhost',
+        port: parseInt(process.env.APP_PORT || '3000')
     }
 }
 
