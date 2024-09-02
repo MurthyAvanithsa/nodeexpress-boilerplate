@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:postgres@localhost:5432/dsp"
 }
 
 model Feed {
@@ -35,3 +35,15 @@ model adBreaks {
   markers Json
 }
 
+model JobQueue {
+  id          String   @id @default(cuid())
+  queueName   String
+  jobId       String
+  status      String
+  payload     Json
+  createdAt   DateTime @default(now())
+  completedAt DateTime? 
+  error       String?
+
+  @@unique([queueName, jobId])
+}
