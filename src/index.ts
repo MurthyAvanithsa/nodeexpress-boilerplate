@@ -8,7 +8,7 @@ const program = new Command();
 
 program
   .command('server')
-  .option('-p, --port <number>', 'port to listen on', process.env.port || "3000")  
+  .option('-p, --port <number>', 'port to listen on', `${config.app.port}`)  
   .action((cmd) => {
     startServer(cmd);
   });
