@@ -7,7 +7,7 @@
     "copy-files": "copyfiles -u 1 \"src/swagger/swagger.yaml\" \"dist\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-repo": "npx jest src/repos/repo.test.ts",
-    "postinstall": "npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npm run generate-openapi-spec",
+    "postinstall": "ts-node src/utils/generateDbUrl.ts && npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npm run generate-openapi-spec",
     "generate-openapi-spec": "npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node src/swagger/openapi-spec-generator.ts"
   },
   "keywords": [],
