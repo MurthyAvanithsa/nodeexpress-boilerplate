@@ -6,11 +6,360 @@ info:
 servers:
   - url: http://localhost:3000
     description: Local server
+  - url: http://localhost:5000
+    description: Example Development server
+  - url: https://api.example.com
+    description: Example Production server
 tags:
   - name: filter
     description: Operations related to filters
   - name: feed
     description: Operations related to feeds
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    FeedQueryParams:
+      properties:
+        name:
+          title: FeedQueryParams.name
+          type: string
+        type:
+          title: FeedQueryParams.type
+          type: string
+        required:
+          title: FeedQueryParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FeedQueryParams
+      type: object
+    Feed:
+      properties:
+        id:
+          title: Feed.id
+          type: string
+        name:
+          title: Feed.name
+          type: string
+        path:
+          title: Feed.path
+          type: string
+        config:
+          title: Feed.config
+        queryParams:
+          items: {}
+          title: Feed.queryParams
+          type: array
+      required:
+        - id
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: Feed
+      type: object
+    GetFeedsResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetFeedsResponse.data.[].id
+                type: string
+              name:
+                title: GetFeedsResponse.data.[].name
+                type: string
+              path:
+                title: GetFeedsResponse.data.[].path
+                type: string
+            required:
+              - id
+              - name
+              - path
+            additionalProperties: false
+            title: GetFeedsResponse.data.[]
+            type: object
+          title: GetFeedsResponse.data
+          type: array
+        error:
+          title: GetFeedsResponse.error
+          type: string
+      additionalProperties: false
+      title: GetFeedsResponse
+      type: object
+    GetFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: GetFeedResponse.data
+        error:
+          title: GetFeedResponse.error
+          type: string
+      additionalProperties: false
+      title: GetFeedResponse
+      type: object
+    PostFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: PostFeedResponse.data
+        error:
+          title: PostFeedResponse.error
+          type: string
+      additionalProperties: false
+      title: PostFeedResponse
+      type: object
+    UpdateFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Feed'
+          title: UpdateFeedResponse.data
+        error:
+          title: UpdateFeedResponse.error
+          type: string
+      additionalProperties: false
+      title: UpdateFeedResponse
+      type: object
+    DeleteFeedResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+          title: DeleteFeedResponse.data
+        error:
+          title: DeleteFeedResponse.error
+          type: string
+      additionalProperties: false
+      title: DeleteFeedResponse
+      type: object
+    PostFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: PostFeedRequestBody
+    UpdateFeedRequestBody:
+      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
+      title: UpdateFeedRequestBody
+    DeleteFeedRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: DeleteFeedRequest
+    GetFeedByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
+      title: GetFeedByIdRequest
+    DeleteAndGetFeedRequest:
+      properties:
+        id:
+          title: DeleteAndGetFeedRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFeedRequest
+      type: object
+    UpdateAndCreateFeedRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFeedRequest.name
+          type: string
+        path:
+          title: UpdateAndCreateFeedRequest.path
+          type: string
+        config:
+          title: UpdateAndCreateFeedRequest.config
+          type: object
+        queryParams:
+          items:
+            $ref: '#/components/schemas/FeedQueryParams'
+            title: UpdateAndCreateFeedRequest.queryParams.[]
+          title: UpdateAndCreateFeedRequest.queryParams
+          type: array
+      required:
+        - name
+        - path
+        - config
+        - queryParams
+      additionalProperties: false
+      title: UpdateAndCreateFeedRequest
+      type: object
+    FilterParams:
+      properties:
+        name:
+          title: FilterParams.name
+          type: string
+        type:
+          title: FilterParams.type
+          type: string
+        required:
+          title: FilterParams.required
+          type: boolean
+      required:
+        - name
+        - type
+        - required
+      additionalProperties: false
+      title: FilterParams
+      type: object
+    Filter:
+      properties:
+        id:
+          title: Filter.id
+          type: string
+        name:
+          title: Filter.name
+          type: string
+        type:
+          title: Filter.type
+          type: string
+        description:
+          title: Filter.description
+          type: string
+        code:
+          title: Filter.code
+          nullable: true
+          type: string
+        filterParams:
+          items: {}
+          title: Filter.filterParams
+          type: array
+      required:
+        - id
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: Filter
+      type: object
+    CreateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: CreateFilterRequest
+    UpdateFilterRequest:
+      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
+      title: UpdateFilterRequest
+    DeleteFilterRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: DeleteFilterRequest
+    GetFilterByIdRequest:
+      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+      title: GetFilterByIdRequest
+    GetAllFiltersResponse:
+      properties:
+        data:
+          items:
+            properties:
+              id:
+                title: GetAllFiltersResponse.data.[].id
+                type: string
+              name:
+                title: GetAllFiltersResponse.data.[].name
+                type: string
+              type:
+                title: GetAllFiltersResponse.data.[].type
+                type: string
+            required:
+              - id
+              - name
+              - type
+            additionalProperties: false
+            title: GetAllFiltersResponse.data.[]
+            type: object
+          title: GetAllFiltersResponse.data
+          type: array
+        error:
+          title: GetAllFiltersResponse.error
+          type: string
+      additionalProperties: false
+      title: GetAllFiltersResponse
+      type: object
+    GetFilterByIdResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: GetFilterByIdResponse.data
+        error:
+          title: GetFilterByIdResponse.error
+          type: string
+      additionalProperties: false
+      title: GetFilterByIdResponse
+      type: object
+    UpdateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: UpdateFilterResponse.data
+        error:
+          title: UpdateFilterResponse.error
+          type: string
+      additionalProperties: false
+      title: UpdateFilterResponse
+      type: object
+    CreateFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Filter'
+          title: CreateFilterResponse.data
+        error:
+          title: CreateFilterResponse.error
+          type: string
+      additionalProperties: false
+      title: CreateFilterResponse
+      type: object
+    DeleteFilterResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/DeleteAndGetFilterRequest'
+          title: DeleteFilterResponse.data
+        error:
+          title: DeleteFilterResponse.error
+          type: string
+      additionalProperties: false
+      title: DeleteFilterResponse
+      type: object
+    UpdateAndCreateFilterRequest:
+      properties:
+        name:
+          title: UpdateAndCreateFilterRequest.name
+          type: string
+        type:
+          title: UpdateAndCreateFilterRequest.type
+          type: string
+        description:
+          title: UpdateAndCreateFilterRequest.description
+          type: string
+        code:
+          title: UpdateAndCreateFilterRequest.code
+          type: string
+        filterParams:
+          items:
+            $ref: '#/components/schemas/FilterParams'
+            title: UpdateAndCreateFilterRequest.filterParams.[]
+          title: UpdateAndCreateFilterRequest.filterParams
+          type: array
+      required:
+        - name
+        - type
+        - code
+        - filterParams
+      additionalProperties: false
+      title: UpdateAndCreateFilterRequest
+      type: object
+    DeleteAndGetFilterRequest:
+      properties:
+        id:
+          title: DeleteAndGetFilterRequest.id
+          type: string
+      required:
+        - id
+      additionalProperties: false
+      title: DeleteAndGetFilterRequest
+      type: object
+security:
+  - bearerAuth: []
 paths:
   /feed:
     get:
@@ -351,341 +700,3 @@ paths:
                 properties:
                   message:
                     type: string
-components:
-  schemas:
-    FeedQueryParams:
-      properties:
-        name:
-          title: FeedQueryParams.name
-          type: string
-        type:
-          title: FeedQueryParams.type
-          type: string
-        required:
-          title: FeedQueryParams.required
-          type: boolean
-      required:
-        - name
-        - type
-        - required
-      additionalProperties: false
-      title: FeedQueryParams
-      type: object
-    Feed:
-      properties:
-        id:
-          title: Feed.id
-          type: string
-        name:
-          title: Feed.name
-          type: string
-        path:
-          title: Feed.path
-          type: string
-        config:
-          title: Feed.config
-        queryParams:
-          items: {}
-          title: Feed.queryParams
-          type: array
-      required:
-        - id
-        - name
-        - path
-        - config
-        - queryParams
-      additionalProperties: false
-      title: Feed
-      type: object
-    GetFeedsResponse:
-      properties:
-        data:
-          items:
-            properties:
-              id:
-                title: GetFeedsResponse.data.[].id
-                type: string
-              name:
-                title: GetFeedsResponse.data.[].name
-                type: string
-              path:
-                title: GetFeedsResponse.data.[].path
-                type: string
-            required:
-              - id
-              - name
-              - path
-            additionalProperties: false
-            title: GetFeedsResponse.data.[]
-            type: object
-          title: GetFeedsResponse.data
-          type: array
-        error:
-          title: GetFeedsResponse.error
-          type: string
-      additionalProperties: false
-      title: GetFeedsResponse
-      type: object
-    GetFeedResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Feed'
-          title: GetFeedResponse.data
-        error:
-          title: GetFeedResponse.error
-          type: string
-      additionalProperties: false
-      title: GetFeedResponse
-      type: object
-    PostFeedResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Feed'
-          title: PostFeedResponse.data
-        error:
-          title: PostFeedResponse.error
-          type: string
-      additionalProperties: false
-      title: PostFeedResponse
-      type: object
-    UpdateFeedResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Feed'
-          title: UpdateFeedResponse.data
-        error:
-          title: UpdateFeedResponse.error
-          type: string
-      additionalProperties: false
-      title: UpdateFeedResponse
-      type: object
-    DeleteFeedResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/DeleteAndGetFeedRequest'
-          title: DeleteFeedResponse.data
-        error:
-          title: DeleteFeedResponse.error
-          type: string
-      additionalProperties: false
-      title: DeleteFeedResponse
-      type: object
-    PostFeedRequestBody:
-      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
-      title: PostFeedRequestBody
-    UpdateFeedRequestBody:
-      $ref: '#/components/schemas/UpdateAndCreateFeedRequest'
-      title: UpdateFeedRequestBody
-    DeleteFeedRequest:
-      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
-      title: DeleteFeedRequest
-    GetFeedByIdRequest:
-      $ref: '#/components/schemas/DeleteAndGetFeedRequest'
-      title: GetFeedByIdRequest
-    DeleteAndGetFeedRequest:
-      properties:
-        id:
-          title: DeleteAndGetFeedRequest.id
-          type: string
-      required:
-        - id
-      additionalProperties: false
-      title: DeleteAndGetFeedRequest
-      type: object
-    UpdateAndCreateFeedRequest:
-      properties:
-        name:
-          title: UpdateAndCreateFeedRequest.name
-          type: string
-        path:
-          title: UpdateAndCreateFeedRequest.path
-          type: string
-        config:
-          title: UpdateAndCreateFeedRequest.config
-          type: object
-        queryParams:
-          items:
-            $ref: '#/components/schemas/FeedQueryParams'
-            title: UpdateAndCreateFeedRequest.queryParams.[]
-          title: UpdateAndCreateFeedRequest.queryParams
-          type: array
-      required:
-        - name
-        - path
-        - config
-        - queryParams
-      additionalProperties: false
-      title: UpdateAndCreateFeedRequest
-      type: object
-    FilterParams:
-      properties:
-        name:
-          title: FilterParams.name
-          type: string
-        type:
-          title: FilterParams.type
-          type: string
-        required:
-          title: FilterParams.required
-          type: boolean
-      required:
-        - name
-        - type
-        - required
-      additionalProperties: false
-      title: FilterParams
-      type: object
-    Filter:
-      properties:
-        id:
-          title: Filter.id
-          type: string
-        name:
-          title: Filter.name
-          type: string
-        type:
-          title: Filter.type
-          type: string
-        description:
-          title: Filter.description
-          type: string
-        code:
-          title: Filter.code
-          nullable: true
-          type: string
-        filterParams:
-          items: {}
-          title: Filter.filterParams
-          type: array
-      required:
-        - id
-        - name
-        - type
-        - code
-        - filterParams
-      additionalProperties: false
-      title: Filter
-      type: object
-    CreateFilterRequest:
-      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
-      title: CreateFilterRequest
-    UpdateFilterRequest:
-      $ref: '#/components/schemas/UpdateAndCreateFilterRequest'
-      title: UpdateFilterRequest
-    DeleteFilterRequest:
-      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
-      title: DeleteFilterRequest
-    GetFilterByIdRequest:
-      $ref: '#/components/schemas/DeleteAndGetFilterRequest'
-      title: GetFilterByIdRequest
-    GetAllFiltersResponse:
-      properties:
-        data:
-          items:
-            properties:
-              id:
-                title: GetAllFiltersResponse.data.[].id
-                type: string
-              name:
-                title: GetAllFiltersResponse.data.[].name
-                type: string
-              type:
-                title: GetAllFiltersResponse.data.[].type
-                type: string
-            required:
-              - id
-              - name
-              - type
-            additionalProperties: false
-            title: GetAllFiltersResponse.data.[]
-            type: object
-          title: GetAllFiltersResponse.data
-          type: array
-        error:
-          title: GetAllFiltersResponse.error
-          type: string
-      additionalProperties: false
-      title: GetAllFiltersResponse
-      type: object
-    GetFilterByIdResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Filter'
-          title: GetFilterByIdResponse.data
-        error:
-          title: GetFilterByIdResponse.error
-          type: string
-      additionalProperties: false
-      title: GetFilterByIdResponse
-      type: object
-    UpdateFilterResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Filter'
-          title: UpdateFilterResponse.data
-        error:
-          title: UpdateFilterResponse.error
-          type: string
-      additionalProperties: false
-      title: UpdateFilterResponse
-      type: object
-    CreateFilterResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Filter'
-          title: CreateFilterResponse.data
-        error:
-          title: CreateFilterResponse.error
-          type: string
-      additionalProperties: false
-      title: CreateFilterResponse
-      type: object
-    DeleteFilterResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/DeleteAndGetFilterRequest'
-          title: DeleteFilterResponse.data
-        error:
-          title: DeleteFilterResponse.error
-          type: string
-      additionalProperties: false
-      title: DeleteFilterResponse
-      type: object
-    UpdateAndCreateFilterRequest:
-      properties:
-        name:
-          title: UpdateAndCreateFilterRequest.name
-          type: string
-        type:
-          title: UpdateAndCreateFilterRequest.type
-          type: string
-        description:
-          title: UpdateAndCreateFilterRequest.description
-          type: string
-        code:
-          title: UpdateAndCreateFilterRequest.code
-          type: string
-        filterParams:
-          items:
-            $ref: '#/components/schemas/FilterParams'
-            title: UpdateAndCreateFilterRequest.filterParams.[]
-          title: UpdateAndCreateFilterRequest.filterParams
-          type: array
-      required:
-        - name
-        - type
-        - code
-        - filterParams
-      additionalProperties: false
-      title: UpdateAndCreateFilterRequest
-      type: object
-    DeleteAndGetFilterRequest:
-      properties:
-        id:
-          title: DeleteAndGetFilterRequest.id
-          type: string
-      required:
-        - id
-      additionalProperties: false
-      title: DeleteAndGetFilterRequest
-      type: object

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import csv from 'csv-parser';
+import { logger } from '../logger/log';
 
 interface AdMarker {
     breaktime: number;
@@ -26,7 +27,7 @@ function csvToJson(csvFilePath: string): Promise<AdBreak[]> {
                             .replace(/'/g, '"') 
                             .replace(/(\w+):/g, '"$1":')); 
                     } catch (e) {
-                        console.error('Error parsing markers:', e);
+                        logger.error('Error parsing markers:', e);
                         data.markers = [];
                     }
                 }
@@ -42,10 +43,10 @@ const csvFilePath = path.join(__dirname, '/files/ad-breaks.csv');
 async function getAdBreaks() {
     try {
         const adBreaks = await csvToJson(csvFilePath);
-        console.log('Converted JSON:', JSON.stringify(adBreaks, null, 2));
+        logger.info('Converted JSON:', JSON.stringify(adBreaks, null, 2));
         return adBreaks;
     } catch (error) {
-        console.error('Error:', error);
+        logger.error('Error:', error);
         return [];
     }
 }

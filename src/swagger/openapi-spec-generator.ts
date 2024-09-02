@@ -15,7 +15,7 @@ function readYamlFile(filePath: string): OpenApiDocument {
     const fileContents = fs.readFileSync(filePath, 'utf8');
     return yaml.load(fileContents) as OpenApiDocument;
   } catch (e) {
-    console.error(`Error reading or parsing ${filePath}:`, e);
+    logger.error(`Error reading or parsing ${filePath}:`, e);
     throw e;
   }
 }
