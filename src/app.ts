@@ -17,8 +17,10 @@ import { Queue } from 'bullmq';
 import { PrismaClient } from '@prisma/client';
 import { prismaConnection } from './connections';
 import { jwtMiddleware } from "./middleware/jwt-authorization";
+import queueRouter from './routes/routes.worker';
+import config from './config';
 
-const adBreaksQueue = new Queue('adBreaksQueue', {
+const queue = new Queue(config.queue.GENERIC_WORKER_QUEUE, {
   connection: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),
@@ -40,7 +42,7 @@ serverAdapter.setBasePath('/bull-board/ui');
 
 createBullBoard({
   queues: [
-    new BullMQAdapter(adBreaksQueue),
+    new BullMQAdapter(queue),
   ],
   serverAdapter,
 });
@@ -56,6 +58,7 @@ app.use(
 );
 app.use(feedRouter);
 app.use(filterRouter);
+app.use(workerRouter);
 app.use(errorLogger);
 
 export let connection: PrismaClient;
