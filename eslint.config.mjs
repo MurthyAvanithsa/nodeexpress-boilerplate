@@ -4,6 +4,14 @@ import tseslint from "typescript-eslint";
 
 
 export default [
+  {
+    ignores: [
+      "dist/",
+      "trunk/",
+      "node_modules/",
+      "jest.config.js"
+    ]
+  },
   {files: ["**/*.{js,mjs,cjs,ts}"]},
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
@@ -12,5 +20,5 @@ export default [
     rules: {
       "@typescript-eslint/no-explicit-any": [0],
     },
-  },
+  }
 ];
