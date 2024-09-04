@@ -16,7 +16,7 @@ async function createJobQueue(queueName: string, id: string, payload: CloudEvent
     return insertedJob;
 }
 
-async function updateJobQueue(queueName: string, id: string, updates: { status: string, completedAt?: string, error?: string }) {
+async function updateJobQueueResults(queueName: string, id: string, updates: { status: string, completedAt?: string, error?: string }) {
     const updatedJob = await prismaConnection.jobQueue.update({
         where: {
             queueName_jobId: {
@@ -28,4 +28,4 @@ async function updateJobQueue(queueName: string, id: string, updates: { status: 
     });
     return updatedJob;
 }
-export { createJobQueue, updateJobQueue }
+export { createJobQueue, updateJobQueueResults }
