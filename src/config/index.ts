@@ -1,6 +1,18 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+const getEnvConfig = () => {
+    dotenv.config();
+    const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+    Object.keys(process.env).forEach(key => {
+        delete process.env[key];
+    });
+    return envFile;
+};
+
+dotenv.config({
+    path: getEnvConfig()
+});
 
 interface Config {
     db: {
