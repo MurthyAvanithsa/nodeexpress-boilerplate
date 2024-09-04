@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "yarn eslint .",
-    "lint-fix": "yarn eslint . --fix"
+    "lint-fix": "yarn eslint . --fix",
     "start": "yarn ts-node-dev --respawn ./src/index.ts",
     "build": "yarn tsup && yarn copy-files",
     "copy-files": "copyfiles -u 1 \"src/swagger/swagger.yaml\" \"dist\"",
