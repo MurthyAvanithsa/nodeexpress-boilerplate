@@ -16,7 +16,7 @@ import queueRouter from './routes/routes.queue';
 import bullBoardUI from './middleware/bull-board';
 import config from './config';
 
-const app = express();
+export const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
 const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
 
