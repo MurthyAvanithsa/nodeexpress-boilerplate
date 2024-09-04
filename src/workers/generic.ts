@@ -19,7 +19,7 @@ function startWorker(queueName: string) {
     },
     {
       connection: redisConnection,
-      removeOnComplete: { count: 0 },
+      removeOnComplete: { count: 100 },
     }
   );
   
@@ -49,7 +49,7 @@ function startWorker(queueName: string) {
 async function addJob(queueName: string, data: CloudEventV1<any>) {
   const queue = new Queue(queueName, { connection: redisConnection });
   queue.add(queueName, data).then(async createdJob => {
-    await createJobQueue(queueName, createdJob.id || "", createdJob.data);
+    createJobQueue(queueName, createdJob.id || "", createdJob.data);
   });
   return { status: "Processing..." };
 }
