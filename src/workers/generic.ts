@@ -1,7 +1,7 @@
 import { Worker, Job, Queue } from "bullmq";
 import { redisConnection } from "../connections";
 import { logger } from "../logger/log";
-import { createJobQueue, updateJobQueue } from "../repos/repos.queue";
+import { createJobQueue, updateJobQueueResults } from "../repos/repos.queue";
 import { CloudEventV1 } from "cloudevents";
 
 function startWorker(queueName: string) {
