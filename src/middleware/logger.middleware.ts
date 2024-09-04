@@ -5,7 +5,6 @@ export const errorLogger = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   if (err.name === "UnauthorizedError") {
     logger.error(`Unauthorized error: ${err.message}`);
