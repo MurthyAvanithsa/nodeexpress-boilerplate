@@ -1,5 +1,5 @@
-import { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter } from './repos.filter';
-import { getFeeds, getFeedById, createFeed, updateFeed, deleteFeed } from './repos.feed';
+import { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter } from '../repos/repos.filter';
+import { getFeeds, getFeedById, createFeed, updateFeed, deleteFeed } from '../repos/repos.feed';
 // import { logger } from "../logger/log";
 
 // function // logTestResult((testName: string, result: any) {
