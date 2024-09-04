@@ -18,15 +18,14 @@ filterRouter.get("/filter/", async (req: Request, res: Response)=> {
     res.status(responseCode).json(response);
 });
 
-filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFilterByIdResponse, {}>, res: Response<GetFilterByIdResponse | { error: string }>) => {
+filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFilterByIdResponse>, res: Response<GetFilterByIdResponse | { error: string }>) => {
     const filterId = req.params.id;
     const response: GetFilterByIdResponse = await getFilterById(filterId);
-    let responseCode;
-    response.data? responseCode = 200: response.error=="Filter not found"? responseCode=404: responseCode = 500; 
-    res.status(responseCode).json(response); 
+    const responseCode = !response.data ? response.error === `Filter with ID ${filterId} not found` ? 404: 500 : 200;
+    res.status(responseCode).json(response);  
 });
 
-filterRouter.post("/filter/", async (req: Request<{}, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
+filterRouter.post("/filter/", async (req: Request<unknown, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
     const filter: CreateFilterRequest = req.body;
     const response: CreateFilterResponse = await createFilter(filter);
     const responseCode = response.data ? 201: 500;
@@ -44,8 +43,7 @@ filterRouter.put("/filter/:id", async (req: Request<GetFilterByIdRequest, Update
 filterRouter.delete("/filter/:id", async (req: Request<DeleteFilterRequest, DeleteFilterResponse, DeleteFilterRequest>, res: Response)=> {
     const filterId = req.params.id;
     const response: DeleteFilterResponse = await deleteFilter(filterId);
-    let responseCode;
-    response.data? responseCode = 204: responseCode = 500;
+    const responseCode = response.data? 200 : 500;
     res.status(responseCode).json(response);
 });
 

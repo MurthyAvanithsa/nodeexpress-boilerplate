@@ -21,7 +21,7 @@ feedRouter.get('/feed', async (req: Request, res: Response<GetFeedsResponse>) =>
     res.status(responseCode).json(response);
 });
 
-feedRouter.post('/feed', async (req: Request<{}, PostFeedResponse, PostFeedRequestBody>, res: Response<PostFeedResponse>) => {
+feedRouter.post('/feed', async (req: Request<unknown, PostFeedResponse, PostFeedRequestBody>, res: Response<PostFeedResponse>) => {
     const feed: PostFeedRequestBody = req.body;
     const response: PostFeedResponse = await createFeed(feed);
     const responseCode = response.data ? 201: 500;
@@ -31,8 +31,7 @@ feedRouter.post('/feed', async (req: Request<{}, PostFeedResponse, PostFeedReque
 feedRouter.get('/feed/:id', async (req: Request<GetFeedByIdRequest>, res: Response<GetFeedResponse>) => {
     const feedId = req.params.id;
     const response: GetFeedResponse = await getFeedById(feedId);
-    let responseCode;
-    response.data? responseCode = 200: response.error=="Filter not found"? responseCode=404: responseCode = 500; 
+    const responseCode = !response.data ? response.error === `Feed with ID ${feedId} not found` ? 404: 500 : 200;
     res.status(responseCode).json(response); 
 });
 
@@ -44,11 +43,10 @@ feedRouter.put('/feed/:id', async (req: Request<GetFeedByIdRequest, UpdateFeedRe
     res.status(responseCode).json(response);
 });
 
-feedRouter.delete('/feed/:id', async (req: Request<DeleteFeedRequest, DeleteFeedResponse, {}>, res: Response<DeleteFeedResponse>) => {
+feedRouter.delete('/feed/:id', async (req: Request<DeleteFeedRequest, DeleteFeedResponse>, res: Response<DeleteFeedResponse>) => {
     const feedId = req.params.id;
     const response: DeleteFeedResponse = await deleteFeed(feedId);
-    let responseCode;
-    response.data? responseCode = 204: responseCode = 500;
+    const responseCode = response.data? 200 : 500;
     res.status(responseCode).json(response);
 });
 

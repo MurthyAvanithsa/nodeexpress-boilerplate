@@ -6,9 +6,9 @@ import { logger } from '../logger/log';
 import { v4 as uuidv4 } from 'uuid';
 
 const queueRouter = Router();
-queueRouter.post('/job', async (req: Request<{}, {}>, res: Response) => {
-    const job: any = req.body;
-    const cloudevent: CloudEventV1<any> = {
+queueRouter.post('/job', async (req: Request, res: Response) => {
+    const job: JSON = req.body;
+    const cloudevent: CloudEventV1<JSON> = {
         id: uuidv4(),
         source: '/mycontext',
         type: 'com.example.someevent',
