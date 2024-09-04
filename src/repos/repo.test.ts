@@ -1,13 +1,13 @@
 import { getAllFilters, getFilterById, createFilter, updateFilter, deleteFilter } from './repos.filter';
 import { getFeeds, getFeedById, createFeed, updateFeed, deleteFeed } from './repos.feed';
-import { logger } from "../logger/log";
+// import { logger } from "../logger/log";
 
-function logTestResult(testName: string, result: any) {
+// function // logTestResult((testName: string, result: any) {
     // logger.info(`Test: ${testName} - Result: ${JSON.stringify(result, null, 2)}`);
-}
+// }
 
 describe('Filter Repo Functions', () => {
-    let filterId: string = "xx123xxx";
+    const filterId: string = "xx123xxx";
 
     it('should create a new filter', async () => {
         const newFilter = {
@@ -20,7 +20,7 @@ describe('Filter Repo Functions', () => {
         };
 
         const createResult = await createFilter(newFilter);
-        logTestResult('Create Filter', createResult);
+        // // logTestResult(('Create Filter', createResult);
 
         expect(createResult.data).toBeDefined();
         expect(createResult.data?.name).toBe(newFilter.name);
@@ -33,7 +33,7 @@ describe('Filter Repo Functions', () => {
 
     it('should fetch a filter by ID', async () => {
         const getResult = await getFilterById(filterId);
-        logTestResult('Get Filter by ID', getResult);
+        // // logTestResult(('Get Filter by ID', getResult);
 
         expect(getResult.data).toBeDefined();
         expect(getResult.data?.id).toBe(filterId);
@@ -48,7 +48,7 @@ describe('Filter Repo Functions', () => {
         };
 
         const updateResult = await updateFilter(filterId, updates);
-        logTestResult('Update Filter', updateResult);
+        // logTestResult(('Update Filter', updateResult);
 
         expect(updateResult.data).toBeDefined();
         expect(updateResult.data?.name).toBe(updates.name);
@@ -59,21 +59,21 @@ describe('Filter Repo Functions', () => {
 
     it('should delete the filter', async () => {
         const deleteResult = await deleteFilter(filterId);
-        logTestResult('Delete Filter', deleteResult);
+        // logTestResult(('Delete Filter', deleteResult);
 
         expect(deleteResult.data).toBeNull();
     });
 
     it('should fetch all filters', async () => {
         const allFiltersResult = await getAllFilters();
-        logTestResult('Get All Filters', allFiltersResult);
+        // logTestResult(('Get All Filters', allFiltersResult);
 
         expect(allFiltersResult.data).toBeInstanceOf(Array);
     });
 });
 
 describe('Feed Repo Functions', () => {
-    let feedId: string = "xxx123xxx";
+    const feedId: string = "xxx123xxx";
 
     it('should create a new feed', async () => {
         const newFeed = {
@@ -85,7 +85,7 @@ describe('Feed Repo Functions', () => {
         };
 
         const createResult = await createFeed(newFeed);
-        logTestResult('Create Feed', createResult);
+        // logTestResult(('Create Feed', createResult);
 
         expect(createResult.data).toBeDefined();
         expect(createResult.data?.name).toBe(newFeed.name);
@@ -97,7 +97,7 @@ describe('Feed Repo Functions', () => {
 
     it('should fetch a feed by ID', async () => {
         const getResult = await getFeedById(feedId);
-        logTestResult('Get Feed by ID', getResult);
+        // logTestResult(('Get Feed by ID', getResult);
 
         expect(getResult.data).toBeDefined();
         expect(getResult.data?.id).toBe(feedId);
@@ -111,7 +111,7 @@ describe('Feed Repo Functions', () => {
         };
 
         const updateResult = await updateFeed(feedId, updates);
-        logTestResult('Update Feed', updateResult);
+        // logTestResult(('Update Feed', updateResult);
 
         expect(updateResult.data).toBeDefined();
         expect(updateResult.data?.name).toBe(updates.name);
@@ -121,14 +121,14 @@ describe('Feed Repo Functions', () => {
 
     it('should delete the feed', async () => {
         const deleteResult = await deleteFeed(feedId);
-        logTestResult('Delete Feed', deleteResult);
+        // logTestResult(('Delete Feed', deleteResult);
 
         expect(deleteResult.data).toBeNull();
     });
 
     it('should fetch all feeds', async () => {
         const allFeedsResult = await getFeeds();
-        logTestResult('Get All Feeds', allFeedsResult);
+        // logTestResult(('Get All Feeds', allFeedsResult);
 
         expect(allFeedsResult.data).toBeInstanceOf(Array);
     });
