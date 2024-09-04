@@ -26,18 +26,18 @@ function startWorker(queueName: string) {
   worker.on("error", (error) => {
     // UPdate JOB_QUEUE table with error along with job id
     logger.error("Worker error:", error);
-    updateJobQueue(queueName, jobId || "", { status: "Error", error: error.message });
+    updateJobQueueResults(queueName, jobId || "", { status: "Error", error: error.message });
   });
 
   worker.on("failed", (job, error) => {
     // UPdate JOB_QUEUE table with error along with job id
-    updateJobQueue(queueName, job?.id || "", { status: "Failed", error: error.message, completedAt: new Date().toISOString() });
+    updateJobQueueResults(queueName, job?.id || "", { status: "Failed", error: error.message, completedAt: new Date().toISOString() });
     logger.error(`Job ${job?.id} failed with error: ${error.message}`);
   });
 
   worker.on("completed", (job) => {
     // UPdate JOB_QUEUE table with status along with job id
-    updateJobQueue(queueName, job?.id || "", { status: "Completed", completedAt: new Date().toISOString() });
+    updateJobQueueResults(queueName, job?.id || "", { status: "Completed", completedAt: new Date().toISOString() });
     logger.info(`Job ${job.id} completed successfully.`);
   });
 
