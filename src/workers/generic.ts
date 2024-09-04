@@ -46,7 +46,7 @@ function startWorker(queueName: string) {
 }
 
 // Come up with cloudevent as a message format
-async function addJob(queueName: string, data: CloudEventV1<any>) {
+async function addJob(queueName: string, data: CloudEventV1<JSON>) {
   const queue = new Queue(queueName, { connection: redisConnection });
   queue.add(queueName, data).then(async createdJob => {
     createJobQueue(queueName, createdJob.id || "", createdJob.data);
