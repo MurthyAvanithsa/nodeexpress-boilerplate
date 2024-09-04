@@ -1,7 +1,6 @@
 import { CloudEvent } from "cloudevents";
 import { prismaConnection } from "../connections";
 import { JobQueue as jobQueueModel } from "@prisma/client"
-import { logger } from "../logger/log";
 
 async function createJobQueue(queueName: string, id: string, payload: CloudEvent): Promise<jobQueueModel> {
     const insertedJob: jobQueueModel = await prismaConnection.jobQueue.create({

@@ -2,6 +2,7 @@ import { prismaConnection as prisma } from "../connections";
 import { Feed } from "@prisma/client";
 import { logger } from "../logger/log";
 import { FeedQueryParams } from "../types/types.feed";
+import { InputJsonValue } from "@prisma/client/runtime/library";
 
 type Result<T> = {
     data?: T;
@@ -58,7 +59,7 @@ async function createFeed(req: {
 async function updateFeed(feedId: string, updates: {
     path?: string;
     name?: string;
-    config: {};
+    config: InputJsonValue;
     queryParams: FeedQueryParams[];
 }): Promise<Result<Feed>> {
     try {

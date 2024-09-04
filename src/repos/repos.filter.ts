@@ -79,7 +79,7 @@ async function updateFilter(filterId: string, updates: {
 
 async function deleteFilter(filterId: string): Promise<Result<null>> {
     try {
-        const result = await prisma.filter.delete({
+        await prisma.filter.delete({
             where: { id: filterId }
         });
         return { data: null };
