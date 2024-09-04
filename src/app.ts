@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import { logger } from './logger/log';
 import 'dotenv/config';
 import feedRouter from './routes/routes.feed';
