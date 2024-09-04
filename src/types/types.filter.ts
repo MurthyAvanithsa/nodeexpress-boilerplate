@@ -1,4 +1,4 @@
-import { JsonArray, JsonValue } from "@prisma/client/runtime/library";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export type FilterParams = {
   name: string;
