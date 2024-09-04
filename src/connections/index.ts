@@ -1,4 +1,3 @@
-import { Queue, Worker } from 'bullmq';
 import { PrismaClient } from '@prisma/client'
 import IORedis from 'ioredis';
 import config from '../config';
