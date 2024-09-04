@@ -7,8 +7,9 @@
     "copy-files": "copyfiles -u 1 \"src/swagger/swagger.yaml\" \"dist\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-repo": "npx jest src/repos/repo.test.ts",
-    "postinstall": "ts-node src/utils/generateDbUrl.ts && npx prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts && npm run generate-openapi-spec",
-    "generate-openapi-spec": "npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node src/swagger/openapi-spec-generator.ts"
+    "generate-openapi-spec": "npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node src/swagger/openapi-spec-generator.ts",
+    "generate-db-url": "ts-node src/utils/generateDbUrl.ts",
+    "init-db": "npm run generate-db-url && prisma migrate dev --schema ./src/prisma/schema.prisma && npx prisma generate --schema ./src/prisma/schema.prisma && npx ts-node src/repos/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
   "dependencies": {
     "@bull-board/api": "^5.21.4",
     "@bull-board/express": "^5.21.4",
+    "@bull-board/ui": "5.21.4",
     "@prisma/client": "^5.19.0",
     "bullmq": "^5.12.12",
     "cloudevents": "^8.0.2",
@@ -35,7 +37,8 @@
     "swagger-ui-express": "^5.0.1",
     "typeconv": "^2.3.1",
     "uuid": "^10.0.0",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
