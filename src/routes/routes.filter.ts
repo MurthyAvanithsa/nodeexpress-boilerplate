@@ -43,7 +43,7 @@ filterRouter.put("/filter/:id", async (req: Request<GetFilterByIdRequest, Update
 filterRouter.delete("/filter/:id", async (req: Request<DeleteFilterRequest, DeleteFilterResponse, DeleteFilterRequest>, res: Response)=> {
     const filterId = req.params.id;
     const response: DeleteFilterResponse = await deleteFilter(filterId);
-    const responseCode = response.data? 200 : 500;
+    const responseCode = response.data? 204 : 500;
     res.status(responseCode).json(response);
 });
 
