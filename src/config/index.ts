@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import path from 'path';
 
 const getEnvConfig = () => {
     dotenv.config();
