@@ -46,7 +46,7 @@ feedRouter.put('/feed/:id', async (req: Request<GetFeedByIdRequest, UpdateFeedRe
 feedRouter.delete('/feed/:id', async (req: Request<DeleteFeedRequest, DeleteFeedResponse>, res: Response<DeleteFeedResponse>) => {
     const feedId = req.params.id;
     const response: DeleteFeedResponse = await deleteFeed(feedId);
-    const responseCode = response.data? 200 : 500;
+    const responseCode = response.data? 204 : 500;
     res.status(responseCode).json(response);
 });
 
