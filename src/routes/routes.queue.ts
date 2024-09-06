@@ -2,8 +2,9 @@ import { Router, Request, Response } from 'express';
 import { addJob } from '../workers/generic';
 import config from '../config';
 import { CloudEventV1 } from 'cloudevents';
-import { logger } from '../logger/log';
 import { v4 as uuidv4 } from 'uuid';
+import { getAllJobs, getJobById } from '../services/services.queue';
+import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from '../types/types.queue';
 
 const queueRouter = Router();
 queueRouter.post('/job', async (req: Request, res: Response) => {
@@ -22,10 +23,28 @@ queueRouter.post('/job', async (req: Request, res: Response) => {
         response = await addJob(config.queue.GENERIC_WORKER_QUEUE, cloudevent);
         statusCode = 201;
     } catch (error) {
-        logger.error(`Error creating job: ${error}`);
         statusCode = 500;
         response = error;
     }
+    res.status(statusCode).json(response);
+});
+
+queueRouter.get("/job", async(req: Request<unknown, getAllJobsResponse, unknown>, res: Response<getAllJobsResponse>) => {
+    const queryParams = req.query;
+    const requestPayload: getAllJobsRequest = {
+        sort: JSON.parse(String(queryParams.sort || JSON.stringify(['id', 'asc']))),
+        filter: JSON.parse(String(queryParams.filter || JSON.stringify({'1': '1'}))),
+        pagination: JSON.parse(String(queryParams.pagination || JSON.stringify([1, 10])))
+    };
+    const response: getAllJobsResponse = await getAllJobs(requestPayload);
+    const statusCode = response.data ? 200 : 500;
+    res.status(statusCode).json(response);
+});
+
+queueRouter.get("/job/:id", async(req: Request<{id: string}>, res: Response) => {
+    const jobId = req.params.id;
+    const response: getJobByIdResponse = await getJobById(jobId);
+    const statusCode = response.data ? 200 : 500;
     res.status(statusCode).json(response);
 });
 
