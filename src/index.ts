@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+
 import 'dotenv/config'
 import { startServer } from './app';  
 import { startWorker } from './workers/generic';

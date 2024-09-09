@@ -1,6 +1,7 @@
+import { JobQueue as jobQueueModel } from "prisma/prisma-client"
+
 import * as queueRepos from "../repos/repos.queue";
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from "../types/types.queue";
-import { JobQueue as jobQueueModel } from "prisma/prisma-client"
 async function getAllJobs(req: getAllJobsRequest): Promise<getAllJobsResponse> {
     const result = await queueRepos.getAllJobs({
         sort: req.sort || ["id", "asc"],

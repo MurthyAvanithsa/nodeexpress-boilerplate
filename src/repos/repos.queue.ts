@@ -1,6 +1,7 @@
 import { CloudEvent } from "cloudevents";
-import { prismaConnection } from "../connections";
 import { JobQueue as jobQueueModel } from "@prisma/client"
+
+import { prismaConnection } from "../connections";
 import { logger } from "../logger/log";
 import { getAllJobsRequest } from "../types/types.queue";
 

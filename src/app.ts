@@ -1,10 +1,12 @@
 import path from 'path';
+
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import * as OpenApiValidator from 'express-openapi-validator';
+
 import { logger } from './logger/log';
 import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';

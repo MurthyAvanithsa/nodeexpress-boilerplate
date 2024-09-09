@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { join } from 'path';
+
 import config from '../config';
 import { logger } from '../logger/log';
 

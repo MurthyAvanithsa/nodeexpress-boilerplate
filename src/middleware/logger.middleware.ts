@@ -1,5 +1,6 @@
-import { logger } from "../logger/log";
 import { Request, Response, NextFunction } from "express";
+
+import { logger } from "../logger/log";
 
 export const errorLogger = (
   err: any,

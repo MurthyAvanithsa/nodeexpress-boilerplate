@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import { Request, Response } from 'express';
+
 import { getFilters, getFilterById, createFilter, updateFilter, deleteFilter } from '../services/services.filter';
 import { UpdateFilterRequest,
     UpdateFilterResponse,
@@ -9,7 +11,6 @@ import { UpdateFilterRequest,
     GetAllFiltersResponse,
     GetFilterByIdResponse,
     GetFilterByIdRequest } from "../types/types.filter"
-import { Request, Response } from 'express';
 const filterRouter = Router();
 
 filterRouter.get("/filter/", async (req: Request, res: Response)=> {

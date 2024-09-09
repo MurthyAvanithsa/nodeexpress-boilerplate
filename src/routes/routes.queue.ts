@@ -1,8 +1,9 @@
 import { Router, Request, Response } from 'express';
-import { addJob } from '../workers/generic';
-import config from '../config';
 import { CloudEventV1 } from 'cloudevents';
 import { v4 as uuidv4 } from 'uuid';
+
+import { addJob } from '../workers/generic';
+import config from '../config';
 import { getAllJobs, getJobById } from '../services/services.queue';
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from '../types/types.queue';
 import { logger } from '../logger/log';

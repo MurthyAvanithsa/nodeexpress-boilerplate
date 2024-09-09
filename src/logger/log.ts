@@ -1,5 +1,6 @@
-import pino from 'pino';
 import path from 'path';
+
+import pino from 'pino';
 
 const logFilePath = path.join(__dirname, 'app.log');
 

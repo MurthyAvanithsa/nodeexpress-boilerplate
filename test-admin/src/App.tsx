@@ -1,4 +1,5 @@
 import { Admin, Resource } from "react-admin";
+
 import { dataProvider } from "./dataProvider";
 import { JobList, JobShow } from "./JobQueue";
 

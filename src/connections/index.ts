@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import IORedis from 'ioredis';
+
 import config from '../config';
 
 const redisConnection = new IORedis({

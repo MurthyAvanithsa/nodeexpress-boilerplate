@@ -1,8 +1,10 @@
-import { prismaConnection as prisma } from "../connections";
 import { Feed } from "@prisma/client";
+import { InputJsonValue } from "@prisma/client/runtime/library";
+
+import { prismaConnection as prisma } from "../connections";
 import { logger } from "../logger/log";
 import { FeedQueryParams } from "../types/types.feed";
-import { InputJsonValue } from "@prisma/client/runtime/library";
+
 
 type Result<T> = {
     data?: T;
