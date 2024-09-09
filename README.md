@@ -1,4 +1,3 @@
-
 # Microservices-boilerplate
 
 ### Table of Contents
@@ -8,7 +7,6 @@
 - [Introduction](#introduction)
 - [Swagger Documentation](#swagger-documentation)
 - [Overview of Repository Functions](#overview-of-repository-functions)
-- [Routes](#routes-docs)
 - [JWT Middleware](#jwt-middleware)
 
 ## Quick Start
@@ -26,23 +24,78 @@ git clone https://github.com/tecnics-python/dsp-boilerplate
 **Install Dependencies**:
 
 ```
-npm install
+yarn install
 ```
 
-**Start the Server**: To run the application
+**Setup Application**  
+   To setup the application, follow these steps:
 
 ```
-npm start server
+yarn setup
+```
+
+If you run the command `yarn setup` in your project with the provided scripts, the following sequence of commands will be executed, each performing a specific task related to OpenAPI schema generation and database setup.
+
+##### Steps
+
+1. **Generate OpenAPI schemas**:
+   - **Command**: `yarn generate-openapi-schemas`
+   - This command uses `typeconv` to convert TypeScript types into OpenAPI schemas. The output is saved to the `src/swagger/schemas` directory.
+
+2. **Generate OpenAPI spec**:
+   - **Command**: `yarn generate-openapi-spec`
+   - This runs a TypeScript script (`openapi-spec-generator.ts`) that generates the OpenAPI specification document based on the schemas from the previous step.
+
+3. **Generate DB URL**:
+   - **Command**: `yarn generate-db-url`
+   - This runs a TypeScript script (`generateDbUrl.ts`) that generates or modifies the database connection URL based on environment variables or some other logic specific to your project.
+
+4. **Migrate the database**:
+   - **Command**: `yarn migrate-db`
+   - This command applies any pending Prisma migrations to your database, using the schema defined in `src/prisma/schema.prisma`. After migration, the Prisma client is generated.
+
+5. **Load seed data**:
+   - **Command**: `yarn load-seed-data`
+   - This script runs a TypeScript file (`seed.ts`) that populates the database with seed data, typically used for initial testing or development.
+
+6. **Initialize the database**:
+   - **Command**: `yarn init-db`
+   - This combines the previous steps of generating the database URL, migrating the database, and loading the seed data, effectively setting up the database from scratch.
+
+7. **Final setup**:
+   - The `yarn setup` command runs all the above commands in sequence, ensuring that both the OpenAPI specifications and the database are properly configured and initialized.
+
+**Start the Server**: To run the application with default port, use the following command:
+
+```
+yarn start server
 ```
 
 **Start the Server with Specific Port**:
 
 ```
-npm start -- server [-p PORTNUMBER]
+yarn start -- server [-p PORTNUMBER]
           or
-npm start -- server [--port PORTNUMBER]
+yarn start -- server [--port PORTNUMBER]
 ```
+Example:
+```
+yarn start -- server -p 5000
+```
+To start the worker with default queue, use the following command:
 
+```
+yarn start worker
+```
+To start the worker with a custom queue, use the following command:
+
+```
+yarn start -- worker [--queue customQueueName]
+```
+Example:
+```
+yarn start -- worker --queue ad-breaks-queue
+```
 # Features
 
 - **SQL Database**: PostgreSQL object data modeling using Prisma ORM
@@ -85,7 +138,7 @@ This project uses Swagger for API documentation. The setup involves generating O
 The schema files in the `schemas/` folder are generated using the `typeconv` module. To generate these files, run the following command:
 
 ```
-npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts
+yarn typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts
 ```
 
 ### Generating OpenAPI Specification
@@ -97,7 +150,7 @@ The `openapi-spec-generator.ts` script combines the routes defined in `routes.ya
 The schema generation and OpenAPI specification creation are automated to run after installing dependencies. This ensures the documentation is always up-to-date. The following command is executed automatically:
 
 ```
-npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node src/swagger/openapi-spec-generator.ts
+yarn typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && yarn ts-node src/swagger/openapi-spec-generator.ts
 ```
 
 ### Manual Update
@@ -105,654 +158,10 @@ npx typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts && npx ts-node 
 If you update the types and need to regenerate the documentation, you can manually run the following script defined in `package.json`:
 
 ```
-npm run generate-openapi-spec
+yarn generate-openapi-spec
 ```
 
 This script performs the same actions as the post-install process, regenerating the schemas and OpenAPI specification.
-
-## Routes docs
-
-### Feed Routes
-
-#### Endpoint: `/feed`
-
-#### Method: `GET`
-
-#### Description
-Fetches all feeds data.
-
-#### Responses
-
-##### 200 OK
-- **Description**: Successfully retrieved feed data.
-- **Example**:
-  ```json
-  {
-    "data": [
-      {
-        "id": "0d40c",
-        "name": "Playlist feed",
-        "path": "/tbn/playlist-feed"
-      },
-      {
-        "id": "cm0drew770000onf86e8j91bs",
-        "name": "Playlist",
-        "path": "/tbn/mediafeed"
-      },
-      {
-        "id": "example-id",
-        "name": "Another feed",
-        "path": "/tbn/another-feed"
-      }
-    ]
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while fetching feed data.
-- **Example**:
-    ```json
-    {
-      "error": "Error message"
-    }
-    ```
-
-
-#### Endpoint: `/filter/:id`
-
-#### Method: `GET`
-
-#### URL Parameters
-- **id** (string): The ID of the filter to retrieve.
-
-#### Responses
-
-##### 200 OK
-- **Description**: Successfully retrieved the filter.
-- **Example**:
-  ```json
-  {
-    "data": {
-      "id": "0d40c",
-      "path": "/tbn/playlist-feed",
-      "name": "Playlist feed",
-      "config": {
-        "assetFilters": [
-          {
-            "name": "FILTER_ASSET_PREMIUM",
-            "type": "assetFilter",
-            "config": {
-              "excludeTags": "episode, free",
-              "includeProperties": {
-                "requiresSubscription": "false"
-              }
-            }
-          },
-          {
-            "name": "FILTER_ASSET_ADINJECT",
-            "type": "assetFilter",
-            "config": {
-              "entry": "id",
-              "includeMidRoll": true,
-              "includePostRoll": true
-            }
-          },
-          {
-            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
-            "type": "customAssetFilter",
-            "config": {
-              "clearCache": true
-            }
-          }
-        ],
-        "playlistFilters": [
-          {
-            "name": "FILTER_PLAYLIST_JWPLAYER",
-            "type": "playlistFilter",
-            "config": {
-              "excludeTags": true,
-              "includeCustomParms": false
-            }
-          }
-        ]
-      },
-      "queryParams": [
-        {
-          "name": "playlistId",
-          "required": false
-        }
-      ]
-    }
-  }
-  ```
-
-##### 404 Not Found
-- **Description**: The specified filter could not be found. This response indicates that the ID provided does not match any filter in the system.
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while fetching the filter. 
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-
-#### Endpoint: `/feed`
-
-#### Method: `POST`
-
-#### Description
-Creates a new feed.
-
-#### Request Body
-
-- `PostFeedRequestBody`
-  - **Description**: The request body should contain the details of the feed to be created.
-  - **Example**:
-    ```json
-    {
-      "path": "/tbn/dojo-pbr",
-      "name": "Playlist feed",
-      "config": {
-        "assetFilters": [
-          {
-            "name": "FILTER_ASSET_PREMIUM",
-            "type": "assetFilter",
-            "config": {
-              "excludeTags": "episode, free",
-              "includeProperties": {
-                "requiresSubscription": "false"
-              }
-            }
-          },
-          {
-            "name": "FILTER_ASSET_ADINJECT",
-            "type": "assetFilter",
-            "config": {
-              "entry": "id",
-              "includeMidRoll": true,
-              "includePostRoll": true
-            }
-          },
-          {
-            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
-            "type": "customAssetFilter",
-            "config": {
-              "clearCache": true
-            }
-          }
-        ],
-        "playlistFilters": [
-          {
-            "name": "FILTER_PLAYLIST_JWPLAYER",
-            "type": "playlistFilter",
-            "config": {
-              "excludeTags": true,
-              "includeCustomParms": false
-            }
-          }
-        ]
-      },
-      "queryParams": [
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": false
-        }
-      ]
-    }
-    ```
-
-#### Responses
-
-##### 201 Created
-- **Description**: The feed was successfully created.
-- **Example**:
-  ```json
-  {
-    "data": {
-      "id": "cm0f29z2g0001qjb28qxs68iq",
-      "path": "/tbn/dojo-pbr",
-      "name": "Playlist feed",
-      "config": {
-        "assetFilters": [
-          {
-            "name": "FILTER_ASSET_PREMIUM",
-            "type": "assetFilter",
-            "config": {
-              "excludeTags": "episode, free",
-              "includeProperties": {
-                "requiresSubscription": "false"
-              }
-            }
-          },
-          {
-            "name": "FILTER_ASSET_ADINJECT",
-            "type": "assetFilter",
-            "config": {
-              "entry": "id",
-              "includeMidRoll": true,
-              "includePostRoll": true
-            }
-          },
-          {
-            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
-            "type": "customAssetFilter",
-            "config": {
-              "clearCache": true
-            }
-          }
-        ],
-        "playlistFilters": [
-          {
-            "name": "FILTER_PLAYLIST_JWPLAYER",
-            "type": "playlistFilter",
-            "config": {
-              "excludeTags": true,
-              "includeCustomParms": false
-            }
-          }
-        ]
-      },
-      "queryParams": [
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": false
-        }
-      ]
-    }
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while fetching the filter. 
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-  ```
-
-
-#### Endpoint: `/feed/:id`
-  
-#### Method: `PUT`
-  
-#### Description
-  Up dates the feed information based on the provided feed ID.
-  
-#### Parameters
-  - `id` (path parameter): The ID of the feed to be updated.
-  
-#### Request Body
-  
-- **UpdateFeedRequestBody**:
-  - **Description**: The body containing the new feed information.
-  - **Example**:
-    ```json
-    {
-      "path": "/tbn/dojo-pbr",
-      "name": "Playlist feed",
-      "config": {
-        "assetFilters": [
-          {
-            "name": "FILTER_ASSET_PREMIUM",
-            "type": "assetFilter",
-            "config": {
-              "excludeTags": "episode, free",
-              "includeProperties": {
-                "requiresSubscription": "false"
-              }
-            }
-          },
-          {
-            "name": "FILTER_ASSET_ADINJECT",
-            "type": "assetFilter",
-            "config": {
-              "entry": "id",
-              "includeMidRoll": true,
-              "includePostRoll": true
-            }
-          },
-          {
-            "name": "FILTER_ASSET_NEED_AUTHENTICATION",
-            "type": "customAssetFilter",
-            "config": {
-              "clearCache": true
-            }
-          }
-        ],
-        "playlistFilters": [
-          {
-            "name": "FILTER_PLAYLIST_JWPLAYER",
-            "type": "playlistFilter",
-            "config": {
-              "excludeTags": true,
-              "includeCustomParms": false
-            }
-          }
-        ]
-      },
-      "queryParams": [
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": false
-        }
-      ]
-    }
-    ```
-  
-#### Responses
-  
-##### 200 OK
-- **Description**: The feed was successfully updated.
-- **Example**:
-  ```json
-      {
-        "data": {
-          "id": "cm0f29z2g0001qjb28qxs68iq",
-          "path": "/tbn/dojo-pbr",
-          "name": "Playlist feed",
-          "config": {
-            "assetFilters": [
-              {
-                "name": "FILTER_ASSET_PREMIUM",
-                "type": "assetFilter",
-                "config": {
-                  "excludeTags": "episode, free",
-                  "includeProperties": {
-                    "requiresSubscription": "false"
-                  }
-                }
-              },
-              {
-                "name": "FILTER_ASSET_ADINJECT",
-                "type": "assetFilter",
-                "config": {
-                  "entry": "id",
-                  "includeMidRoll": true,
-                  "includePostRoll": true
-                }
-              },
-              {
-                "name": "FILTER_ASSET_NEED_AUTHENTICATION",
-                "type": "customAssetFilter",
-                "config": {
-                  "clearCache": true
-                }
-              }
-            ],
-            "playlistFilters": [
-              {
-                "name": "FILTER_PLAYLIST_JWPLAYER",
-                "type": "playlistFilter",
-                "config": {
-                  "excludeTags": true,
-                  "includeCustomParms": false
-                }
-              }
-            ]
-          },
-          "queryParams": [
-            {
-              "name": "playlistId",
-              "type": "string",
-              "required": false
-            }
-          ]
-        }
-      }
-  ```
-  
-##### 500 Internal Server Error
-- **Description**: An error occurred while updating the feed.
-- **Example**:
-    ```json
-    {
-    "error": "error message"
-    }
-    ```
-
-
-#### Endpoint: `DELETE /feed/:id`
-
-#### Method: `DELETE`
-
-#### Parameters
-- `id` (string, required): The unique identifier of the feed to be deleted.
-
-#### Responses
-
-##### 204 No Content
-  - **Description**: The feed was successfully deleted.
-
-#### 500 Internal Server Error
-  - **Description**: An error occurred while deleting the feed.
-  - **Example**:
-    ```json
-    {
-      "error": "Error message"
-    }
-    ```
-
-
-### Filter Routes
-
-#### Endpoint: `/filter/`
-
-#### Description
-Fetches all filters.
-
-#### Method: `GET`
-
-#### Responses
-
-##### 200 OK
-- **Description**: Successfully retrieved all filters.
-- **Example**:
-  ```json
-  {
-    "data": [
-      {
-        "id": "79272",
-        "name": "FILTER_ASSET_ADINJECT",
-        "type": "assetFilter"
-      },
-      {
-        "id": "65763",
-        "name": "FILTER_PLAYLIST_JWPLAYER",
-        "type": "playlistFilter"
-      },
-      {
-        "id": "12345",
-        "name": "FILTER_SOME_OTHER",
-        "type": "otherFilter"
-      }
-    ]
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while fetching filters.
-- **Example**:
-  ```json
-  {
-    "error": "Error message"
-  }
-
-
-#### Endpoint: `/filter/:id`
-
-#### Description
-Fetches a specific filter by its ID.
-
-#### Method: `GET`
-
-#### URL Parameters
-- `id` (string): The ID of the filter to retrieve.
-
-#### Response
-
-##### 200 OK
-- **Description**: Successfully retrieved the filter.
-- **Example**:
-  ```json
-  {
-    "data": {
-      "id": "79272",
-      "name": "FILTER_ASSET_ADINJECT",
-      "description": "To inject ad breaks",
-      "type": "assetFilter",
-      "code": null,
-      "filterParams": []
-    }
-  }
-
-##### 404 Not Found
-- **Description**: The requested filter could not be found.
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while fetching the filter.
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-
-#### Endpoint: `/filter/`
-
-#### Description
-Creates a new filter.
-
-#### Method: `POST`
-
-#### Request Body
-
-- **CreateFilterRequest**:
-  - **Description**: The body containing the new filter information.
-  - **Example**:
-    ```json
-    {
-      "name": "FILTER_GEO_LOCATION",
-      "description": "To add geo location to each playlist",
-      "type": "assetFilter",
-      "code": "",
-      "filterParams": []
-    }
-    ```
-
-#### Responses
-
-##### 201 Created
-- **Description**: The filter was successfully created.
-- **Example**:
-  ```json
-  {
-    "data": {
-      "id": "cm0f1zt570000qjb2z76lx189",
-      "name": "FILTER_GEO_LOCATION",
-      "description": "To add geo location to each playlist",
-      "type": "assetFilter",
-      "code": null,
-      "filterParams": []
-    }
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while creating the filter.
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-
-
-#### Endpoint: `/filter/:id`
-
-#### Description
-Updates an existing filter with the specified ID.
-
-#### Method: `POST`
-
-#### URL Parameters
-- `id` (string, required): The unique identifier of the filter to be updated.
-
-#### Request Body
-
-- **CreateFilterRequest**:
-  - **Description**: The body containing the updated filter information.
-  - **Example**:
-    ```json
-    {
-      "name": "FILTER_GEO_LOCATION",
-      "description": "To add geo location to each playlist",
-      "type": "assetFilter",
-      "code": "",
-      "filterParams": []
-    }
-    ```
-
-#### Responses
-
-##### 201 Created
-- **Description**: The filter was successfully updated.
-- **Example**:
-  ```json
-  {
-    "data": {
-      "id": "cm0f1zt570000qjb2z76lx189",
-      "name": "FILTER_GEO_LOCATION",
-      "description": "To add geo location to each playlist",
-      "type": "assetFilter",
-      "code": null,
-      "filterParams": []
-    }
-  }
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while updating the filter.
-- **Example**:
-  ```json
-  {
-    "error": "error message"
-  }
-
-
-#### Endpoint: `/feed/:id`
-
-#### Description
-Deletes a filter by its ID.
-
-### Method: `DELETE`
-
-#### Parameters
-- **id** (string, required): The unique identifier of the filter to be deleted.
-
-#### Responses
-
-##### 204 No Content
-- **Description**: The filter was successfully deleted.
-
-##### 500 Internal Server Error
-- **Description**: An error occurred while deleting the filter.
-- **Example**:
-  ```json
-  {
-    "error": "An error occurred while deleting the filter"
-  }
-
 
 ## Overview of Repository Functions
 
@@ -785,9 +194,9 @@ This documentation should help you get started with repository and database oper
 ### Post-Install Setup
 While installing dependencies, models are automatically created in the database, seeding is also done, and the Prisma client is generated.
 We can manually set up these things:
-- To set up the tables: `npx prisma migrate dev --schema ./src/prisma/schema.prisma`
-- To set up the seeding: `npx ts-node src/repos/seed.ts`
-- To generate the Prisma client: `npx prisma generate --schema ./src/prisma/schema.prisma`
+- To set up the tables: `yarn prisma migrate dev --schema ./src/prisma/schema.prisma`
+- To set up the seeding: `yarn ts-node src/repos/seed.ts`
+- To generate the Prisma client: `yarn prisma generate --schema ./src/prisma/schema.prisma`
 ### DB Folder Structure
 ```
 src/
@@ -955,7 +364,7 @@ src/
   To execute the tests for the repository functions, run the following command in your terminal:
 
   ```
-  npm run test-repo
+  yarn test-repo
   ```
 
   The `repo` function returns an object with the following structure:
