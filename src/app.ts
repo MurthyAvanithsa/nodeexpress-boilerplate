@@ -1,20 +1,19 @@
+import path from 'path';
 import express from 'express';
-import { logger } from './logger/log';
-import 'dotenv/config';
-import feedRouter from './routes/routes.feed';
-import filterRouter from './routes/routes.filter';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import path from 'path';
-import cors from 'cors';
-import bodyParser from 'body-parser'
 import * as OpenApiValidator from 'express-openapi-validator';
-import { errorLogger, requestLogger } from './middleware/logger.middleware';
-import { prismaConnection } from './connections';
-import { jwtMiddleware } from "./middleware/jwt-authorization";
-import queueRouter from './routes/routes.queue';
-import bullBoardUI from './middleware/bull-board';
+import { logger } from './logger/log';
 import config from './config';
+import { errorLogger, requestLogger } from './middleware/logger.middleware';
+import { jwtMiddleware } from './middleware/jwt-authorization';
+import bullBoardUI from './middleware/bull-board';
+import { prismaConnection } from './connections';
+import feedRouter from './routes/routes.feed';
+import filterRouter from './routes/routes.filter';
+import queueRouter from './routes/routes.queue';
 
 export const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
