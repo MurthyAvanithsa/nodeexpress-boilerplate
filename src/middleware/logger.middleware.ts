@@ -5,10 +5,11 @@ export const errorLogger = (
   err: any,
   req: Request,
   res: Response,
+  next: NextFunction
 ) => {
   if (err.name === "UnauthorizedError") {
     logger.error(`Unauthorized error: ${err.message}`);
-    return res.status(401).json({ message: "Invalid or missing token" });
+    res.status(401).json({ message: "Invalid or missing token" });
   } else if (err.errors) {
     logger.error(`Validation error: ${JSON.stringify(err.errors, null, 2)}`);
     res.status(400).json({
@@ -20,6 +21,7 @@ export const errorLogger = (
       error: `An unexpected error occurred: ${err.message}`,
     });
   }
+  next();
 };
 
 export const requestLogger = (
