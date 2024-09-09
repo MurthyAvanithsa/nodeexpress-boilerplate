@@ -16,17 +16,27 @@ import filterRouter from './routes/routes.filter';
 import queueRouter from './routes/routes.queue';
 
 export const app = express();
+
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
 const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(requestLogger);
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use(requestLogger);
+
 app.use(queueRouter);
 app.use('/bull-board/ui', bullBoardUI);
+
+app.get('/', (req, res) => {
+  res.redirect('/api-docs');
+});
+
 app.use(jwtMiddleware);
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,
@@ -34,6 +44,7 @@ app.use(
     validateResponses: true
   })
 );
+
 app.use(feedRouter);
 app.use(filterRouter);
 app.use(errorLogger);
