@@ -5,6 +5,7 @@ import { CloudEventV1 } from 'cloudevents';
 import { v4 as uuidv4 } from 'uuid';
 import { getAllJobs, getJobById } from '../services/services.queue';
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from '../types/types.queue';
+import { logger } from '../logger/log';
 
 const queueRouter = Router();
 queueRouter.post('/job', async (req: Request, res: Response) => {
@@ -43,6 +44,7 @@ queueRouter.get("/job", async(req: Request<unknown, getAllJobsResponse, unknown>
 
 queueRouter.get("/job/:id", async(req: Request<{id: string}>, res: Response) => {
     const jobId = req.params.id;
+    logger.info(jobId)
     const response: getJobByIdResponse = await getJobById(jobId);
     const statusCode = response.data ? 200 : 500;
     res.status(statusCode).json(response);

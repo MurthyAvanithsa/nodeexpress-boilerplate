@@ -1,4 +1,4 @@
-import { app } from "../app";
+import { app } from "../../app";
 import request from "supertest";
 
 const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g";
@@ -8,7 +8,7 @@ describe("Test the feed routes", () => {
 
     it("Should create a new feed", async () => {
         const newFeed = {
-            path: "dojo-pbr/tbn",
+            path: "dojo-pbr/",
             name: "dsp",
             config: {"assetFilters": [], "playlistFilters": []},
             queryParams: []
@@ -54,7 +54,7 @@ describe("Test the feed routes", () => {
 
     it("Should update feed based on ID", async () => {
         const updateFeed = {
-            path: "dojo-pbr/tbn",
+            path: "dojo-pbr/",
             name: "dsp",
             config: {"assetFilters": [], "playlistFilters": []},
             queryParams: []
@@ -79,84 +79,110 @@ describe("Test the feed routes", () => {
             .set("Authorization", authToken);
         expect(response.status).toBe(204);
     });
+
 });
 
-describe("Test the filter routes", () => {
-    let filterId: string;
 
-    it("Should create a filter using '/filter'", async () => {
-        const newFilter = {
-            name: "FILTER_GEO_LOCATION",
-            description: "This filter is to authenticate user",
-            type: "assetFilter",
-            code: "",
-            filterParams: [{ name: "value", type: "string", required: true }]
+
+describe("Validate error response for feed routes", () =>{
+    let feedId = "cm0unzfea0000yf10u8eohrti"
+    it("should return error for fetching all feeds with invalid token", async() =>{
+        const response = await request(app)
+        .get('/feed')
+        .set("Authorization", "Bearer 345678dfghjo");
+        expect(response.status).toBe(401);
+    });
+
+    it("should return error for creating a new feed with invalid token", async() =>{
+        const createFeed = { 
+            path: "dojo-pbr/tbn",
+            name: "dsp",
+            config: {"assetFilters": [], "playlistFilters": []},
+            queryParams: []
+            };
+            const response = await request(app)
+            .post('/feed')
+            .set("Authorization", "Bearer 342r3f3wrrfc3333dd")
+            .send(createFeed);
+            expect(response.status).toBe(401);
+    });
+
+    it("should return validation error for creating a feed with missing required fields", async() =>{
+        const createFeed = { 
+            path: "dojo-pbr/tbn",
+            config: {"assetFilters": [], "playlistFilters": []},
+            queryParams: []
+            };
+            const response = await request(app)
+            .post('/feed')
+            .set("Authorization", authToken)
+            .send(createFeed);
+            expect(response.status).toBe(400);
+    });
+    
+    it("should return error for fetching a specific feed with an invalid invalid token ", async () => {
+        const response = await request(app)
+            .get(`/feed/${feedId}`)
+            .set("Authorization", 'Bearer 467389tyeuwioqc');
+        expect(response.status).toBe(401);
+    });
+
+    it("should return error for fetching a specific feed with an invalid ID", async () => {
+        feedId = "64377tesyw2r"
+        const response = await request(app)
+            .get(`/feed/${feedId}`)
+            .set("Authorization", authToken);
+        expect(response.status).toBe(404); 
+    });
+    
+
+    it("Should return validation error for updating a feed with invalid token", async () => {
+        
+        const updateFeed = {
+            path: "dojo-pbr/tbn",
+            name: "dsp",
+            config: { "assetFilters": [], "playlistFilters": [] },
+            queryParams: []
         };
         const response = await request(app)
-            .post("/filter")
-            .set("Authorization", authToken)
-            .send(newFilter);
-        const data = response.body.data;
-        filterId = data?.id;
-        expect(data).toBeInstanceOf(Object);
-        expect(data?.id).toBeDefined();
-        expect(data?.name).toBe(newFilter.name);
-        expect(data?.description).toBe(newFilter.description);
-        expect(data?.type).toBe(newFilter.type);
-        expect(data?.filterParams).toEqual(newFilter.filterParams);
+            .put(`/feed/${feedId}`) 
+            .set("Authorization", "Bearer 7890dfghjk") 
+            .send(updateFeed);
+        expect(response.status).toBe(401); 
     });
 
-    it("Should fetch all filters using '/filter'", async () => {
-        const response = await request(app)
-            .get("/filter")
-            .set("Authorization", authToken);
-        const data = response.body.data;
-        expect(data).toBeInstanceOf(Array);
-        expect(data?.[0]?.id).toBeDefined();
-        expect(data?.[0]?.name).toBeDefined();
-        expect(data?.[0]?.type).toBeDefined();
-    });
-
-    it("Should fetch filter by ID using '/filter/:id'", async () => {
-        const response = await request(app)
-            .get(`/filter/${filterId}`)
-            .set("Authorization", authToken);
-        expect(response.body.data).toBeInstanceOf(Object);
-        const data = response.body.data;
-        expect(data?.id).toBeDefined();
-        expect(data?.name).toBeDefined();
-        expect(data?.description).toBeDefined();
-        expect(data?.type).toBeDefined();
-        expect(data?.code).toBeDefined();
-        expect(data?.filterParams).toBeInstanceOf(Array);
-    });
-
-    it("Should update a filter using '/filter/:id'", async () => {
-        const updateFilter = {
-            name: "FILTER_SS",
-            description: "This filter is to authenticate user",
-            type: "assetFilter",
-            code: "",
-            filterParams: [{ name: "value", type: "string", required: true }]
+    it("hould return validation error for updating a feed with invalid data", async () => {
+        const updateFeed = {
+            path: "dojo-pbr/tbn"
         };
         const response = await request(app)
-            .put(`/filter/${filterId}`)
-            .set("Authorization", authToken)
-            .send(updateFilter);
-        expect(response.body).toHaveProperty("data");
-        expect(response.body?.data).toBeDefined();
-        const data = response.body.data;
-        expect(data?.id).toBeDefined();
-        expect(data?.name).toBe(updateFilter.name);
-        expect(data?.description).toBe(updateFilter.description);
-        expect(data?.type).toBe(updateFilter.type);
-        expect(data?.filterParams).toEqual(updateFilter.filterParams);
+            .put(`/feed/${feedId}`) 
+            .set("Authorization", authToken) 
+            .send(updateFeed);
+        expect(response.status).toBe(400); 
+    });
+    
+    it("Should return 404 Not Found when updating feed by non-existent ID", async () => {
+        feedId = "536dyusioepeww"
+        const response = await request(app)
+            .get(`/feed/${feedId}`)
+            .set("Authorization", authToken);
+        expect(response.status).toBe(404); 
     });
 
-    it("Should delete filter by ID using '/filter/:id'", async () => {
+    it("Should return error for deleting a feed with an invalid token", async () =>{
         const response = await request(app)
-            .delete(`/filter/${filterId}`)
-            .set("Authorization", authToken);
-        expect(response.status).toBe(204);
+        .delete(`/feed/${feedId}`)
+        .set("Authorization", "Bearer 56789yuio");
+        expect(response.status).toBe(401);
     });
-});
+
+    it("Should return error for deleting a feed with an invalid ID", async () => {
+        feedId = "485hdcdw" 
+        const response = await request(app)
+            .get(`/feed/${feedId}`)
+            .set("Authorization", authToken);
+        expect(response.status).toBe(404); 
+    });
+
+})
