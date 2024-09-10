@@ -22,6 +22,3 @@ src/prisma/.env
 
 # yarn.lock file is automatically generated and used to lock the versions of dependencies in a project, ensuring consistent installs across different environments.
 yarn.lock
-
-# To ignore _ in husky
-.husky/_
