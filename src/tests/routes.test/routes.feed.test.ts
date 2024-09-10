@@ -1,10 +1,5 @@
-<<<<<<< HEAD:src/tests/routes/routes.feed.test.ts
 import { app } from "../../app";
-=======
->>>>>>> 64e417c (Modified imports order using eslint fix):src/tests/routes.test.ts
 import request from "supertest";
-
-import { app } from "../app";
 
 const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g";
 
