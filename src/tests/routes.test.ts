@@ -1,5 +1,6 @@
-import { app } from "../app";
 import request from "supertest";
+
+import { app } from "../app";
 
 const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g";
 
@@ -89,7 +90,7 @@ describe("Test the feed routes", () => {
     });
 
     it("should return error for creating a new feed with invalid token", async() =>{
-        const createFeed = { 
+        const createFeed = {
             path: "dojo-pbr/tbn",
             name: "dsp",
             config: {"assetFilters": [], "playlistFilters": []},
@@ -103,7 +104,7 @@ describe("Test the feed routes", () => {
     });
 
     it("should return validation error for creating a feed with missing required fields", async() =>{
-        const createFeed = { 
+        const createFeed = {
             path: "dojo-pbr/tbn",
             config: {"assetFilters": [], "playlistFilters": []},
             queryParams: []
@@ -114,7 +115,7 @@ describe("Test the feed routes", () => {
             .send(createFeed);
             expect(response.status).toBe(400);
     });
-    
+
     it("should return error for fetching a specific feed with an invalid invalid token ", async () => {
         const response = await request(app)
             .get(`/feed/${feedId}`)
@@ -127,12 +128,12 @@ describe("Test the feed routes", () => {
         const response = await request(app)
             .get(`/feed/${feedId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     });
-    
+
 
     it("Should return validation error for updating a feed with invalid token", async () => {
-        
+
         const updateFeed = {
             path: "dojo-pbr/tbn",
             name: "dsp",
@@ -140,10 +141,10 @@ describe("Test the feed routes", () => {
             queryParams: []
         };
         const response = await request(app)
-            .put(`/feed/${feedId}`) 
-            .set("Authorization", "Bearer 7890dfghjk") 
+            .put(`/feed/${feedId}`)
+            .set("Authorization", "Bearer 7890dfghjk")
             .send(updateFeed);
-        expect(response.status).toBe(401); 
+        expect(response.status).toBe(401);
     });
 
     it("Should return validation error for updating a feed with invalid data", async () => {
@@ -151,18 +152,18 @@ describe("Test the feed routes", () => {
             path: "dojo-pbr/tbn"
         };
         const response = await request(app)
-            .put(`/feed/${feedId}`) 
-            .set("Authorization", authToken) 
+            .put(`/feed/${feedId}`)
+            .set("Authorization", authToken)
             .send(updateFeed);
-        expect(response.status).toBe(400); 
+        expect(response.status).toBe(400);
     });
-    
+
     it("Should return an ID not found message for updating a feed with an invalid ID.", async () => {
         feedId = "536dyusioepeww"
         const response = await request(app)
             .get(`/feed/${feedId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     });
 
     it("Should return error for deleting a feed with an invalid token", async () =>{
@@ -173,11 +174,11 @@ describe("Test the feed routes", () => {
     });
 
     it("Should return an ID not found message for deleting a feed with an invalid ID.", async () => {
-        feedId = "485hdcdw" 
+        feedId = "485hdcdw"
         const response = await request(app)
             .get(`/feed/${feedId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     });
 
 });
@@ -298,7 +299,7 @@ describe("Test the filter routes", () => {
             .send(createFilter);
             expect(response.status).toBe(400);
     });
-    
+
     it("Should return error for fetching a specific filter with an invalid token ", async () => {
         const response = await request(app)
             .get(`/filter/${filterId}`)
@@ -307,16 +308,16 @@ describe("Test the filter routes", () => {
     });
 
     it("Should return an ID not found message for fetching a filter with an invalid ID.", async () => {
-        filterId = "78376"; 
+        filterId = "78376";
         const response = await request(app)
             .get(`/filter/${filterId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     });
-    
+
 
     it("Should return validation error for updating a filter with invalid token", async () => {
-        
+
         const updateFilter = {
                         name: "FILTER_SS",
                         description: "This filter is to authenticate user",
@@ -325,10 +326,10 @@ describe("Test the filter routes", () => {
                         filterParams: [{ name: "value", type: "string", required: true }]
                     };
         const response = await request(app)
-            .put(`/filter/${filterId}`) 
-            .set("Authorization", "Bearer 75843rekcjskf34") 
+            .put(`/filter/${filterId}`)
+            .set("Authorization", "Bearer 75843rekcjskf34")
             .send(updateFilter);
-        expect(response.status).toBe(401); 
+        expect(response.status).toBe(401);
     });
 
     it("Should return validation error for updating a filter with invalid data", async () => {
@@ -340,18 +341,18 @@ describe("Test the filter routes", () => {
                         filterParams: [{ name: "value", type: "string", required: true }]
                     }
         const response = await request(app)
-            .put(`/filter/${filterId}`) 
-            .set("Authorization", authToken) 
+            .put(`/filter/${filterId}`)
+            .set("Authorization", authToken)
             .send(updateFilter);
-        expect(response.status).toBe(400); 
+        expect(response.status).toBe(400);
     });
-    
+
     it("Should return an ID not found message for updating a filter with an invalid ID.", async () => {
-        filterId = "r5679";  
+        filterId = "r5679";
         const response = await request(app)
             .get(`/filter/${filterId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     });
 
     it("Should return error for deleting a filter with an invalid token", async () =>{
@@ -362,11 +363,11 @@ describe("Test the filter routes", () => {
     });
 
     it("Should return an ID not found message for deleting a filter with an invalid ID.", async () => {
-        filterId = "r5679"; 
+        filterId = "r5679";
         const response = await request(app)
             .get(`/filter/${filterId}`)
             .set("Authorization", authToken);
-        expect(response.status).toBe(404); 
+        expect(response.status).toBe(404);
     })
 
 
@@ -382,7 +383,7 @@ describe("Test the queue routes", () => {
             }
         const response = await request(app)
         .post("/job")
-        .send(newJob)   
+        .send(newJob)
 
         expect(response.status).toBe(201);
     })
