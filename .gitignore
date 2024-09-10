@@ -8,7 +8,6 @@ dist
 src/logger/app.log
 
 # Ignore swagger schemas
-
 src/swagger/swagger.yaml
 src/swagger/schemas/types.feed.yaml
 src/swagger/schemas/types.filter.yaml
