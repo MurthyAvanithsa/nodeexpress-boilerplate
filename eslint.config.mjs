@@ -7,7 +7,7 @@ export default [
   {
     ignores: [
       "dist/",
-      "trunk/",
+      ".trunk/",
       "node_modules/",
       "jest.config.js",
       "test-admin/"

@@ -15,7 +15,8 @@
     "migrate-db": "yarn prisma migrate dev --schema ./src/prisma/schema.prisma && yarn prisma generate --schema ./src/prisma/schema.prisma",
     "load-seed-data": "yarn ts-node src/repos/seed.ts",
     "init-db": "yarn generate-db-url && yarn migrate-db && yarn load-seed-data",
-    "setup": "yarn generate-openapi-schemas && yarn generate-openapi-spec && yarn init-db"
+    "setup": "yarn generate-openapi-schemas && yarn generate-openapi-spec && yarn init-db",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
