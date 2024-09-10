@@ -9,7 +9,8 @@ export default [
       "dist/",
       "trunk/",
       "node_modules/",
-      "jest.config.js"
+      "jest.config.js",
+      "test-admin/"
     ]
   },
   {files: ["**/*.{js,mjs,cjs,ts}"]},
