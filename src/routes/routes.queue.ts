@@ -36,7 +36,7 @@ queueRouter.get("/job", async(req: Request<unknown, getAllJobsResponse, unknown>
     const requestPayload: getAllJobsRequest = {
         sort: JSON.parse(String(queryParams.sort || JSON.stringify(['id', 'asc']))),
         filter: JSON.parse(String(queryParams.filter || JSON.stringify({'1': '1'}))),
-        pagination: JSON.parse(String(queryParams.pagination || JSON.stringify([1, 10])))
+        pagination: JSON.parse(String(queryParams.pagination || JSON.stringify([0, 10])))
     };
     const response: getAllJobsResponse = await getAllJobs(requestPayload);
     const statusCode = response.data ? 200 : 500;
