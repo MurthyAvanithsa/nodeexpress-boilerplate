@@ -47,7 +47,7 @@ const config: Config = {
         port: parseInt(process.env.REDIS_PORT || '6379')
     },
     queue: {
-        GENERIC_WORKER_QUEUE: process.env.ADBREAKS_JOB_QUEUE || 'adbreaks-job-queue'
+        GENERIC_WORKER_QUEUE: process.env.GENERIC_WORKER_QUEUE || 'adbreaks-job-queue'
     },
     app: {
         host: process.env.APP_HOST || 'localhost',
