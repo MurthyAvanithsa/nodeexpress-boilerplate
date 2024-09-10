@@ -4,9 +4,9 @@ import * as queueRepos from "../repos/repos.queue";
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from "../types/types.queue";
 async function getAllJobs(req: getAllJobsRequest): Promise<getAllJobsResponse> {
     const result = await queueRepos.getAllJobs({
-        sort: req.sort || ["id", "asc"],
-        filter: req.filter || {'1': '1'},
-        pagination: req.pagination || [1, 10],
+        sort: req.sort,
+        filter: req.filter,
+        pagination: req.pagination,
     });
     if (result.error) {
         return { error: result.error }
