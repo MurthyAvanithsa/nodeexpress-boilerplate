@@ -42,7 +42,7 @@ model JobQueue {
   status      String
   payload     Json
   createdAt   DateTime @default(now())
-  completedAt DateTime? 
+  completedAt DateTime?
   error       String?
 
   @@unique([queueName, jobId])

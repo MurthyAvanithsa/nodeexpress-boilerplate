@@ -11,7 +11,6 @@ import { logger } from './logger/log';
 import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
 import { jwtMiddleware } from './middleware/jwt-authorization';
-import bullBoardUI from './middleware/bull-board';
 import { prismaConnection } from './connections';
 import feedRouter from './routes/routes.feed';
 import filterRouter from './routes/routes.filter';
@@ -31,7 +30,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(requestLogger);
 
 app.use(queueRouter);
-app.use('/bull-board/ui', bullBoardUI);
 
 app.get('/', (req, res) => {
   res.redirect('/api-docs');

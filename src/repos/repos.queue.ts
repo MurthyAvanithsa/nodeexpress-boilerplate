@@ -1,5 +1,6 @@
-import { CloudEvent } from "cloudevents";
+import {  CloudEventV1 } from "cloudevents";
 import { JobQueue as jobQueueModel } from "@prisma/client"
+import { InputJsonValue } from "@prisma/client/runtime/library";
 
 import { prismaConnection } from "../connections";
 import { logger } from "../logger/log";
@@ -10,14 +11,14 @@ type Result<T> = {
     error?: string;
 };
 
-async function createJobQueue(queueName: string, id: string, payload: CloudEvent): Promise<Result<jobQueueModel>> {
+async function createJobQueue(queueName: string, id: string, payload: CloudEventV1<JSON>): Promise<Result<jobQueueModel>> {
     try {
         const insertedJob: jobQueueModel = await prismaConnection.jobQueue.create({
             data: {
                 queueName: queueName,
                 status: "Waiting",
                 jobId: id,
-                payload: payload,
+                payload: payload as unknown as InputJsonValue, // Casting payload to any
                 createdAt: payload.time
             }
         });

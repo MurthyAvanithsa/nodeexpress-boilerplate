@@ -1,5 +1,13 @@
 import dotenv from 'dotenv';
 
+const awsConfig = {
+    region: process.env.AWS_REGION || "",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+    queueName: process.env.AWS_QUEUE_NAME || "",
+    accountId: process.env.AWS_ACCOUNT_ID || "",
+    sessionToken: process.env.AWS_SESSION_TOKEN || ""
+}
 const getEnvConfig = () => {
     dotenv.config();
     const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
@@ -31,6 +39,14 @@ interface Config {
     app: {
         host: string,
         port: number
+    },
+    aws: {
+        region: string,
+        accessKeyId: string,
+        secretAccessKey: string,
+        queueName: string,
+        accountId: string,
+        sessionToken: string
     }
 }
 
@@ -47,11 +63,19 @@ const config: Config = {
         port: parseInt(process.env.REDIS_PORT || '6379')
     },
     queue: {
-        GENERIC_WORKER_QUEUE: process.env.GENERIC_WORKER_QUEUE || 'adbreaks-job-queue'
+        GENERIC_WORKER_QUEUE: awsConfig.queueName
     },
     app: {
         host: process.env.APP_HOST || 'localhost',
         port: parseInt(process.env.APP_PORT || '3000')
+    },
+    aws: {
+        region: awsConfig.region,
+        accessKeyId: awsConfig.accessKeyId,
+        secretAccessKey: awsConfig.secretAccessKey,
+        queueName: awsConfig.queueName,
+        accountId: awsConfig.accountId,
+        sessionToken: awsConfig.sessionToken
     }
 }
 
