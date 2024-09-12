@@ -9,7 +9,7 @@ import { postMessageResponse } from "../types/types.queue";
 
 import getQueueUrl from './sqsHelper';
 
-export class SQSService {
+export class SQSTask {
   private sqsClient: SQSClient;
   private queueUrl: string;
   private queueName: string;
@@ -94,5 +94,5 @@ export class SQSService {
   }
 }
 
-export default SQSService;
+export default SQSTask;
 
