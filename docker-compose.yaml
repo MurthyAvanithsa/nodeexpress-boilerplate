@@ -1,11 +1,60 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:14
+    hostname: postgres
+    container_name: pgdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dsp
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - backend
+
+  wait-for-postgres:
+    image: busybox
+    container_name: wait-for-postgres
+    depends_on:
+      - postgres
+    command: /bin/sh -c "while ! nc -z postgres 5432; do sleep 1; done;"
+    networks:
+      - backend
+
   app:
+    hostname: app
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: Microservices-Boilerplate
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dsp
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      APP_HOST: app
+      APP_PORT: 3000
+      NODE_ENV: docker
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
+    depends_on:
+      - wait-for-postgres
+    volumes:
+      - appdata:/usr/src/app
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+  appdata:
+
+networks:
+  backend:
+    driver: bridge
