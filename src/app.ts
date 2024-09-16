@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 
 import express from 'express';
 import cors from 'cors';
@@ -12,9 +13,8 @@ import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
 import { jwtMiddleware } from './middleware/jwt-authorization';
 import { prismaConnection } from './connections';
-import feedRouter from './routes/routes.feed';
-import filterRouter from './routes/routes.filter';
-import queueRouter from './routes/routes.queue';
+const files = fs.readdirSync('./src/routes/');
+const routeFiles = files.filter(file => file.endsWith('.ts'));
 
 export const app = express();
 
@@ -28,8 +28,6 @@ app.use(bodyParser.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(requestLogger);
-
-app.use(queueRouter);
 
 app.get('/', (req, res) => {
   res.redirect('/api-docs');
@@ -45,8 +43,21 @@ app.use(
   })
 );
 
-app.use(feedRouter);
-app.use(filterRouter);
+routeFiles.forEach(file => {
+  const routeName = path.basename(file, '.ts');
+  async function registerRoute() {
+    try {
+      const route = await import(`./routes/${routeName}`);
+      if (route.default && typeof route.default === 'function') {
+        app.use(route.default);
+      }
+    } catch (error) {
+      logger.error(`Error registering route ${routeName}:`, error);
+    }
+  }
+  registerRoute();
+});
+
 app.use(errorLogger);
 
 export function startServer(options: { port: number }) {
