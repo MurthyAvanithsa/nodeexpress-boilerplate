@@ -14,7 +14,7 @@ queueRouter.post('/job', async (req: Request, res: Response) => {
     const cloudevent: CloudEventV1<JSON> = {
         id: uuidv4(),
         source: '/mycontext',
-        type: 'com.example.someevent',
+        type: 'com.example.job.created',
         specversion: '1.0',
         datacontenttype: 'application/json',
         time: new Date().toISOString(),
