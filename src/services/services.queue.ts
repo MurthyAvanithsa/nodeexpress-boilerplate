@@ -1,7 +1,14 @@
-import { JobQueue as jobQueueModel } from "prisma/prisma-client"
+import { JobQueue as jobQueueModel } from "prisma/prisma-client";
+import { CloudEventV1 } from "cloudevents";
 
 import * as queueRepos from "../repos/repos.queue";
-import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse } from "../types/types.queue";
+import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse, Job, postMessageResponse } from "../types/types.queue";
+import { sqsTask } from "../index"
+async function addJob(queueName: string, data: CloudEventV1<Job>) {
+    const result: postMessageResponse = await sqsTask.postMessage(data);
+    return result.status ? { message: `Added job with id ${result.data?.messageId}.` } : { error: `Failed to add ${result?.error}` };
+}
+
 async function getAllJobs(req: getAllJobsRequest): Promise<getAllJobsResponse> {
     const result = await queueRepos.getAllJobs({
         sort: req.sort,
@@ -31,7 +38,7 @@ async function getJobById(id: string): Promise<getJobByIdResponse> {
         return { error: result.error }
     }
     return {
-        data: result.data ?  ({
+        data: result.data ? ({
             id: result.data.id,
             queueName: result.data.queueName,
             jobId: result.data.jobId,
@@ -44,4 +51,4 @@ async function getJobById(id: string): Promise<getJobByIdResponse> {
     };
 }
 
-export { getAllJobs, getJobById }
+export { getAllJobs, getJobById, addJob }

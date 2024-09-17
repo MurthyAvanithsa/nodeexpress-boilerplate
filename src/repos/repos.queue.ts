@@ -1,31 +1,31 @@
-import {  CloudEventV1 } from "cloudevents";
+import { CloudEventV1 } from "cloudevents";
 import { JobQueue as jobQueueModel } from "@prisma/client"
 import { InputJsonValue } from "@prisma/client/runtime/library";
 
 import { prismaConnection } from "../connections";
 import { logger } from "../logger/log";
-import { getAllJobsRequest } from "../types/types.queue";
+import { getAllJobsRequest, Job } from "../types/types.queue";
 
 type Result<T> = {
     data?: T;
     error?: string;
 };
 
-async function createJobQueue(queueName: string, id: string, payload: CloudEventV1<JSON>): Promise<Result<jobQueueModel>> {
+async function createJobQueue(queueName: string, id: string, payload: CloudEventV1<Job>): Promise<Result<jobQueueModel>> {
     try {
         const insertedJob: jobQueueModel = await prismaConnection.jobQueue.create({
             data: {
                 queueName: queueName,
                 status: "Waiting",
                 jobId: id,
-                payload: payload as unknown as InputJsonValue, // Casting payload to any
+                payload: payload as unknown as InputJsonValue,
                 createdAt: payload.time
             }
         });
         return { data: insertedJob };
     } catch (error: any) {
         logger.error(`Error creating job: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause : error : error };
+        throw new Error(JSON.stringify(error));
     }
 }
 
@@ -54,14 +54,14 @@ async function getAllJobs(req: getAllJobsRequest): Promise<Result<jobQueueModel[
         const [sortBy, order] = sort;
         const [page, perPage] = pagination;
         const jobs = await prismaConnection.jobQueue.findMany({
-            where : {
+            where: {
                 [filterKey]: filter?.filterKey
             },
             orderBy: {
-                    [sortBy]: order.toLowerCase()
-                },
-                skip: page * perPage,
-                take: perPage
+                [sortBy]: order.toLowerCase()
+            },
+            skip: page * perPage,
+            take: perPage
         });
         return { data: jobs };
     } catch (error: any) {
@@ -73,12 +73,12 @@ async function getAllJobs(req: getAllJobsRequest): Promise<Result<jobQueueModel[
 async function getJobById(id: string): Promise<Result<jobQueueModel>> {
     try {
         const job = await prismaConnection.jobQueue.findUnique({
-           where :{
-            id: id
-           }
+            where: {
+                id: id
+            }
         });
         if (!job) {
-            return {error: "Not found"}
+            return { error: "Not found" }
         }
         return { data: job };
     } catch (error: any) {

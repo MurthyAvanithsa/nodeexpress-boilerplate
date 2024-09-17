@@ -4,6 +4,7 @@ import fs from 'fs';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import bodyParserXml from 'body-parser-xml';
 import YAML from 'yamljs';
 import swaggerUi from 'swagger-ui-express';
 import * as OpenApiValidator from 'express-openapi-validator';
@@ -13,6 +14,7 @@ import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
 import { jwtMiddleware } from './middleware/jwt-authorization';
 import { prismaConnection } from './connections';
+
 const files = fs.readdirSync('./src/routes/');
 const routeFiles = files.filter(file => file.endsWith('.ts'));
 
@@ -22,8 +24,13 @@ const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
 const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
 
 app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
+bodyParserXml(bodyParser);
+app.use(bodyParser.xml({
+  limit: '1MB',
+  xmlParseOptions: { explicitArray: false }
+}));
+app.use(express.json()); 
+app.use(express.text());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -52,7 +59,7 @@ routeFiles.forEach(file => {
         app.use(route.default);
       }
     } catch (error) {
-      logger.error(`Error registering route ${routeName}:`, error);
+      logger.error(`Error registering route ${routeName}: ${error}`);
     }
   }
   registerRoute();

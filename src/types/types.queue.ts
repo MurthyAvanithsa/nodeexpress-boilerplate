@@ -33,6 +33,8 @@ export type getJobByIdResponse = {
 
 export type postMessageResponse = {
     error?: any,
-    data?: { messageId?: string, payload: CloudEventV1<JSON> },
+    data?: { messageId?: string, payload: CloudEventV1<Job> },
     status: boolean
 }
+
+export type Job = | string | JSON | XMLDocument;

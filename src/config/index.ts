@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-
 const awsConfig = {
     region: process.env.AWS_REGION || "",
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
@@ -29,9 +28,6 @@ interface Config {
         name: string,
         connectionLimit?: number
     },
-    queue: {
-        GENERIC_WORKER_QUEUE: string,
-    },
     app: {
         host: string,
         port: number
@@ -53,9 +49,6 @@ const config: Config = {
         pass: process.env.DB_PASS || 'postgres',
         name: process.env.DB_NAME || 'dsp',
         connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '5')
-    },
-    queue: {
-        GENERIC_WORKER_QUEUE: awsConfig.queueName
     },
     app: {
         host: process.env.APP_HOST || 'localhost',

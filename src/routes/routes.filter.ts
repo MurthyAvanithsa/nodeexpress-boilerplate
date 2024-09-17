@@ -6,7 +6,7 @@ import { UpdateFilterRequest,
     UpdateFilterResponse,
     CreateFilterRequest,
     CreateFilterResponse,
-    DeleteFilterRequest, 
+    DeleteFilterRequest,
     DeleteFilterResponse,
     GetAllFiltersResponse,
     GetFilterByIdResponse,
@@ -23,7 +23,7 @@ filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFil
     const filterId = req.params.id;
     const response: GetFilterByIdResponse = await getFilterById(filterId);
     const responseCode = !response.data ? response.error === `Filter with ID ${filterId} not found` ? 404: 500 : 200;
-    res.status(responseCode).json(response);  
+    res.status(responseCode).json(response);
 });
 
 filterRouter.post("/filter/", async (req: Request<unknown, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
