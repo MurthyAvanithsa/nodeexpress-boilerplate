@@ -8,6 +8,7 @@
 - [Swagger Documentation](#swagger-documentation)
 - [Overview of Repository Functions](#overview-of-repository-functions)
 - [JWT Middleware](#jwt-middleware)
+- [Docker Setup](#docker-setup)
 
 ## Quick Start
 
@@ -416,3 +417,17 @@ In this format:
 - The `Authorization` header example is provided in a `javascript` code block.
 - The actual JWT token is included directly in the `Authorization` header for clarity and ease of copying.
 ```
+# Docker Setup
+
+Update the NODE_ENV with docker
+```
+  NODE_ENV="docker"
+```
+### Docker Compose Setup
+This setup uses Docker Compose to manage the application's containers. To run the application using Docker Compose, navigate to the project directory and execute the following command:
+```
+docker-compose up --build
+```
+
+This will set up the application with DB, Redis, and the server.
+
