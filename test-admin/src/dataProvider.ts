@@ -8,11 +8,10 @@ export const dataProvider: DataProvider = {
   getList: (resource, params) => {
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
-    console.log(page, perPage, field, order);
     const query = {
       sort: JSON.stringify([field, order]),
       pagination: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-      filter: JSON.stringify({}),
+      filter: JSON.stringify(params.filter),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
     console.log(url);
