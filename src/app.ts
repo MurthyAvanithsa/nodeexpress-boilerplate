@@ -29,7 +29,7 @@ app.use(bodyParser.xml({
   limit: '1MB',
   xmlParseOptions: { explicitArray: false }
 }));
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.text());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -41,7 +41,6 @@ app.get('/', (req, res) => {
 });
 
 app.use(jwtMiddleware);
-
 app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,

@@ -15,7 +15,7 @@ tags:
     description: Operations related to filters
   - name: feed
     description: Operations related to feeds
-  - name: worker
+  - name: queue
     description: Operations related to worker
 components:
   securitySchemes:
@@ -705,6 +705,8 @@ paths:
   /job:
     post:
       summary: Create a new job
+      tags:
+        - queue
       description: Accepts XML, JSON, or text data to create a new job.
       operationId: createJob
       requestBody:

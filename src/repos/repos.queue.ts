@@ -29,62 +29,107 @@ async function createJobQueue(queueName: string, id: string, payload: CloudEvent
     }
 }
 
-async function updateJobQueueResults(queueName: string, id: string, updates: { status: string, completedAt?: string | null, error?: string | null }): Promise<Result<jobQueueModel>> {
-    try {
-        const updatedJob = await prismaConnection.jobQueue.update({
-            where: {
-                queueName_jobId: {
-                    queueName: queueName,
-                    jobId: id
-                }
-            },
-            data: updates
-        });
-        return { data: updatedJob };
-    } catch (error: any) {
-        logger.error(`Error updating jobs: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause : error : error };
+async function updateJobQueueResults(
+    queueName: string,
+    id: string,
+    updates: {
+      status: string;
+      completedAt?: string | null;
+      error?: string | null;
     }
-}
-
-async function getAllJobs(req: getAllJobsRequest): Promise<Result<jobQueueModel[]>> {
+  ): Promise<Result<jobQueueModel>> {
     try {
-        const { sort, filter, pagination } = req;
-        const filterKey = Object.keys(filter)[0];
-        const [sortBy, order] = sort;
-        const [page, perPage] = pagination;
-        const jobs = await prismaConnection.jobQueue.findMany({
-            where: {
-                [filterKey]: filter?.filterKey
-            },
-            orderBy: {
-                [sortBy]: order.toLowerCase()
-            },
-            skip: page * perPage,
-            take: perPage
-        });
-        return { data: jobs };
+      const updatedJob = await prismaConnection.jobQueue.update({
+        where: {
+          queueName_jobId: {
+            queueName: queueName,
+            jobId: id,
+          },
+        },
+        data: updates,
+      });
+      return { data: updatedJob };
     } catch (error: any) {
-        logger.error(`Error fetching jobs:${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause : error : error };
+      logger.error(`Error updating jobs: ${error}`);
+      return {
+        error: error.meta ? (error.meta.cause ? error.meta.cause : error) : error,
+      };
     }
-}
+  }
 
-async function getJobById(id: string): Promise<Result<jobQueueModel>> {
+  async function getAllJobs(
+    req: getAllJobsRequest
+  ): Promise<Result<jobQueueModel[]>> {
     try {
-        const job = await prismaConnection.jobQueue.findUnique({
-            where: {
-                id: id
-            }
-        });
-        if (!job) {
-            return { error: "Not found" }
+      const { sort, filter, pagination } = req;
+      const [sortBy, order] = sort;
+      const [page, perPage] = pagination;
+      const whereClause = Object.entries(filter).reduce((acc, [key, value]) => {
+        const fieldType = getFieldType(key);
+
+        switch (fieldType) {
+          case "string":
+            acc[key] = {
+              contains: value,
+              mode: "insensitive",
+            };
+            break;
+          case "date":
+            acc[key] = {
+              gte: new Date(`${value}T00:00:00.000Z`),
+              lte: new Date(`${value}T23:59:59.999Z`),
+            };
+            break;
+          default:
+            acc[key] = value;
         }
-        return { data: job };
-    } catch (error: any) {
-        logger.error(`Error fetching jobs:${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause : error : error };
-    }
-}
+        return acc;
+      }, {} as Record<string, any>);
 
-export { createJobQueue, updateJobQueueResults, getAllJobs, getJobById }
+      const jobs = await prismaConnection.jobQueue.findMany({
+        where: whereClause,
+        orderBy: {
+          [sortBy]: order.toLowerCase(),
+        },
+        skip: page * perPage,
+        take: perPage,
+      });
+      return { data: jobs };
+    } catch (error: any) {
+      logger.error(`Error fetching jobs:${error}`);
+      return {
+        error: error.meta ? (error.meta.cause ? error.meta.cause : error) : error,
+      };
+    }
+  }
+
+  function getFieldType(field: string): "string" | "date" | "number" | "boolean" {
+    const dateFields = ["createdAt", "completedAt"];
+    return dateFields.includes(field) ? "date" : "string";
+  }
+
+  async function getJobById(id: string): Promise<Result<jobQueueModel>> {
+    try {
+      const job = await prismaConnection.jobQueue.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!job) {
+        return { error: "Not found" };
+      }
+      return { data: job };
+    } catch (error: any) {
+      logger.error(`Error fetching jobs:${error}`);
+      return {
+        error: error.meta ? (error.meta.cause ? error.meta.cause : error) : error,
+      };
+    }
+  }
+
+  export {
+    createJobQueue,
+    updateJobQueueResults,
+    getAllJobs,
+    getJobById,
+  };
