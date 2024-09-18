@@ -12,17 +12,26 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import { logger } from './logger/log';
 import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
-import { jwtMiddleware } from './middleware/jwt-authorization';
+import jwtAuthMiddleware from "./middleware/jwt-authorization";
+import { redirectToAuthorizationUrl } from "./middleware/auth-middleware";
 import { prismaConnection } from './connections';
+import { registerRoute } from './utils/registerRoutes';
 
-const files = fs.readdirSync('./src/routes/');
-const routeFiles = files.filter(file => file.endsWith('.ts'));
+const pathsToIgnore = ['/job'];
 
 export const app = express();
 
-const swaggerDocument = YAML.load(path.join(__dirname, 'swagger/swagger.yaml'));
-const openApiSpecPath = path.join(__dirname, 'swagger/swagger.yaml');
+const swaggerOptions = {
+  customCss: "",
+  customSiteTitle: "Microservices Boilerplate API Docs",
+};
+app.get("/authorize", redirectToAuthorizationUrl);
 
+const swaggerDocument = YAML.load(path.join(__dirname, "swagger/swagger.yaml"));
+const openApiSpecPath = path.join(__dirname, "swagger/swagger.yaml");
+const swaggerUiInstance = swaggerUi.setup(swaggerDocument, swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUiInstance);
 app.use(cors());
 bodyParserXml(bodyParser);
 app.use(bodyParser.xml({
@@ -40,29 +49,48 @@ app.get('/', (req, res) => {
   res.redirect('/api-docs');
 });
 
-app.use(jwtMiddleware);
-app.use(
+app.get('/react-admin', (req, res) => {
+  res.redirect(`http://localhost:5173`);
+});
+
+app.use((req, res, next) => {
+  if (pathsToIgnore.includes(req.path)) {
+    next();
+  }
   OpenApiValidator.middleware({
     apiSpec: openApiSpecPath,
     validateRequests: true,
-    validateResponses: true
-  })
-);
-
-routeFiles.forEach(file => {
-  const routeName = path.basename(file, '.ts');
-  async function registerRoute() {
-    try {
-      const route = await import(`./routes/${routeName}`);
-      if (route.default && typeof route.default === 'function') {
-        app.use(route.default);
-      }
-    } catch (error) {
-      logger.error(`Error registering route ${routeName}: ${error}`);
-    }
-  }
-  registerRoute();
+    validateResponses: true,
+  });
 });
+
+let routePath: string = "public/routes";
+const publicRouteDir = fs.readdirSync(`./src/${routePath}`);
+const publicRouteFiles = publicRouteDir.filter(file => file.endsWith('.ts'));
+
+publicRouteFiles.forEach(async file => {
+  const routeName: string = path.basename(file, '.ts');
+  const filePath = path.join(__dirname, `./public/routes/${routeName}`);
+  const routeHandler = await registerRoute(filePath);
+  if (routeHandler) {
+    app.use(routeHandler);
+  }
+});
+
+routePath = "routes";
+const routeDir = fs.readdirSync(`./src/${routePath}`);
+const routeFiles = routeDir.filter(file => file.endsWith('.ts'));
+
+routeFiles.forEach(async file => {
+  const routeName: string = path.basename(file, '.ts');
+  const filePath = path.join(__dirname, `./routes/${routeName}`);
+  const routeHandler = await registerRoute(filePath);
+  if (routeHandler) {
+    app.use(routeHandler, jwtAuthMiddleware);
+  }
+});
+
+
 
 app.use(errorLogger);
 
