@@ -39,6 +39,9 @@ interface Config {
         queueName: string,
         accountId: string,
         sessionToken: string
+    },
+    swagger: {
+        domain: string
     }
 }
 
@@ -61,6 +64,9 @@ const config: Config = {
         queueName: awsConfig.queueName,
         accountId: awsConfig.accountId,
         sessionToken: awsConfig.sessionToken
+    },
+    swagger: {
+        domain: process.env.SWAGGER_DOMAIN || 'dev-fulrxmb8tfh5ke8o.us.auth0.com'
     }
 }
 
