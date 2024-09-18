@@ -76,8 +76,8 @@ async function updateJobQueueResults(
             break;
           case "date":
             acc[key] = {
-              gte: new Date(`${value}T00:00:00.000Z`),
-              lte: new Date(`${value}T23:59:59.999Z`),
+              gte: new Date(value[`${key}_gte`]),
+              lte: new Date(value[`${key}_lte`])
             };
             break;
           default:
