@@ -19,10 +19,13 @@ tags:
     description: Operations related to worker
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:3000/authorize
+          tokenUrl: https://dev-fulrxmb8tfh5ke8o.us.auth0.com/oauth/token
+          scopes: {}
   schemas:
     FeedQueryParams:
       properties:
@@ -361,7 +364,7 @@ components:
       title: DeleteAndGetFilterRequest
       type: object
 security:
-  - bearerAuth: []
+  - oauth2: []
 paths:
   /feed:
     get:
