@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import config from '../config';
 
 const domain = config.swagger.domain;
-console.log(domain);
 
 export const redirectToAuthorizationUrl = (req: Request, res: Response) => {
   const responseType = req.query.response_type;
