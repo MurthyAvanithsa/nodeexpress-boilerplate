@@ -4,9 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { addJob } from '../services/services.queue';
 import config from '../config';
-import { getAllJobs, getJobById } from '../services/services.queue';
-import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse, Job } from '../types/types.queue';
-import { logger } from '../logger/log';
+import { Job } from '../types/types.queue';
 
 const queueRouter = Router();
 
@@ -27,26 +25,6 @@ queueRouter.post('/job', async (req: Request<unknown, unknown, Job>, res: Respon
     };
     const response = await addJob(config.aws.queueName, cloudevent);
     const statusCode = response.error ? 500 : 201;
-    res.status(statusCode).json(response);
-});
-
-queueRouter.get("/job", async (req: Request<unknown, getAllJobsResponse, unknown>, res: Response<getAllJobsResponse>) => {
-    const queryParams = req.query;
-    const requestPayload: getAllJobsRequest = {
-        sort: JSON.parse(String(queryParams.sort || JSON.stringify(['id', 'asc']))),
-        filter: JSON.parse(String(queryParams.filter || JSON.stringify({ '1': '1' }))),
-        pagination: JSON.parse(String(queryParams.pagination || JSON.stringify([0, 10])))
-    };
-    const response: getAllJobsResponse = await getAllJobs(requestPayload);
-    const statusCode = response.data ? 200 : 500;
-    res.status(statusCode).json(response);
-});
-
-queueRouter.get("/job/:id", async (req: Request<{ id: string }>, res: Response) => {
-    const jobId = req.params.id;
-    logger.info(jobId)
-    const response: getJobByIdResponse = await getJobById(jobId);
-    const statusCode = response.data ? 200 : 500;
     res.status(statusCode).json(response);
 });
 
