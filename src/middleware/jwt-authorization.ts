@@ -5,7 +5,7 @@ import jwksRsa from 'jwks-rsa';
 
 import config from '../config';
 
-const domain = `https://dev-fulrxmb8tfh5ke8o.us.auth0.com${config.swagger.domain}`;
+const domain = `https://${config.swagger.domain}`;
 
 const agent = new https.Agent({
   rejectUnauthorized: false,

@@ -56,12 +56,13 @@ app.get('/react-admin', (req, res) => {
 app.use((req, res, next) => {
   if (pathsToIgnore.includes(req.path)) {
     next();
+  } else {
+    OpenApiValidator.middleware({
+      apiSpec: openApiSpecPath,
+      validateRequests: true,
+      validateResponses: true,
+    });
   }
-  OpenApiValidator.middleware({
-    apiSpec: openApiSpecPath,
-    validateRequests: true,
-    validateResponses: true,
-  });
 });
 
 let routePath: string = "public/routes";
