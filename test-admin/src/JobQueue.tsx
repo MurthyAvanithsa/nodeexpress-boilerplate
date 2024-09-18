@@ -2,27 +2,17 @@ import { useMediaQuery, Theme } from "@mui/material";
 import {
   List,
   SimpleList,
-  Datagrid,
   TextField,
   DateField,
-  TextInput,
   Show,
   SimpleShowLayout,
-  Filter,
-  DateInput,
+  ExportButton,
+  SelectColumnsButton,
+  TopToolbar,
+  DatagridConfigurable,
 } from "react-admin";
 import { useRecordContext } from "react-admin";
-
-const JobFilter = (props: any) => (
-  <Filter {...props}>
-    <TextInput label="Search by ID" source="id" alwaysOn />
-    <TextInput label="Search by Job ID" source="jobId" />
-    <TextInput label="Search by Queue Name" source="queueName" />
-    <TextInput label="Search by Status" source="status" />
-    <DateInput label="Created At" source="createdAt" />
-    <DateInput label="Completed At" source="completedAt" />
-  </Filter>
-);
+import JobFilterSidebar from "./JobFilterSidebar";
 
 const JsonField = ({ source }: any) => {
   const record = useRecordContext();
@@ -35,10 +25,22 @@ const JsonField = ({ source }: any) => {
   );
 };
 
+const JobActions = () => (
+  <TopToolbar>
+    <SelectColumnsButton />
+    <ExportButton />
+  </TopToolbar>
+);
+
 export const JobList = (props: any) => {
   const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
   return (
-    <List {...props} filters={<JobFilter />} resource="job">
+    <List
+      aside={<JobFilterSidebar />}
+      {...props}
+      resource="job"
+      actions={<JobActions />}
+    >
       {isSmall ? (
         <SimpleList
           primaryText={(record) => record.queueName}
@@ -46,14 +48,25 @@ export const JobList = (props: any) => {
           tertiaryText={(record) => record.jobId}
         />
       ) : (
-        <Datagrid>
+        <DatagridConfigurable
+          rowClick="edit"
+          sx={{
+            "& .column-groups": {
+              md: { display: "none" },
+              lg: { display: "table-cell" },
+            },
+          }}
+          omit={["payload", "error"]}
+        >
           <TextField source="id" />
           <TextField source="queueName" />
           <TextField source="jobId" />
           <TextField source="status" />
+          <JsonField source="payload" />
           <DateField source="createdAt" />
           <DateField source="completedAt" />
-        </Datagrid>
+          <TextField source="error" />
+        </DatagridConfigurable>
       )}
     </List>
   );
