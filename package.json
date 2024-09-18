@@ -14,9 +14,11 @@
     "generate-db-url": "yarn ts-node src/utils/generateDbUrl.ts",
     "migrate-db": "yarn prisma migrate dev --schema ./src/prisma/schema.prisma && yarn prisma generate --schema ./src/prisma/schema.prisma",
     "load-seed-data": "yarn ts-node src/repos/seed.ts",
+    "react-admin-setup": "cd test-admin && yarn install",
     "init-db": "yarn generate-db-url && yarn migrate-db && yarn load-seed-data",
     "setup": "yarn generate-openapi-schemas && yarn generate-openapi-spec && yarn init-db",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "react-admin": "cd test-admin && yarn run dev"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +46,7 @@
     "express-openapi-validator": "^5.3.3",
     "fs": "^0.0.1-security",
     "js-yaml": "^4.1.0",
+    "jwks-rsa": "^3.1.0",
     "lint-staged": "^15.2.10",
     "pino": "^9.3.2",
     "pino-pretty": "^11.2.2",
