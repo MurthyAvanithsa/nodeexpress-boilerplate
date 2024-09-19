@@ -41,6 +41,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetFeedsResponse"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -70,6 +79,15 @@ paths:
                 $ref: "#/components/schemas/PostFeedResponse"
         "400":
           description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -107,6 +125,15 @@ paths:
                 $ref: "#/components/schemas/GetFeedResponse"
         "404":
           description: Feed not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -159,6 +186,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -182,6 +218,15 @@ paths:
                 $ref: "#/components/schemas/DeleteFeedResponse"
         "404":
           description: Feed not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -220,6 +265,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "400":
           description: Bad request
           content:
@@ -249,6 +303,15 @@ paths:
                 $ref: "#/components/schemas/CreateFilterResponse"
         "400":
           description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -293,6 +356,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -322,6 +394,15 @@ paths:
                 $ref: "#/components/schemas/UpdateFilterResponse"
         "400":
           description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -361,6 +442,15 @@ paths:
                 $ref: "#/components/schemas/DeleteFilterResponse"
         "404":
           description: Filter not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
