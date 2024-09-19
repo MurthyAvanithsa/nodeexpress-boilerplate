@@ -17,8 +17,6 @@ import { redirectToAuthorizationUrl } from "./middleware/auth-middleware";
 import { prismaConnection } from './connections';
 import { registerRoute } from './utils/registerRoutes';
 
-const pathsToIgnore = ['/job'];
-
 export const app = express();
 
 const swaggerOptions = {
@@ -38,10 +36,8 @@ app.use(bodyParser.xml({
   limit: '1MB',
   xmlParseOptions: { explicitArray: false }
 }));
-app.use(express.json());
 app.use(express.text());
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(express.json());
 
 app.use(requestLogger);
 
@@ -53,17 +49,14 @@ app.get('/react-admin', (req, res) => {
   res.redirect(`http://localhost:5173`);
 });
 
-app.use((req, res, next) => {
-  if (pathsToIgnore.includes(req.path)) {
-    next();
-  } else {
-    OpenApiValidator.middleware({
-      apiSpec: openApiSpecPath,
-      validateRequests: true,
-      validateResponses: true,
-    });
-  }
-});
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: openApiSpecPath,
+    validateRequests: true,
+    validateResponses: true,
+    ignorePaths: /.*\/job$/,
+  })
+);
 
 let routePath: string = "public/routes";
 const publicRouteDir = fs.readdirSync(`./src/${routePath}`);
@@ -82,12 +75,13 @@ routePath = "routes";
 const routeDir = fs.readdirSync(`./src/${routePath}`);
 const routeFiles = routeDir.filter(file => file.endsWith('.ts'));
 
+app.use(jwtAuthMiddleware);
 routeFiles.forEach(async file => {
   const routeName: string = path.basename(file, '.ts');
   const filePath = path.join(__dirname, `./routes/${routeName}`);
   const routeHandler = await registerRoute(filePath);
   if (routeHandler) {
-    app.use(routeHandler, jwtAuthMiddleware);
+    app.use(routeHandler);
   }
 });
 
