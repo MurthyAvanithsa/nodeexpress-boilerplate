@@ -19,6 +19,8 @@ const jwtAuthMiddleware = expressjwt({
   audience: `${domain}/api/v2/`,
   issuer: `${domain}/`,
   algorithms: ['RS256'],
-});
+}).unless({
+  path: ['/job'],
+});;
 
 export default jwtAuthMiddleware;
