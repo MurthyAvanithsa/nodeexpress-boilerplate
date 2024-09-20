@@ -5,7 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import bodyParserXml from 'body-parser-xml';
-import YAML from 'yamljs';
+import * as yaml from 'js-yaml';
 import swaggerUi from 'swagger-ui-express';
 import * as OpenApiValidator from 'express-openapi-validator';
 
@@ -25,7 +25,7 @@ const swaggerOptions = {
 };
 app.get("/authorize", redirectToAuthorizationUrl);
 
-const swaggerDocument = YAML.load(path.join(__dirname, "swagger/swagger.yaml"));
+const swaggerDocument = yaml.load(fs.readFileSync(path.join(__dirname, "swagger/swagger.yaml"), 'utf8')) as Record<string, any>;
 const openApiSpecPath = path.join(__dirname, "swagger/swagger.yaml");
 const swaggerUiInstance = swaggerUi.setup(swaggerDocument, swaggerOptions);
 

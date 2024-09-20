@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "yarn eslint .",
+    "snyk-setup": "yarn snyk auth && yarn snyk test",
     "lint-fix": "yarn eslint . --fix",
     "start": "yarn ts-node-dev --respawn --watch ./.env,./.env.*,./src/swagger,./config ./src/index.ts",
     "build": "yarn tsup && yarn copy-files",
@@ -26,9 +27,6 @@
   "description": "",
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.649.0",
-    "@bull-board/api": "^5.21.4",
-    "@bull-board/express": "^5.21.4",
-    "@bull-board/ui": "5.21.4",
     "@prisma/client": "^5.19.0",
     "@types/body-parser-xml": "^2.0.5",
     "@types/supertest": "^6.0.2",
@@ -50,12 +48,13 @@
     "lint-staged": "^15.2.10",
     "pino": "^9.3.2",
     "pino-pretty": "^11.2.2",
+    "snyk": "^1.1293.1",
     "sqs-consumer": "^11.0.2",
     "supertest": "^7.0.0",
     "swagger-ui-express": "^5.0.1",
     "typeconv": "^2.3.1",
     "uuid": "^10.0.0",
-    "yamljs": "^0.3.0",
+    "yaml": "^2.5.1",
     "yarn": "^1.22.22"
   },
   "devDependencies": {
