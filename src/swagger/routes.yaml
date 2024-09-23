@@ -24,7 +24,7 @@ components:
       flows:
         authorizationCode:
           authorizationUrl: http://localhost:3000/authorize
-          tokenUrl: https://dev-fulrxmb8tfh5ke8o.us.auth0.com/oauth/token
+          tokenUrl: https://dev-k4p1yfgkmym3hz6h.us.auth0.com/oauth/token
           scopes: {}
 security:
   - oauth2: []
@@ -43,6 +43,15 @@ paths:
                 $ref: "#/components/schemas/GetFeedsResponse"
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -79,6 +88,15 @@ paths:
                 $ref: "#/components/schemas/PostFeedResponse"
         "400":
           description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -141,6 +159,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -195,6 +222,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -227,6 +263,15 @@ paths:
                     type: string
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -283,6 +328,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
     post:
       summary: Create a new filter
@@ -312,6 +366,15 @@ paths:
                     type: string
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -358,6 +421,15 @@ paths:
                     type: string
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -419,6 +491,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         "500":
           description: Internal server error
           content:
@@ -451,6 +532,15 @@ paths:
                     type: string
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -520,6 +610,15 @@ paths:
                   error:
                     type: string
                     example: "Invalid payload format"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
       parameters:
         - name: event-type
           in: header

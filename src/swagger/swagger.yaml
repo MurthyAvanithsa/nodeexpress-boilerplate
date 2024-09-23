@@ -24,7 +24,7 @@ components:
       flows:
         authorizationCode:
           authorizationUrl: http://localhost:3000/authorize
-          tokenUrl: https://dev-fulrxmb8tfh5ke8o.us.auth0.com/oauth/token
+          tokenUrl: https://dev-k4p1yfgkmym3hz6h.us.auth0.com/oauth/token
           scopes: {}
   schemas:
     FeedQueryParams:
@@ -379,7 +379,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetFeedsResponse'
         '401':
-          description: Un-authorized
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -431,6 +440,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '500':
           description: Internal server error
           content:
@@ -460,6 +478,15 @@ paths:
                 $ref: '#/components/schemas/GetFeedResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -520,6 +547,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '404':
           description: Feed not found
           content:
@@ -551,6 +587,15 @@ paths:
                 $ref: '#/components/schemas/DeleteFeedResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -606,6 +651,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '500':
           description: Internal server error
           content:
@@ -650,6 +704,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '500':
           description: Internal server error
           content:
@@ -679,6 +742,15 @@ paths:
                 $ref: '#/components/schemas/GetFilterByIdResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -739,6 +811,15 @@ paths:
                 properties:
                   message:
                     type: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '404':
           description: Filter not found
           content:
@@ -770,6 +851,15 @@ paths:
                 $ref: '#/components/schemas/DeleteFilterResponse'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -848,6 +938,15 @@ paths:
                   error:
                     type: string
                     example: Invalid payload format
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
       parameters:
         - name: event-type
           in: header
