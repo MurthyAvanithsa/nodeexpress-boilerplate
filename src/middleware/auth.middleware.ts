@@ -14,3 +14,4 @@ export const redirectToAuthorizationUrl = (req: Request, res: Response) => {
   const authorizationUrl = `https://${domain}/authorize?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}&audience=${audience}&state=${state}`;
   res.redirect(authorizationUrl);
 };
+
