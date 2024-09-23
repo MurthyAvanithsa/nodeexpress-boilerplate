@@ -24,7 +24,7 @@ components:
       flows:
         authorizationCode:
           authorizationUrl: http://localhost:3000/authorize
-          tokenUrl: https://dev-k4p1yfgkmym3hz6h.us.auth0.com/oauth/token
+          tokenUrl: https://dev-fulrxmb8tfh5ke8o.us.auth0.com/oauth/token
           scopes: {}
 security:
   - oauth2: []
