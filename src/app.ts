@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import express from 'express';
+import { Request } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import bodyParserXml from 'body-parser-xml';
@@ -12,8 +13,9 @@ import * as OpenApiValidator from 'express-openapi-validator';
 import { logger } from './logger/log';
 import config from './config';
 import { errorLogger, requestLogger } from './middleware/logger.middleware';
-import jwtAuthMiddleware from "./middleware/jwt-authorization";
+import jwtAuthMiddleware from "./middleware/jwtAuth.middleware.ts";
 import { redirectToAuthorizationUrl } from "./middleware/auth-middleware";
+import { checkRolesAndPermissions } from './middleware/rbac.middleware';
 import { prismaConnection } from './connections';
 import { registerRoute } from './utils/registerRoutes';
 
@@ -41,7 +43,8 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res) => {
+  // req.group = "Deepika";
   res.redirect('/api-docs');
 });
 
@@ -57,6 +60,8 @@ app.use(
     ignorePaths: /.*\/job$/,
   })
 );
+
+app.use(checkRolesAndPermissions);
 
 let routePath: string = "public/routes";
 const publicRouteDir = fs.readdirSync(`./src/${routePath}`);
@@ -84,8 +89,6 @@ routeFiles.forEach(async file => {
     app.use(routeHandler);
   }
 });
-
-
 
 app.use(errorLogger);
 
