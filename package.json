@@ -15,11 +15,11 @@
     "generate-db-url": "yarn ts-node src/utils/generateDbUrl.ts",
     "migrate-db": "yarn prisma migrate dev --schema ./src/prisma/schema.prisma && yarn prisma generate --schema ./src/prisma/schema.prisma",
     "load-seed-data": "yarn ts-node src/repos/seed.ts",
-    "react-admin-setup": "cd test-admin && yarn install",
+    "react-admin-setup": "cd queue-admin && yarn install",
     "init-db": "yarn generate-db-url && yarn migrate-db && yarn load-seed-data",
     "setup": "yarn generate-openapi-schemas && yarn generate-openapi-spec && yarn init-db",
     "prepare": "husky install",
-    "react-admin": "cd test-admin && yarn run dev"
+    "react-admin": "cd queue-admin && yarn run dev"
   },
   "keywords": [],
   "author": "",

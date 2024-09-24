@@ -10,7 +10,7 @@ export default [
       ".trunk/",
       "node_modules/",
       "jest.config.js",
-      "test-admin/"
+      "queue-admin/"
     ]
   },
   {files: ["**/*.{js,mjs,cjs,ts}"]},
