@@ -16,24 +16,22 @@ import { errorLogger, requestLogger } from './middleware/logger.middleware';
 import jwtAuthMiddleware from "./middleware/jwtAuth.middleware";
 import { redirectToAuthorizationUrl } from "./middleware/auth.middleware";
 import { checkRolesAndPermissions } from './middleware/rbac.middleware';
+import appRouter from "./utils/registerRoutes";
 import { prismaConnection } from './connections';
-import { registerRoute } from './utils/registerRoutes';
-
 export const app = express();
 
 const swaggerOptions = {
   customCss: "",
   customSiteTitle: "Microservices Boilerplate API Docs",
 };
-app.get("/authorize", redirectToAuthorizationUrl);
-
 const swaggerDocument = yaml.load(fs.readFileSync(path.join(__dirname, "swagger/swagger.yaml"), 'utf8')) as Record<string, any>;
 const openApiSpecPath = path.join(__dirname, "swagger/swagger.yaml");
 const swaggerUiInstance = swaggerUi.setup(swaggerDocument, swaggerOptions);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUiInstance);
+// cors to allow cross-origin
 app.use(cors());
 bodyParserXml(bodyParser);
+// To parse xml data
 app.use(bodyParser.xml({
   limit: '1MB',
   xmlParseOptions: { explicitArray: false }
@@ -41,14 +39,17 @@ app.use(bodyParser.xml({
 app.use(express.text());
 app.use(express.json());
 
+app.get("/authorize", redirectToAuthorizationUrl);
+// Swagger ui
+app.use("/api-docs", swaggerUi.serve, swaggerUiInstance);
 app.use(requestLogger);
 
+// Redirect to swagger ui
 app.get('/', (req: Request, res) => {
-  // req.group = "Deepika";
   res.redirect('/api-docs');
 });
 
-app.get('/react-admin', (req, res) => {
+app.get('/queue-admin', (req, res) => {
   res.redirect(`http://localhost:5173`);
 });
 
@@ -61,35 +62,9 @@ app.use(
   })
 );
 
-app.use(checkRolesAndPermissions);
-
-let routePath: string = "public/routes";
-const publicRouteDir = fs.readdirSync(`./src/${routePath}`);
-const publicRouteFiles = publicRouteDir.filter(file => file.endsWith('.ts'));
-
-publicRouteFiles.forEach(async file => {
-  const routeName: string = path.basename(file, '.ts');
-  const filePath = path.join(__dirname, `./public/routes/${routeName}`);
-  const routeHandler = await registerRoute(filePath);
-  if (routeHandler) {
-    app.use(routeHandler);
-  }
-});
-
-routePath = "routes";
-const routeDir = fs.readdirSync(`./src/${routePath}`);
-const routeFiles = routeDir.filter(file => file.endsWith('.ts'));
-
 app.use(jwtAuthMiddleware);
-routeFiles.forEach(async file => {
-  const routeName: string = path.basename(file, '.ts');
-  const filePath = path.join(__dirname, `./routes/${routeName}`);
-  const routeHandler = await registerRoute(filePath);
-  if (routeHandler) {
-    app.use(routeHandler);
-  }
-});
-
+app.use(checkRolesAndPermissions);
+app.use(appRouter);
 app.use(errorLogger);
 
 export function startServer(options: { port: number }) {
