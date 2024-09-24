@@ -1,4 +1,4 @@
-# test-admin
+# queue-admin
 
 ## Installation
 
