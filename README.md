@@ -9,8 +9,9 @@
 - [Overview of Repository Functions](#overview-of-repository-functions)
 - [JWT Middleware](#jwt-middleware)
 - [Docker Setup](#docker-setup)
+- [Roles and Permissions Middleware](#roles-and-permissions-middleware)
 
-## Quick Start
+# Quick Start
 
 To get started with this project, follow the steps below:
 
@@ -28,7 +29,7 @@ git clone https://github.com/tecnics-python/dsp-boilerplate
 yarn install
 ```
 
-**Setup Application**  
+**Setup Application**
    To setup the application, follow these steps:
 
 ```
@@ -37,7 +38,7 @@ yarn setup
 
 If you run the command `yarn setup` in your project with the provided scripts, the following sequence of commands will be executed, each performing a specific task related to OpenAPI schema generation and database setup.
 
-##### Steps
+#### Steps
 
 1. **Generate OpenAPI schemas**:
    - **Command**: `yarn generate-openapi-schemas`
@@ -66,7 +67,59 @@ If you run the command `yarn setup` in your project with the provided scripts, t
 7. **Final setup**:
    - The `yarn setup` command runs all the above commands in sequence, ensuring that both the OpenAPI specifications and the database are properly configured and initialized.
 
-**Start the Server**: To run the application with default port, use the following command:
+**AWS SQS Setup**
+
+To set up AWS SQS in your application, you will need to copy the following credentials from your AWS account:
+
+- **AWS_ACCOUNT_ID**: Your AWS account ID.
+- **AWS_QUEUE_NAME**: The name of your SQS queue.
+- **AWS_REGION**: The region where your SQS queue is hosted.
+- **AWS_ACCESS_KEY_ID**: Your AWS access key ID.
+- **AWS_SECRET_ACCESS_KEY**: Your AWS secret access key.
+- **AWS_SESSION_TOKEN**: Your AWS session token (only needed for temporary credentials).
+
+### Steps to Copy Credentials Using AWS Management Console
+
+#### 1. **Go to AWS Management Console**
+- Navigate to the [AWS Management Console](https://aws.amazon.com/console/).
+- Log in using your AWS credentials.
+
+#### 2. **Generate Keys and Session Tokens**
+- After logging in, access the AWS Access Keys option.
+- Click on Get Keys to generate a new pair of credentials (Access Key and Secret Key).
+
+#### 3. **Copy Environment Setup Variables**
+- After generating the keys, you’ll be presented with an option to **copy** the environment setup variables directly.
+- This will look something like:
+  - For Linux or Mac:
+    ```bash
+    export AWS_ACCESS_KEY_ID="your-access-key-id"
+    export AWS_SECRET_ACCESS_KEY="your-secret-access-key"
+    export AWS_SESSION_TOKEN="your-session-token" # (if applicable)
+    export AWS_REGION="your-region"
+
+    And also you need to add these two:
+    export AWS_ACCOUNT_ID="your-account-id"
+    export AWS_QUEUE_NAME="your-queue-name"
+    ```
+  - For Windows:
+    ```cmd
+    set AWS_ACCESS_KEY_ID=your-access-key-id
+    set AWS_SECRET_ACCESS_KEY=your-secret-access-key
+    set AWS_SESSION_TOKEN=your-session-token # (if applicable)
+    set AWS_REGION=your-region
+
+    And also you need to add these two:
+    set AWS_ACCOUNT_ID=your-account-id
+    set AWS_QUEUE_NAME=your-queue-name
+    ```
+- Once you have these credentials, you can configure them in your application to interact with AWS SQS.
+**Key Points:**
+- This method allows you to directly copy ***environment setup variables*** for AWS services, helping with abstraction.
+- By exporting these variables, you can use them securely without embedding credentials in your source code.
+
+## **Start the Server**:
+To run the application with default port, use the following command:
 
 ```
 yarn start server
@@ -119,8 +172,8 @@ yarn start -- worker --queue ad-breaks-queue
 ## Introduction
 
 - Commanderjs for creating commands
-- Expressjs is considered as a REST and API middleware 
-- PrismaJS is considered as an ORM layer 
+- Expressjs is considered as a REST and API middleware
+- PrismaJS is considered as an ORM layer
 - PINOJS as a logging library
 
 ## Swagger Documentation
@@ -284,7 +337,7 @@ src/
        {
          "data": null
        }
-       ```  
+       ```
 
       These functions interact with the Prisma ORM to perform the CRUD operations on the `Feed` model, ensuring that all interactions with the database are handled efficiently and consistently.
 
@@ -399,7 +452,7 @@ This module sets up JWT middleware using `express-jwt` to authenticate requests.
 
 ### Usage
 
-#### Token: 
+#### Token:
 ```
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g
 ```
@@ -417,6 +470,7 @@ In this format:
 - The `Authorization` header example is provided in a `javascript` code block.
 - The actual JWT token is included directly in the `Authorization` header for clarity and ease of copying.
 ```
+
 # Docker Setup
 
 Update the NODE_ENV with docker
@@ -431,3 +485,63 @@ docker-compose up --build
 
 This will set up the application with DB, Redis, and the server.
 
+# Roles and Permissions Middleware
+
+This document explains how the `checkRolesAndPermissions` middleware works for handling **authorization** in your Express.js application. It defines role-based access control for different HTTP methods and routes, allowing users with specific roles or groups to perform actions on specific resources.
+
+## Concepts
+
+1. **Group**: A set of users who share the same permissions (e.g., `grp_viewer`, `grp_editor`, `grp_admin`). These groups map to certain roles, which determine the actions they can perform.
+
+2. **Role**: Defines the permissions or capabilities of a user. Each group is associated with a role (e.g., "viewer," "editor," "admin"). For example:
+   - **Viewers** can read resources.
+   - **Editors** can read and modify resources.
+   - **Admins** have access to all resources.
+
+3. **Permissions**: The allowed HTTP methods and routes that a group can access. Permissions are mapped to specific HTTP methods and paths, or to a wildcard `*_*` that grants all permissions for admin users.
+
+## Role-Permission Mapping (`groupRoleMapping`)
+
+The role-permission mapping defines what actions (HTTP methods and paths) each group is allowed to perform. This is stored in the `groupRoleMapping` object.
+
+## Middleware Workflow
+
+The checkRolesAndPermissions middleware checks if a user (based on their group) has the appropriate permissions to access a particular route.
+
+### Steps:
+
+1. **Extract Group**: The user’s group is identified. In this example, it's hardcoded as "grp_editor", but typically it would be retrieved from the req object (e.g., from req.auth.group).
+
+2. **Check Group Permissions**: The middleware looks up the group's permissions in the groupRoleMapping. If the group doesn't exist, the request is denied.
+
+3. **Admin Check**: If the group has the \*_\* wildcard (like grp_admin), all routes are automatically accessible, and the middleware allows the request to continue (next()).
+
+4. **Path & Method Check**: The middleware constructs a key by combining the HTTP method and request path (e.g., GET_/feed). It checks if this key exists in the group's permissions:
+    - If the key exists and the permission is true, the user is allowed to proceed.
+    - If not, the user is denied access with a 403 Forbidden response.
+
+This middleware will run before protected routes and ensure that only users with the correct group permissions can access them.
+
+### Key Points
+
+- **Role-based access control**: Permissions are based on roles assigned to groups.
+- **Granular control**: Permissions are granted per HTTP method and path, allowing fine-grained access.
+- **Admin override**: Admin users have complete access via the wildcard *_*.
+
+### Scenarios
+
+**Viewer Request**:
+- A user in the grp_viewer group tries to access GET /feed:id. Since this is allowed in the mapping, the request proceeds.
+- If the same user tries to POST /feed, they will be denied.
+
+**Editor Request**:
+- A user in the grp_editor group has more permissions. They can POST and PUT to /feed and /filter resources.
+- If they attempt to access something outside their permissions (e.g., DELETE /feed), they will be denied.
+
+**Admin Request**:
+- A user in the grp_admin group can access any route or resource, regardless of the method or path.
+
+### Error Handling
+
+If a user tries to access a resource they don't have permissions for:
+- They receive a 403 Forbidden response with a message: "Forbidden - You do not have the necessary permissions.
