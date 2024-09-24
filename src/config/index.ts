@@ -40,8 +40,15 @@ interface Config {
         accountId: string,
         sessionToken: string
     },
-    swagger: {
-        domain: string
+    oidc: {
+        domain: string,
+        authorizeUrl: string,
+        webKeySetUrl: string,
+        audience: string,
+        tokenUrl: string,
+        clientId: string,
+        issuer: string,
+        redirectUri: string
     }
 }
 
@@ -65,8 +72,15 @@ const config: Config = {
         accountId: awsConfig.accountId,
         sessionToken: awsConfig.sessionToken
     },
-    swagger: {
-        domain: process.env.SWAGGER_DOMAIN || 'dev-fulrxmb8tfh5ke8o.us.auth0.com'
+    oidc: {
+        domain: process.env.OIDC_DOMAIN || "dev-fulrxmb8tfh5ke8o.us.auth0.com",
+        audience: process.env.OIDC_AUDIENCE || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/api/v2/",
+        tokenUrl: process.env.OIDC_TOKEN_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/oauth/token",
+        clientId: process.env.OIDC_CLIENT_ID || "PnEitIqyE34JDNeUZiIbY42zWIkVrilL",
+        authorizeUrl: process.env.OIDC_AUTHORIZE_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/authorize",
+        webKeySetUrl: process.env.OIDC_WEB_KEY_SET_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/.well-known/jwks.json",
+        issuer: process.env.OIDC_ISSUER || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/",
+        redirectUri: process.env.OIDC_REDIRECT_URL || "http://localhost:3000/api-docs/oauth2-redirect.html"
     }
 }
 
