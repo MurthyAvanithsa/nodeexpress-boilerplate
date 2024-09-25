@@ -17,16 +17,6 @@ tags:
     description: Operations related to feeds
   - name: queue
     description: Operations related to worker
-components:
-  securitySchemes:
-    oauth2:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://localhost:3000/authorize
-          scopes: {}
-security:
-  - oauth2: []
 paths:
   /feed:
     get:
