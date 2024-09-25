@@ -2,28 +2,31 @@ import { Command } from 'commander';
 
 import 'dotenv/config'
 import { startServer } from './app';
-import { createSqsTask, startWorker } from './workers/generic';
 import config from './config';
-import SQSTask from './workers/consumer';
+import { BullMQTask } from './workers/generic.bullmq';
+import { SQSTask } from './workers/generic.aws.sqs';
+import { startWorker } from './workers/consumer';
 
 const program = new Command();
-export let sqsTask: SQSTask;
+export let queueProcessingTask: SQSTask | BullMQTask;
 
 program
   .command('server')
   .option('-p, --port <number>', 'port to listen on', `${config.app.port}`)
   .action((cmd) => {
     config.app.port = cmd.port;
-    sqsTask = createSqsTask(config.aws.queueName);
+    queueProcessingTask = config.queue.queueProcessingMethod === "aws-sqs"? new SQSTask(config.queue.name): new BullMQTask(config.queue.name);
     startServer(cmd);
   });
 
 program
   .command('worker')
-  .option('-q, --queue <string>', 'queue name', config.aws.queueName || "")
+  .option('-q, --queue <string>', 'queue name', config.queue.name || "")
+  .option('-m, --method <string>', 'queue processing method', config.queue.queueProcessingMethod)
   .action((cmd) => {
-    config.aws.queueName = cmd.queue;
-    sqsTask = createSqsTask(config.aws.queueName);
+    config.queue.queueProcessingMethod = cmd.method;
+    config.queue.name = cmd.queue;
+    queueProcessingTask = config.queue.queueProcessingMethod === "aws-sqs"? new SQSTask(config.queue.name): new BullMQTask(config.queue.name);
     startWorker();
   });
 

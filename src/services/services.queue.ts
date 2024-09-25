@@ -3,9 +3,9 @@ import { CloudEventV1 } from "cloudevents";
 
 import * as queueRepos from "../repos/repos.queue";
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse, Job, postMessageResponse } from "../types/types.queue";
-import { sqsTask } from "../index"
+import { queueProcessingTask } from "../index"
 async function addJob(queueName: string, data: CloudEventV1<Job>) {
-    const result: postMessageResponse = await sqsTask.postMessage(data);
+    const result: postMessageResponse = await queueProcessingTask.postMessage(data);
     return result.status ? { message: `Added job with id ${result.data?.messageId}.` } : { error: `Failed to add ${result?.error}` };
 }
 

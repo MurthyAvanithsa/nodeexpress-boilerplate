@@ -36,7 +36,6 @@ interface Config {
         region: string,
         accessKeyId: string,
         secretAccessKey: string,
-        queueName: string,
         accountId: string,
         sessionToken: string
     },
@@ -49,6 +48,14 @@ interface Config {
         clientId: string,
         issuer: string,
         redirectUri: string
+    },
+    redis: {
+        host: string,
+        port: number,
+    },
+    queue: {
+        name: string,
+        queueProcessingMethod: string
     }
 }
 
@@ -68,7 +75,6 @@ const config: Config = {
         region: awsConfig.region,
         accessKeyId: awsConfig.accessKeyId,
         secretAccessKey: awsConfig.secretAccessKey,
-        queueName: awsConfig.queueName,
         accountId: awsConfig.accountId,
         sessionToken: awsConfig.sessionToken
     },
@@ -81,6 +87,14 @@ const config: Config = {
         webKeySetUrl: process.env.OIDC_WEB_KEY_SET_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/.well-known/jwks.json",
         issuer: process.env.OIDC_ISSUER || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/",
         redirectUri: process.env.OIDC_REDIRECT_URL || "http://localhost:3000/api-docs/oauth2-redirect.html"
+    },
+    redis: {
+        host: process.env.REDIS_HOST || "localhost",
+        port: parseInt(process.env.REDIS_PORT || '6379'),
+    },
+    queue: {
+        name: process.env.QUEUE_NAME || "",
+        queueProcessingMethod: "aws-sqs"
     }
 }
 

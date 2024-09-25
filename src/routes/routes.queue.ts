@@ -24,7 +24,7 @@ queueRouter.post('/job', async (req: Request<unknown, unknown, Job>, res: Respon
         time: new Date().toISOString(),
         data: job
     };
-    const response = await addJob(config.aws.queueName, cloudevent);
+    const response = await addJob(config.queue.name, cloudevent);
     const statusCode = response.error ? 500 : 201;
     res.status(statusCode).json(response);
 });

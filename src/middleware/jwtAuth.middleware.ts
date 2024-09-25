@@ -17,8 +17,6 @@ const jwtAuthMiddleware = expressjwt({
   audience: config.oidc.audience,
   issuer: config.oidc.issuer,
   algorithms: ["RS256"],
-}).unless({
-  path: ["/job"],
 });
 
 export default jwtAuthMiddleware;

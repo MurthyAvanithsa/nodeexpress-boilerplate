@@ -1,6 +1,14 @@
 import { PrismaClient } from '@prisma/client'
+import IORedis from 'ioredis';
 
 import config from '../config';
+
+const redisConnection = new IORedis({
+    port: config.redis.port,
+    host: config.redis.host,
+    maxRetriesPerRequest: null
+});
+
 
 const prismaConnection = new PrismaClient({
     datasources: {
@@ -11,4 +19,4 @@ const prismaConnection = new PrismaClient({
   log: ['info'],
 })
 
-export { prismaConnection };
+export { redisConnection, prismaConnection };
