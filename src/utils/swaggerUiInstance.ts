@@ -6,8 +6,10 @@ import swaggerUi from 'swagger-ui-express';
 
 const swaggerOptions = {
   customCss: "",
+  customJs: "/custom.js",
   customSiteTitle: "Microservices Boilerplate API Docs",
 };
+
 const swaggerDocument = yaml.load(
   fs.readFileSync(path.join(__dirname, "../swagger/swagger.yaml"), "utf8")
 ) as Record<string, any>;
