@@ -3,6 +3,11 @@
 ### Table of Contents
 
 - [Quick Start](#quick-start)
+  - [Initial Setup](#initial-setup)
+  - [Setup Application](#setup-application)
+  - [Application Queue Processing](#application-queue-processing)
+  - [AWS SQS Setup](#aws-sqs-setup)
+  - [Start the Server](#start-the-server)
 - [Features](#features)
 - [Introduction](#introduction)
 - [Swagger Documentation](#swagger-documentation)
@@ -15,7 +20,7 @@
 
 To get started with this project, follow the steps below:
 
-**Initial Setup**:
+## Initial Setup
 
 **Clone Repository**:
 
@@ -29,7 +34,7 @@ git clone https://github.com/tecnics-python/dsp-boilerplate
 yarn install
 ```
 
-**Setup Application**
+## Setup Application
    To setup the application, follow these steps:
 
 ```
@@ -67,7 +72,131 @@ If you run the command `yarn setup` in your project with the provided scripts, t
 7. **Final setup**:
    - The `yarn setup` command runs all the above commands in sequence, ensuring that both the OpenAPI specifications and the database are properly configured and initialized.
 
-**AWS SQS Setup**
+## Application Queue Processing
+
+This application provides flexible queue processing through two methods: **AWS SQS** and **BullMQ**. The method used is determined by a configuration parameter `queueProcessingMethod`, and the system initializes the respective queue handler based on that value.
+
+### Overview
+
+The application supports the following key functionalities:
+- Queue processing via AWS SQS or BullMQ, selected dynamically at runtime.
+
+### Configuration
+
+The queue processing method and other configuration details are defined in the application configuration file. Key configurations include:
+
+- **`config.queue.queueProcessingMethod`**: Determines the queue processing method (`aws-sqs` or `bullmq`).
+- **`config.queue.name`**: Specifies the name of the queue to be processed.
+
+### Example Configuration File
+
+```javascript
+export const config = {
+  app: {
+    port: 3000,
+  },
+  queue: {
+    queueProcessingMethod: 'bullmq', // or 'aws-sqs'
+    name: 'myQueue',
+  },
+};
+```
+
+**Queue Processing Methods**:
+The server initializes the queue handler based on the `queueProcessingMethod` from the configuration file.
+
+If the value is:
+- `aws-sqs`: The `SQSTask` class is initialized.
+- `bullmq`: The `BullMQTask` class is initialized.
+
+1. AWS SQS
+If queueProcessingMethod is set to aws-sqs, the application uses the SQSTask class to process the queue.
+
+```javascript
+queueProcessingTask = new SQSTask(config.queue.name);
+```
+SQSTask: A class that handles queue operations using AWS SQS.
+
+2. BullMQ
+If queueProcessingMethod is set to bullmq, the application uses the BullMQTask class for queue processing.
+
+```javascript
+queueProcessingTask = new BullMQTask(config.queue.name);
+```
+BullMQTask: A class that manages queue operations using BullMQ.
+
+## Workflow
+1. **Server**: Handles client requests to enqueue jobs into the queue.
+2. **Worker**: Polls the queue and processes the jobs using the selected queue processing method.
+
+## Server Workflow
+The **server** accepts incoming job requests via the `/job` endpoint and enqueues these jobs into the appropriate queue (AWS SQS or BullMQ) based on the value of `queueProcessingMethod`.
+
+## Adding a Job to the Queue
+
+When a job is submitted to the `POST /job` endpoint, the server wraps them in a CloudEvent, and adds them to the appropriate queue based on the configured queue processing method (AWS SQS or BullMQ). This route dynamically processes jobs using either method by utilizing the `addJob` function, which submits the job to the queue. The job is then added to the queue using the `postMessage` method, which is implemented differently depending on the queue processing method (`aws-sqs` or `bullmq`).
+
+#### Example Server Flow
+1. **Incoming Request**: A job is submitted via `POST /job`.
+2. **CloudEvent Creation**: The job data is wrapped in a CloudEvent for standardization.
+3. **Job Enqueue**: The job is added to the appropriate queue (AWS SQS or BullMQ).
+4. **Response**: The server returns a success or failure response based on whether the job was enqueued successfully.
+
+### Endpoint
+
+- **Method**: `POST`
+- **URL**: `/job`
+- **Description**: Accepts job data, enqueues it as a CloudEvent, and submits it to the appropriate queue based on the `queueProcessingMethod`.
+
+### Request Headers
+
+- **`Content-Type`**: The content type of the job data (e.g., `application/json`).
+- **`Event-Type`**: Describes the type of event being submitted (can be used to categorize or filter job types).
+
+### Request Body
+
+The request body should contain the job data that needs to be processed.  
+Example:
+
+```json
+{
+  "jobData": {
+    "taskId": "1234",
+    "payload": {
+      "message": "Process this task."
+    }
+  }
+}
+```
+***Note***: The job could be anything like JSON, string, XML, or anything else will be accepted in request body.
+
+**Response**
+- **201 OK:** The job was successfully enqueued.
+- **500 Internal Server Error:** There was an error adding the job to the queue.
+
+## Worker Workflow
+The worker is responsible for polling the queue and processing the jobs. The worker can handle the jobs in either AWS SQS or BullMQ, based on the `queueProcessingMethod`.
+
+**Purpose:** Starts a worker that listens for and processes jobs from the queue.
+
+**Queue Initialization:** The worker initializes either the `SQSTask` or `BullMQTask` class based on the `queueProcessingMethod`.
+
+#### Continuous Job Listening and Processing:
+
+1. **Start Worker:** When the worker is started, it begins an infinite loop to continuously listen for new jobs from the specified queue.
+
+2. **Queue Polling:** The worker continuously polls the queue for available jobs at regular intervals.
+
+3. **Job Availability Check:** If a job is available in the queue:
+- The worker retrieves the job.
+- Processes the job using the corresponding task class method (either `SQSTask` for AWS SQS or `BullMQTask` for BullMQ).
+
+4. **Job Processing:** The worker executes the job processing logic. Depending on the outcome, the job is either marked as completed or logged as failed.
+
+5. **Repeat:** After processing a job, the worker continues to listen for more jobs, repeating the process.
+
+## AWS SQS Setup
+
 
 To set up AWS SQS in your application, you will need to copy the following credentials from your AWS account:
 
