@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const swaggerOptions = {
   customCss: "",
-  customJs: "/custom.js",
+  customJs: "/customUi.js",
   customSiteTitle: "Microservices Boilerplate API Docs",
 };
 
