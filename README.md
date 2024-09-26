@@ -7,7 +7,7 @@
   - [Setup Application](#setup-application)
   - [Application Queue Processing](#application-queue-processing)
   - [AWS SQS Setup](#aws-sqs-setup)
-  - [Swagger OpenAPI Docs Credentials](#swagger-openapi-docs-credentials)
+  - [Swagger OpenAPI Documentation Access](#swagger-openapi-documentation-access)
   - [Start the Server](#start-the-server)
 - [Features](#features)
 - [Introduction](#introduction)
