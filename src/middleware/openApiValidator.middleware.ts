@@ -1,6 +1,6 @@
 import * as OpenApiValidator from "express-openapi-validator";
 
-import { openApiSpecPath } from "../utils/swaggerUiInstance";
+import { openApiSpecPath } from "../utils/utils.swagger";
 
 export const openApiValidator = OpenApiValidator.middleware({
   apiSpec: openApiSpecPath,

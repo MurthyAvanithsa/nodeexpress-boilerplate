@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Session } from 'express-session';
 
 import config from '../config';
-import { getAccessToken } from '../utils/getAccessToken';
+import { getAccessToken } from '../utils/utils.auth';
 import { logger } from '../logger/log';
 
 interface customSession extends Session {

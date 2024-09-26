@@ -15,9 +15,9 @@ import { handleLogin, handleLogout, redirectToAuthorizationUrl, setSessionVariab
 import { checkRolesAndPermissions } from './middleware/rbac.middleware';
 import { openApiValidator } from './middleware/openApiValidator.middleware';
 import bullBoardUI from './middleware/bullBoard.middleware';
-import appRouter from "./utils/registerRoutes";
+import appRouter from "./utils/utils.routes";
 import { prismaConnection } from './connections';
-import { swaggerUiInstance } from './utils/swaggerUiInstance';
+import { swaggerUiInstance } from './utils/utils.swagger';
 
 export const app = express();
 
