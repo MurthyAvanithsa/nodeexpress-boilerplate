@@ -7,6 +7,7 @@
   - [Setup Application](#setup-application)
   - [Application Queue Processing](#application-queue-processing)
   - [AWS SQS Setup](#aws-sqs-setup)
+  - [Swagger OpenAPI Docs Credentials](#swagger-openapi-docs-credentials)
   - [Start the Server](#start-the-server)
 - [Features](#features)
 - [Introduction](#introduction)
@@ -246,6 +247,48 @@ To set up AWS SQS in your application, you will need to copy the following crede
 **Key Points:**
 - This method allows you to directly copy ***environment setup variables*** for AWS services, helping with abstraction.
 - By exporting these variables, you can use them securely without embedding credentials in your source code.
+
+## Swagger OpenAPI Documentation Access
+
+### Default API Credentials
+
+For accessing the default DSP API (Viewer Role), use the following credentials:
+
+- **Username**: 
+```
+sample_user@gmail.com
+```
+- **Password**: 
+```
+]fEx6i032K£[
+```
+
+### Steps to Sign In to Swagger OpenAPI Docs
+
+1. **Access the Swagger OpenAPI Documentation**  
+   Navigate to your API’s Swagger OpenAPI Docs. This is usually located at the root URL of your API, for example:`http://localhost:3000/`
+
+2. **Locate the Credentials Section**  
+   Within the Swagger OpenAPI Docs, find the credentials section. This may be indicated by a **Login** button or a similar prompt.
+
+3. **Open the Login Form**  
+   Click the login button to open the login form.  
+   Enter the credentials you copied earlier:
+
+   - **Username**: `********`
+   - **Password**: `********`
+
+4. **Access the API Documentation**  
+   After successfully logging in, you will be redirected to the Swagger documentation, where you can explore the available API endpoints and their details.
+
+### Key Points
+
+- **Secure API Exposure**: The Swagger OpenAPI Docs provide a secure method for exposing API credentials.
+  
+- **Useful for Security Setup**: This login method is particularly beneficial for APIs that utilize Swagger for both documentation and security configuration.
+
+- **Viewer Role Access**: The provided credentials grant viewer access, allowing you to explore the API without making modifications.
+
 
 ## **Start the Server**:
 To run the application with default port, use the following command:
