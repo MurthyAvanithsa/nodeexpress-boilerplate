@@ -6,7 +6,7 @@ import { logger } from '../logger/log';
 import config from '../config';
 import { createJobQueue, updateJobQueueResults } from "../repos/repos.queue";
 import { Job, postMessageResponse } from "../types/types.queue";
-import getQueueUrl from '../utils/sqsHelper';
+import getQueueUrl from '../utils/utils.worker';
 
 export class SQSTask {
   private sqsClient: SQSClient;
@@ -103,6 +103,3 @@ export class SQSTask {
     worker.start();
   }
 }
-
-export default SQSTask;
-
