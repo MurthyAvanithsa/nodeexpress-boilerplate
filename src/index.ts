@@ -30,4 +30,8 @@ program
     startWorker();
   });
 
+  program.command("*").action(() => {
+    console.log("Command or option not found");
+  })
+
 program.parse(process.argv);
