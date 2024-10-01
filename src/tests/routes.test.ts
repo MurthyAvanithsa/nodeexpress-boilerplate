@@ -1,8 +1,14 @@
 import request from "supertest";
 
 import { app } from "../app";
+import { getAccessToken } from "../utils/getAccessToken";
+import config from "../config";
 
-const authToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g";
+let authToken: string;
+beforeAll(async () => {
+    authToken = await getAccessToken('refresh_token', config.oidc.refreshToken);
+    authToken = `Bearer ${authToken}`;
+}, 10000);
 
 describe("Test the feed routes", () => {
     let feedId: string;
@@ -11,7 +17,7 @@ describe("Test the feed routes", () => {
         const newFeed = {
             path: "dojo-pbr/",
             name: "dsp",
-            config: {"assetFilters": [], "playlistFilters": []},
+            config: { "assetFilters": [], "playlistFilters": [] },
             queryParams: []
         };
         const response = await request(app)
@@ -57,7 +63,7 @@ describe("Test the feed routes", () => {
         const updateFeed = {
             path: "dojo-pbr/",
             name: "dsp",
-            config: {"assetFilters": [], "playlistFilters": []},
+            config: { "assetFilters": [], "playlistFilters": [] },
             queryParams: []
         };
         const response = await request(app)
@@ -82,38 +88,38 @@ describe("Test the feed routes", () => {
     });
 
     // let feedId = "cm0unzfea0000yf10u8eohrti"
-    it("should return error for fetching all feeds with invalid token", async() =>{
+    it("should return error for fetching all feeds with invalid token", async () => {
         const response = await request(app)
-        .get('/feed')
-        .set("Authorization", "Bearer 345678dfghjo");
+            .get('/feed')
+            .set("Authorization", "Bearer 345678dfghjo");
         expect(response.status).toBe(401);
     });
 
-    it("should return error for creating a new feed with invalid token", async() =>{
+    it("should return error for creating a new feed with invalid token", async () => {
         const createFeed = {
             path: "dojo-pbr/tbn",
             name: "dsp",
-            config: {"assetFilters": [], "playlistFilters": []},
+            config: { "assetFilters": [], "playlistFilters": [] },
             queryParams: []
-            };
-            const response = await request(app)
+        };
+        const response = await request(app)
             .post('/feed')
             .set("Authorization", "Bearer 342r3f3wrrfc3333dd")
             .send(createFeed);
-            expect(response.status).toBe(401);
+        expect(response.status).toBe(401);
     });
 
-    it("should return validation error for creating a feed with missing required fields", async() =>{
+    it("should return validation error for creating a feed with missing required fields", async () => {
         const createFeed = {
             path: "dojo-pbr/tbn",
-            config: {"assetFilters": [], "playlistFilters": []},
+            config: { "assetFilters": [], "playlistFilters": [] },
             queryParams: []
-            };
-            const response = await request(app)
+        };
+        const response = await request(app)
             .post('/feed')
             .set("Authorization", authToken)
             .send(createFeed);
-            expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
     });
 
     it("should return error for fetching a specific feed with an invalid invalid token ", async () => {
@@ -166,10 +172,10 @@ describe("Test the feed routes", () => {
         expect(response.status).toBe(404);
     });
 
-    it("Should return error for deleting a feed with an invalid token", async () =>{
+    it("Should return error for deleting a feed with an invalid token", async () => {
         const response = await request(app)
-        .delete(`/feed/${feedId}`)
-        .set("Authorization", "Bearer 56789yuio");
+            .delete(`/feed/${feedId}`)
+            .set("Authorization", "Bearer 56789yuio");
         expect(response.status).toBe(401);
     });
 
@@ -236,12 +242,12 @@ describe("Test the filter routes", () => {
 
     it("Should update a filterby ID using '/filter/:id'", async () => {
         const updateFilter = {
-                name: "FILTER_GEO_LOCATION",
-                description: "This filter is to authenticate user",
-                type: "assetFilter",
-                code: "",
-                filterParams: [{ name: "value", type: "string", required: true }]
-            };
+            name: "FILTER_GEO_LOCATION",
+            description: "This filter is to authenticate user",
+            type: "assetFilter",
+            code: "",
+            filterParams: [{ name: "value", type: "string", required: true }]
+        };
         const response = await request(app)
             .put(`/filter/${filterId}`)
             .set("Authorization", authToken)
@@ -263,41 +269,41 @@ describe("Test the filter routes", () => {
         expect(response.status).toBe(204);
     });
 
-    it("Should return error for fetching all filters with invalid token", async() =>{
+    it("Should return error for fetching all filters with invalid token", async () => {
         const response = await request(app)
-        .get('/filter')
-        .set("Authorization", "Bearer 647382ghew");
+            .get('/filter')
+            .set("Authorization", "Bearer 647382ghew");
         expect(response.status).toBe(401);
     });
 
-    it("Should return error for creating a new filter with invalid token", async() =>{
+    it("Should return error for creating a new filter with invalid token", async () => {
         const createFilter = {
-                        name: "FILTER_GEO_LOCATION",
-                        description: "This filter is to authenticate user",
-                        type: "assetFilter",
-                        code: "",
-                        filterParams: [{ name: "value", type: "string", required: true }]
-                    }
-            const response = await request(app)
+            name: "FILTER_GEO_LOCATION",
+            description: "This filter is to authenticate user",
+            type: "assetFilter",
+            code: "",
+            filterParams: [{ name: "value", type: "string", required: true }]
+        }
+        const response = await request(app)
             .post('/filter')
             .set("Authorization", "Bearer 6574839gfjh")
             .send(createFilter);
-            expect(response.status).toBe(401);
+        expect(response.status).toBe(401);
     });
 
-    it("should return validation error for creating a filter with missing required fields", async() =>{
-        const createFilter ={
-                        name: "FILTER_GEO_LOCATION",
-                        description: "This filter is to authenticate user",
-                        type: "assetFilter",
-                        // code is missing
-                        filterParams: [{ name: "value", type: "string", required: true }]
-                    }
-            const response = await request(app)
+    it("should return validation error for creating a filter with missing required fields", async () => {
+        const createFilter = {
+            name: "FILTER_GEO_LOCATION",
+            description: "This filter is to authenticate user",
+            type: "assetFilter",
+            // code is missing
+            filterParams: [{ name: "value", type: "string", required: true }]
+        }
+        const response = await request(app)
             .post('/filter')
             .set("Authorization", authToken)
             .send(createFilter);
-            expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
     });
 
     it("Should return error for fetching a specific filter with an invalid token ", async () => {
@@ -319,12 +325,12 @@ describe("Test the filter routes", () => {
     it("Should return validation error for updating a filter with invalid token", async () => {
 
         const updateFilter = {
-                        name: "FILTER_SS",
-                        description: "This filter is to authenticate user",
-                        type: "assetFilter",
-                        code: "",
-                        filterParams: [{ name: "value", type: "string", required: true }]
-                    };
+            name: "FILTER_SS",
+            description: "This filter is to authenticate user",
+            type: "assetFilter",
+            code: "",
+            filterParams: [{ name: "value", type: "string", required: true }]
+        };
         const response = await request(app)
             .put(`/filter/${filterId}`)
             .set("Authorization", "Bearer 75843rekcjskf34")
@@ -334,12 +340,12 @@ describe("Test the filter routes", () => {
 
     it("Should return validation error for updating a filter with invalid data", async () => {
         const updateFilter = {
-                        name: "FILTER_GEO_LOCATION",
-                        description: "This filter is to authenticate user",
-                        // type is missing
-                        code: "",
-                        filterParams: [{ name: "value", type: "string", required: true }]
-                    }
+            name: "FILTER_GEO_LOCATION",
+            description: "This filter is to authenticate user",
+            // type is missing
+            code: "",
+            filterParams: [{ name: "value", type: "string", required: true }]
+        }
         const response = await request(app)
             .put(`/filter/${filterId}`)
             .set("Authorization", authToken)
@@ -355,10 +361,10 @@ describe("Test the filter routes", () => {
         expect(response.status).toBe(404);
     });
 
-    it("Should return error for deleting a filter with an invalid token", async () =>{
+    it("Should return error for deleting a filter with an invalid token", async () => {
         const response = await request(app)
-        .delete(`/filter/${filterId}`)
-        .set("Authorization", "Bearer 6473892uisoaksxe");
+            .delete(`/filter/${filterId}`)
+            .set("Authorization", "Bearer 6473892uisoaksxe");
         expect(response.status).toBe(401);
     });
 
@@ -370,21 +376,4 @@ describe("Test the filter routes", () => {
         expect(response.status).toBe(404);
     })
 
-
 });
-
-describe("Test the queue routes", () => {
-
-    it("Should create a new job", async() => {
-        const newJob = {
-                data: {
-                    msg: "Testing 7"
-                }
-            }
-        const response = await request(app)
-        .post("/job")
-        .send(newJob)
-
-        expect(response.status).toBe(201);
-    })
-})
