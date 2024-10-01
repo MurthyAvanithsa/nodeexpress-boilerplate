@@ -47,7 +47,8 @@ interface Config {
         tokenUrl: string,
         clientId: string,
         issuer: string,
-        redirectUri: string
+        redirectUri: string,
+        refreshToken: string
     },
     redis: {
         host: string,
@@ -86,7 +87,8 @@ const config: Config = {
         authorizeUrl: process.env.OIDC_AUTHORIZE_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/authorize",
         webKeySetUrl: process.env.OIDC_WEB_KEY_SET_URL || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/.well-known/jwks.json",
         issuer: process.env.OIDC_ISSUER || "https://dev-fulrxmb8tfh5ke8o.us.auth0.com/",
-        redirectUri: process.env.OIDC_REDIRECT_URL || "http://localhost:3000/api-docs/oauth2-redirect.html"
+        redirectUri: process.env.OIDC_REDIRECT_URL || "http://localhost:3000/api-docs/oauth2-redirect.html",
+        refreshToken: "85wxHiIHqWKg_aq9CoC9PpkGgKZUByqV1TYkCdNHfLYB0"
     },
     redis: {
         host: process.env.REDIS_HOST || "localhost",
