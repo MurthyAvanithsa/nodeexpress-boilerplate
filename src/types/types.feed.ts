@@ -32,13 +32,12 @@ export type GetFeedsResponse = {
     name: string;
     path: string;
   }[],
-  error?: string
 };
 
-export type GetFeedResponse = { data?: Feed, error?: string };
-export type PostFeedResponse = { data?: Feed, error?: string };
-export type UpdateFeedResponse = { data?: Feed, error?: string };
-export type DeleteFeedResponse = { data?: DeleteAndGetFeedRequest, error?: string };
+export type GetFeedResponse = { data?: Feed };
+export type PostFeedResponse = { data?: Feed };
+export type UpdateFeedResponse = { data?: Feed };
+export type DeleteFeedResponse = { data?: DeleteAndGetFeedRequest };
 
 // Request Bodies
 export type PostFeedRequestBody = UpdateAndCreateFeedRequest;

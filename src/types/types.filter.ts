@@ -19,7 +19,7 @@ type UpdateAndCreateFilterRequest = {
   name: string;
   type: string;
   description?: string;
-  code: string ;
+  code: string;
   filterParams: FilterParams[];
 };
 
@@ -41,10 +41,9 @@ export type GetAllFiltersResponse = {
     name: string;
     type: string;
   }[],
-  error?: string
 };
 
-export type GetFilterByIdResponse = { data?: Filter, error?: string };
-export type UpdateFilterResponse = { data?: Filter, error?: string };
-export type CreateFilterResponse = { data?: Filter, error?: string };
-export type DeleteFilterResponse = { data?: DeleteAndGetFilterRequest, error?: string };
+export type GetFilterByIdResponse = { data?: Filter };
+export type UpdateFilterResponse = { data?: Filter };
+export type CreateFilterResponse = { data?: Filter };
+export type DeleteFilterResponse = { data?: DeleteAndGetFilterRequest };
