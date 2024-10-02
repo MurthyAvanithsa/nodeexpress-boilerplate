@@ -96,10 +96,7 @@ async function updateJobQueueResults(
       });
       return { data: jobs };
     } catch (error: any) {
-      logger.error(`Error fetching jobs:${error}`);
-      return {
-        error: error.meta ? (error.meta.cause ? error.meta.cause : error) : error,
-      };
+      throw Error(error);
     }
   }
 

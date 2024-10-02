@@ -11,9 +11,6 @@ import * as filterRepo from "../repos/repos.filter";
 
 async function getFilters(): Promise<GetAllFiltersResponse> {
     const result = await filterRepo.getAllFilters();
-    if (result.error) {
-        return { error: result.error }
-    }
     return {
         data: result.data!.map(filter => ({
             id: filter.id,
@@ -25,9 +22,6 @@ async function getFilters(): Promise<GetAllFiltersResponse> {
 
 async function getFilterById(id: string): Promise<GetFilterByIdResponse> {
     const result = await filterRepo.getFilterById(id);
-    if (result.error) {
-        return { error: result.error };
-    }
     return { data: result.data! };
 }
 
@@ -39,9 +33,6 @@ async function createFilter(req: CreateFilterRequest): Promise<CreateFilterRespo
         filterParams: req.filterParams,
         code: req.code
     });
-    if (result.error) {
-        return { error: result.error }
-    }
     return { data: result.data! };
 }
 
@@ -53,17 +44,11 @@ async function updateFilter(id: string, updates: UpdateFilterRequest): Promise<U
         filterParams: updates.filterParams,
         code: updates.code || null
     });
-    if (result.error) {
-        return { error: result.error };
-    }
     return { data: result.data! };
 }
 
 async function deleteFilter(id: string): Promise<DeleteFilterResponse> {
-    const result = await filterRepo.deleteFilter(id);
-    if (result.error) {
-        return { error: result.error }
-    }
+    await filterRepo.deleteFilter(id);
     return { data: { id } };
 }
 

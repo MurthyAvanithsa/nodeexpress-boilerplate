@@ -10,34 +10,24 @@ type Result<T> = {
 };
 
 async function getAllFilters(): Promise<Result<Pick<filterModel, 'id' | 'name' | 'type'>[]>> {
-    try {
-        const filters = await prisma.filter.findMany({
-            select: {
-                id: true,
-                name: true,
-                type: true
-            }
-        });
-        return { data: filters };
-    } catch (error: any) {
-        logger.error(`Error fetching filters:${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
-    }
+    const filters = await prisma.filter.findMany({
+        select: {
+            id: true,
+            name: true,
+            type: true
+        }
+    });
+    return { data: filters };
 }
 
 async function getFilterById(filterId: string): Promise<Result<filterModel>> {
-    try {
-        const filter = await prisma.filter.findUnique({
-            where: { id: filterId }
-        });
-        if (!filter) {
-            return { error: `Filter with ID ${filterId} not found` };
-        }
-        return { data: filter };
-    } catch (error: any) {
-        logger.error(`Error fetching filter by ID: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
+    const filter = await prisma.filter.findUnique({
+        where: { id: filterId }
+    });
+    if (!filter) {
+        throw new Error(`Filter with ID ${filterId} not found`);
     }
+    return { data: filter };
 }
 
 async function createFilter(req: {
@@ -48,15 +38,10 @@ async function createFilter(req: {
     filterParams: FilterParams[];
     code?: string;
 }): Promise<Result<filterModel>> {
-    try {
-        const filter = await prisma.filter.create({
-            data: req
-        });
-        return { data: filter };
-    } catch (error: any) {
-        logger.error(`Error creating filter: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
-    }
+    const filter = await prisma.filter.create({
+        data: req
+    });
+    return { data: filter };
 }
 
 async function updateFilter(filterId: string, updates: {
@@ -66,16 +51,11 @@ async function updateFilter(filterId: string, updates: {
     filterParams?: FilterParams[];
     code?: string | null;
 }): Promise<Result<filterModel>> {
-    try {
-        const filter = await prisma.filter.update({
-            where: { id: filterId },
-            data: updates
-        });
-        return { data: filter };
-    } catch (error: any) {
-        logger.error(`Error updating filter: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
-    }
+    const filter = await prisma.filter.update({
+        where: { id: filterId },
+        data: updates
+    });
+    return { data: filter };
 }
 
 async function deleteFilter(filterId: string): Promise<Result<null>> {
@@ -86,7 +66,7 @@ async function deleteFilter(filterId: string): Promise<Result<null>> {
         return { data: null };
     } catch (error: any) {
         logger.error(`Error deleting filter: ${error}`);
-        return { error: error.meta ? error.meta.cause ? error.meta.cause: error : error };
+        return { error: error.meta ? error.meta.cause ? error.meta.cause : error : error };
     }
 }
 
