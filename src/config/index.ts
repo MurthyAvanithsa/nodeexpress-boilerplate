@@ -96,7 +96,7 @@ const config: Config = {
     },
     queue: {
         name: process.env.QUEUE_NAME || "",
-        queueProcessingMethod: "aws-sqs"
+        queueProcessingMethod: "bullmq"
     }
 }
 
