@@ -16,6 +16,7 @@
 - [JWT Middleware](#jwt-middleware)
 - [Docker Setup](#docker-setup)
 - [Roles and Permissions Middleware](#roles-and-permissions-middleware)
+- [Integration Test](#integration-test)
 
 # Quick Start
 
@@ -717,3 +718,27 @@ This middleware will run before protected routes and ensure that only users with
 
 If a user tries to access a resource they don't have permissions for:
 - They receive a 403 Forbidden response with a message: "Forbidden - You do not have the necessary permissions.
+
+
+## Integration Test
+  
+  **Jest**- Testing framework
+  - Jest is a versatile testing framework that simplifies the process of writing and running tests for JavaScript applications. Its features and capabilities make it a valuable tool for developers looking to ensure code quality and reliability.
+
+  **Test Command**
+  ```
+  yarn jest
+  ```
+
+### repos-test
+  - This test suite evaluates the repository functions related to filters and feeds. It covers the creation, retrieval, updating, and deletion of both filters and feeds.
+  ```
+  yarn jest src/tests/repo.test.ts
+  ``` 
+
+### ruotes-test
+  - This suite contains test cases for the API routes of feeds and filters, ensuring that each endpoint functions as expected and meets the defined requirements.
+  - The `beforeAll` block is used to fetch an access token that will be used for authentication in the tests. This ensures that all subsequent requests have valid authorization.
+  ```
+  yarn jest src/tests/routes.test.ts
+  ```
