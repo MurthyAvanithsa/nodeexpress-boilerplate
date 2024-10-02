@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { getFilters, getFilterById, createFilter, updateFilter, deleteFilter } from '../services/services.filter';
 import { UpdateFilterRequest,
@@ -13,39 +13,54 @@ import { UpdateFilterRequest,
     GetFilterByIdRequest } from "../types/types.filter"
 const filterRouter = Router();
 
-filterRouter.get("/filter/", async (req: Request, res: Response)=> {
-    const response: GetAllFiltersResponse = await getFilters();
-    const responseCode = response.error ? 500 : 200;
-    res.status(responseCode).json(response);
+filterRouter.get("/filter/", async (req: Request, res: Response, next: NextFunction)=> {
+    try {
+        const response: GetAllFiltersResponse = await getFilters();
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
-filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFilterByIdResponse>, res: Response<GetFilterByIdResponse | { error: string }>) => {
-    const filterId = req.params.id;
-    const response: GetFilterByIdResponse = await getFilterById(filterId);
-    const responseCode = !response.data ? response.error === `Filter with ID ${filterId} not found` ? 404: 500 : 200;
-    res.status(responseCode).json(response);
+filterRouter.get("/filter/:id", async (req: Request<GetFilterByIdRequest, GetFilterByIdResponse>, res: Response<GetFilterByIdResponse | { error: string }>, next: NextFunction) => {
+    try {
+        const filterId = req.params.id;
+        const response: GetFilterByIdResponse = await getFilterById(filterId);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
-filterRouter.post("/filter/", async (req: Request<unknown, CreateFilterResponse, CreateFilterRequest>, res: Response)=> {
-    const filter: CreateFilterRequest = req.body;
-    const response: CreateFilterResponse = await createFilter(filter);
-    const responseCode = response.data ? 201: 500;
-    res.status(responseCode).json(response);
+filterRouter.post("/filter/", async (req: Request<unknown, CreateFilterResponse, CreateFilterRequest>, res: Response, next: NextFunction)=> {
+    try {
+        const filter: CreateFilterRequest = req.body;
+        const response: CreateFilterResponse = await createFilter(filter);
+        res.status(201).json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
-filterRouter.put("/filter/:id", async (req: Request<GetFilterByIdRequest, UpdateFilterResponse, UpdateFilterRequest>, res: Response)=> {
-    const filterId = req.params.id;
-    const filter: UpdateFilterRequest = req.body;
-    const response: UpdateFilterResponse = await updateFilter(filterId, filter);
-    const responseCode = response.data? 200 : 500;
-    res.status(responseCode).json(response);
+filterRouter.put("/filter/:id", async (req: Request<GetFilterByIdRequest, UpdateFilterResponse, UpdateFilterRequest>, res: Response, next: NextFunction)=> {
+    try {
+        const filterId = req.params.id;
+        const filter: UpdateFilterRequest = req.body;
+        const response: UpdateFilterResponse = await updateFilter(filterId, filter);
+        res.status(200).json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
-filterRouter.delete("/filter/:id", async (req: Request<DeleteFilterRequest, DeleteFilterResponse, DeleteFilterRequest>, res: Response)=> {
-    const filterId = req.params.id;
-    const response: DeleteFilterResponse = await deleteFilter(filterId);
-    const responseCode = response.data? 204 : 500;
-    res.status(responseCode).json(response);
+filterRouter.delete("/filter/:id", async (req: Request<DeleteFilterRequest, DeleteFilterResponse, DeleteFilterRequest>, res: Response, next: NextFunction)=> {
+    try {
+        const filterId = req.params.id;
+        const response: DeleteFilterResponse = await deleteFilter(filterId);
+        res.status(204).json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
 export default filterRouter;
