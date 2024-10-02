@@ -15,9 +15,11 @@ import { handleLogin, handleLogout, redirectToAuthorizationUrl, setSessionVariab
 import { checkRolesAndPermissions } from './middleware/rbac.middleware';
 import { openApiValidator } from './middleware/openApiValidator.middleware';
 import bullBoardUI from './middleware/bullBoard.middleware';
-import appRouter from "./utils/utils.routes";
 import { prismaConnection } from './connections';
 import { swaggerUiInstance } from './utils/utils.swagger';
+import filterRouter from './routes/routes.filter';
+import feedRouter from './routes/routes.feed';
+import queueRouter from './routes/routes.queue';
 
 export const app = express();
 
@@ -56,7 +58,9 @@ app.use(requestLogger); // Logs requested routes for monitoring
 app.use(openApiValidator); // Validates requests against the OpenAPI specification
 app.use(jwtAuthMiddleware); // Validates JWT tokens for authentication
 app.use(checkRolesAndPermissions); // Checks user roles and permissions for route access
-app.use(appRouter); // Registers application routes dynamically
+app.use(filterRouter);
+app.use(feedRouter);
+app.use(queueRouter);
 app.use(errorLogger); // Logs errors that occur during request processing
 
 export function startServer(options: { port: number }) {
