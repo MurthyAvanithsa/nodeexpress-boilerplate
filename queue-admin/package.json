@@ -10,6 +10,7 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "react": "^18.3.0",
     "react-admin": "^5.1.0",
     "react-dom": "^18.3.0"

@@ -1,11 +1,15 @@
 import { DataProvider, fetchUtils } from "react-admin";
 import { stringify } from "query-string";
 
+import { getAccessToken } from "./getAccessToken";
+
 const apiUrl = "http://localhost:3000";
 const httpClient = fetchUtils.fetchJson;
+let accessToken: string;
 
 export const dataProvider: DataProvider = {
-  getList: (resource, params) => {
+  getList: async (resource, params) => {
+    accessToken = await getAccessToken();
     const { page, perPage } = params.pagination;
     const { field, order } = params.sort;
     const query = {
@@ -14,17 +18,27 @@ export const dataProvider: DataProvider = {
       filter: JSON.stringify(params.filter),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    console.log(url);
-    return httpClient(url).then(({ headers, json }) => ({
+    const options = {
+      headers: new Headers({
+        Authorization: `Bearer ${accessToken}`,
+      }),
+    };
+    return httpClient(url, options).then(({ json }) => ({
       data: json.data,
       total: json.data.length || 10,
     }));
   },
 
-  getOne: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
+  getOne: async (resource, params) => {
+    const options = {
+      headers: new Headers({
+        Authorization: `Bearer ${accessToken}`,
+      }),
+    };
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, options).then(({ json }) => ({
       data: json.data,
-    })),
+    }));
+  },
 
   getMany: () => Promise.reject(new Error("Method not implemented")),
   getManyReference: () => Promise.reject(new Error("Method not implemented")),
