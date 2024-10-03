@@ -12,6 +12,7 @@ import {
     DeleteFeedRequest
 } from '../types/types.feed';
 import { getFeeds, createFeed, getFeedById, updateFeed, deleteFeed } from '../services/services.feed';
+import { logger } from '../logger/log';
 
 const feedRouter = Router();
 
@@ -39,8 +40,9 @@ feedRouter.get('/feed/:id', async (req: Request<GetFeedByIdRequest>, res: Respon
     try {
         const feedId = req.params.id;
         const response: GetFeedResponse = await getFeedById(feedId);
-        // const responseCode = !response.data ? response.error === `Feed with ID ${feedId} not found` ? 404: 500 : 200;
-        res.status(200).json(response);
+        const statusCode = 200;
+        logger.setContext('id', feedId);
+        res.status(statusCode).json(response);
     } catch (error) {
         next(error);
     }
