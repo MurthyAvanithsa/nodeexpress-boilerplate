@@ -1,3 +1,5 @@
+import path from 'path';
+
 import dotenv from 'dotenv';
 const awsConfig = {
     region: process.env.AWS_REGION || "",
@@ -57,7 +59,8 @@ interface Config {
     queue: {
         name: string,
         queueProcessingMethod: string
-    }
+    },
+    projectRoot: string
 }
 
 const config: Config = {
@@ -97,7 +100,8 @@ const config: Config = {
     queue: {
         name: process.env.QUEUE_NAME || "",
         queueProcessingMethod: "bullmq"
-    }
+    },
+    projectRoot: __dirname.split("\\").includes("src")? path.join(__dirname, "../") : __dirname
 }
 
 export default config;
