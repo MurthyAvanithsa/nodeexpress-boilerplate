@@ -1,0 +1,22 @@
+apps:
+  - name: server1
+    script: 'src/index.ts'
+    interpreter: 'ts-node'
+    args: 'server'
+    instances: 1
+    exec_mode: 'cluster'
+
+  - name: worker1
+    script: 'src/index.ts'
+    node_args: '-r ts-node'
+    interpreter: 'node'
+    args: 'worker'
+    instances: 1
+    exec_mode: 'cluster'
+
+  - name: queue-admin
+    script: 'queue-admin/server.mjs'
+    interpreter: 'node'
+    args: ''
+    instances: 1
+    exec_mode: 'cluster'
