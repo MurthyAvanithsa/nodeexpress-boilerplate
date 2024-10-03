@@ -16,7 +16,6 @@
 - [JWT Middleware](#jwt-middleware)
 - [Docker Setup](#docker-setup)
 - [Roles and Permissions Middleware](#roles-and-permissions-middleware)
-- [Integration Test](#integration-test)
 
 # Quick Start
 
@@ -616,18 +615,36 @@ src/
 
 ## JWT Middleware
 
-This module sets up JWT middleware using `express-jwt` to authenticate requests.
+### Overview
+
+This section outlines the JWT (JSON Web Token) middleware used for authenticating requests to our API's.
+
+### Middleware Functionality
+
+This middleware is responsible for validating incoming JWTs to ensure that:
+
+- The token is correctly signed.
+- The token is issued by a trusted source.
+- The token includes the expected audience and issuer.
+
+### Key Components
+
+1. **Key Management**: Utilizes a JWKS (JSON Web Key Set) for retrieving public keys used to verify JWT signatures.
+2. **Audience and Issuer Validation**: Checks that the token's audience and issuer match expected values to ensure proper access control.
 
 ### Configuration
 
-- **`secret`**: The secret key used to validate the JWT. In this example, it is set to `'jwt-secret'`.
-- **`algorithms`**: The algorithms allowed for the JWT. In this example, it is set to `['HS256']`.
+The middleware relies on specific configuration settings which are specified in config file:
+
+- **webKeySetUrl**: URL for retrieving public keys necessary for signature verification.
+- **audience**: Expected audience claim for the JWT.
+- **issuer**: Expected issuer claim for the JWT.
 
 ### Usage
 
-#### Token:
+#### Sample Token:
 ```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjQ5MjI2NjIsImV4cCI6MTc1NjQ1ODY2MiwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSJ9.Q5u9b0IsPCdab9w0i5Nk1ns1U3GZG2_XhXOKuo-0p0g
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InRXYVJfU2h5cElJUEF1TnlkUEhmYiJ9.eyJodHRwOi8vZ3JvdXAiOiJncnBfdmlld2VyIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZnVscnhtYjh0Zmg1a2U4by51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDQ4MDU1MDQ1MTM5MDcyNDE3MTEiLCJhdWQiOiJodHRwczovL2Rldi1mdWxyeG1iOHRmaDVrZThvLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNzI3MzU3Mjg2LCJleHAiOjE3Mjc0NDM2ODYsImF6cCI6IlBuRWl0SXF5RTM0SkROZVVaaUliWTQyeldJa1ZyaWxMIn0.eMQrXL4GH4j8fh_v5vBhAzfn4DjXP3ByU4dEGG_2kRLkJc4R-mzseg1MflZNJaND0XrG8jeMhqmpCzRxWWZDw0u80Z0cVNXAaVNOLLfBqk-2gjBULWy3n0AwwjklIG7FAqbZzPTA6UD6DhC1ZXmshSJU71uNPFUJlOdAUTVuFDkNDpqCh4o9sMacDu5WWoFkvpN814TXaKjsnjEbg0PeQlob9qz8HvCLQm8Xm1h8fT0XbCZBPNtaF1n97L43f0iizbdYIEaeRddQ22b7au47MNNNEnuRxZSW21jeNnF3dJ6CsKsr4vjkFXmXqCuU9BZlBZW8h6zBvWJ2RtCMW2oeEg
 ```
 
 To use this token, include it in the `headers` section of your request as follows:
@@ -636,13 +653,9 @@ To use this token, include it in the `headers` section of your request as follow
 Authorization: Bearer <your-token>
 ```
 
-Replace <your-token> with the actual JWT token provided above. Ensure to use this token for authenticated requests to all routes except /api-docs and /bull-board/ui.
+Replace <your-token> with the actual JWT token provided above. Ensure to use this token for authenticated requests to routes which can be accessed by viewer's group.
 
-```
-In this format:
-- The `Authorization` header example is provided in a `javascript` code block.
-- The actual JWT token is included directly in the `Authorization` header for clarity and ease of copying.
-```
+To know more about groups and their permissions of our application, please refer to the [Roles and Permissions](#roles-and-permissions-middleware)
 
 # Docker Setup
 
@@ -718,27 +731,3 @@ This middleware will run before protected routes and ensure that only users with
 
 If a user tries to access a resource they don't have permissions for:
 - They receive a 403 Forbidden response with a message: "Forbidden - You do not have the necessary permissions.
-
-
-## Integration Test
-  
-  **Jest**- Testing framework
-  - Jest is a versatile testing framework that simplifies the process of writing and running tests for JavaScript applications. Its features and capabilities make it a valuable tool for developers looking to ensure code quality and reliability.
-
-  **Test Command**
-  ```
-  yarn jest
-  ```
-
-### repos-test
-  - This test suite evaluates the repository functions related to filters and feeds. It covers the creation, retrieval, updating, and deletion of both filters and feeds.
-  ```
-  yarn jest src/tests/repo.test.ts
-  ``` 
-
-### ruotes-test
-  - This suite contains test cases for the API routes of feeds and filters, ensuring that each endpoint functions as expected and meets the defined requirements.
-  - The `beforeAll` block is used to fetch an access token that will be used for authentication in the tests. This ensures that all subsequent requests have valid authorization.
-  ```
-  yarn jest src/tests/routes.test.ts
-  ```
