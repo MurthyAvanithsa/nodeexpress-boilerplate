@@ -9,4 +9,5 @@ export default defineConfig({
   splitting: false,              // Disable code splitting (for libraries, enable if needed)
   minify: false,                 // Minify the output (set to true if needed)
   target: 'es2016',              // Target JavaScript version
+  outDir: 'dist/src/'
 });
