@@ -25,7 +25,7 @@ export const handleLogin = async (req: Request, res: Response) => {
   const code = req.query.code as string;
   const token = await getAccessToken('authorization_code', code);
   (req.session as customSession).token = `Bearer ${token}`;
-  res.redirect(`http://${config.app.host}:${config.app.port}/api-docs`);
+  res.redirect(`http://localhost:${config.app.port}/api-docs`);
 };
 
 export const handleLogout = async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ export const handleLogout = async (req: Request, res: Response) => {
       logger.error(err);
     }
   });
-  res.redirect(`http://${config.app.host}:${config.app.port}/api-docs`);
+  res.redirect(`http://localhost:${config.app.port}/api-docs`);
 };
 
 export const setSessionVariable = (req: Request, res: Response, next: NextFunction) => {

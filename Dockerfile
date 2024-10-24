@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 3000
 
 # Build the app (skip the setup if needed)
-RUN yarn build
+# RUN yarn build
 
 # Stage 2: Runtime
 FROM node:18-alpine

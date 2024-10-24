@@ -675,9 +675,6 @@ components:
             type: object
           title: GetFeedsResponse.data
           type: array
-        error:
-          title: GetFeedsResponse.error
-          type: string
       additionalProperties: false
       title: GetFeedsResponse
       type: object
@@ -686,9 +683,6 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: GetFeedResponse.data
-        error:
-          title: GetFeedResponse.error
-          type: string
       additionalProperties: false
       title: GetFeedResponse
       type: object
@@ -697,9 +691,6 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: PostFeedResponse.data
-        error:
-          title: PostFeedResponse.error
-          type: string
       additionalProperties: false
       title: PostFeedResponse
       type: object
@@ -708,9 +699,6 @@ components:
         data:
           $ref: '#/components/schemas/Feed'
           title: UpdateFeedResponse.data
-        error:
-          title: UpdateFeedResponse.error
-          type: string
       additionalProperties: false
       title: UpdateFeedResponse
       type: object
@@ -719,9 +707,6 @@ components:
         data:
           $ref: '#/components/schemas/DeleteAndGetFeedRequest'
           title: DeleteFeedResponse.data
-        error:
-          title: DeleteFeedResponse.error
-          type: string
       additionalProperties: false
       title: DeleteFeedResponse
       type: object
@@ -856,9 +841,6 @@ components:
             type: object
           title: GetAllFiltersResponse.data
           type: array
-        error:
-          title: GetAllFiltersResponse.error
-          type: string
       additionalProperties: false
       title: GetAllFiltersResponse
       type: object
@@ -867,9 +849,6 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: GetFilterByIdResponse.data
-        error:
-          title: GetFilterByIdResponse.error
-          type: string
       additionalProperties: false
       title: GetFilterByIdResponse
       type: object
@@ -878,9 +857,6 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: UpdateFilterResponse.data
-        error:
-          title: UpdateFilterResponse.error
-          type: string
       additionalProperties: false
       title: UpdateFilterResponse
       type: object
@@ -889,9 +865,6 @@ components:
         data:
           $ref: '#/components/schemas/Filter'
           title: CreateFilterResponse.data
-        error:
-          title: CreateFilterResponse.error
-          type: string
       additionalProperties: false
       title: CreateFilterResponse
       type: object
@@ -900,9 +873,6 @@ components:
         data:
           $ref: '#/components/schemas/DeleteAndGetFilterRequest'
           title: DeleteFilterResponse.data
-        error:
-          title: DeleteFilterResponse.error
-          type: string
       additionalProperties: false
       title: DeleteFilterResponse
       type: object

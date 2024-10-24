@@ -25,6 +25,18 @@ services:
     command: /bin/sh -c "while ! nc -z postgres 5432; do sleep 1; done;"
     networks:
       - backend
+  redis:
+    image: 'redis:latest'
+    hostname: redis
+    container_name: redis
+    environment:
+      REDIS_HOST: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
 
   app:
     hostname: app
@@ -54,6 +66,7 @@ services:
 volumes:
   pgdata:
   appdata:
+  redis-data:
 
 networks:
   backend:

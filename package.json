@@ -8,7 +8,7 @@
     "start": "yarn ts-node-dev --respawn --watch ./.env,./.env.*,./src/swagger,./config ./src/index.ts",
     "build": "yarn tsup && yarn copy-files",
     "queue-admin-build": "cd queue-admin && yarn build",
-    "copy-files": "copyfiles -u 1 \"src/swagger/swagger.yaml\" \"dist\" && copyfiles -u 1 \"src/public/customUi.js\" \"dist\\src",
+    "copy-files": "copyfiles -u 1 \"src/swagger/swagger.yaml\" \"dist\" && copyfiles -u 1 \"src/public/customUi.js\" \"dist\\src\"",
     "test-repo": "yarn jest src/tests/repo.test.ts",
     "test-routes": "yarn jest src/tests/routes.test.ts",
     "generate-openapi-schemas": "yarn typeconv -f ts -t oapi -o src/swagger/schemas src/types/*.ts",
