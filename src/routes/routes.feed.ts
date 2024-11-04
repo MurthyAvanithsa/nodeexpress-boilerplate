@@ -14,7 +14,7 @@ import {
 import { getFeeds, createFeed, getFeedById, updateFeed, deleteFeed } from '../services/services.feed';
 import { logger } from '../logger/log';
 
-const feedRouter = Router();
+const feedRouter: Router = Router();
 
 feedRouter.get('/feed', async (req: Request, res: Response<GetFeedsResponse>, next: NextFunction) => {
     try {

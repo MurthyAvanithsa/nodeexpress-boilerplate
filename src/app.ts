@@ -21,7 +21,7 @@ import filterRouter from './routes/routes.filter';
 import feedRouter from './routes/routes.feed';
 import queueRouter from './routes/routes.queue';
 
-export const app = express();
+export const app: express.Express = express();
 
 app.use(session({
   secret: 'Microservices Boilerplate',
@@ -31,6 +31,8 @@ app.use(session({
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, './public')));
+console.log(path.join(__dirname, './public'));
+console.log(express.static(path.join(__dirname, './public')));
 
 bodyParserXml(bodyParser);
 app.use(bodyParser.xml({

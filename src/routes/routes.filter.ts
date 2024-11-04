@@ -11,7 +11,7 @@ import { UpdateFilterRequest,
     GetAllFiltersResponse,
     GetFilterByIdResponse,
     GetFilterByIdRequest } from "../types/types.filter"
-const filterRouter = Router();
+const filterRouter: Router = Router();
 
 filterRouter.get("/filter/", async (req: Request, res: Response, next: NextFunction)=> {
     try {

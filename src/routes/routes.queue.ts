@@ -7,7 +7,7 @@ import config from '../config';
 import { getAllJobsRequest, getAllJobsResponse, getJobByIdResponse, Job } from '../types/types.queue';
 import { logger } from '../logger/log';
 
-const queueRouter = Router();
+const queueRouter: Router = Router();
 
 queueRouter.post('/job', async (req: Request<unknown, unknown, Job>, res: Response) => {
     const jobType = req.headers["content-type"];

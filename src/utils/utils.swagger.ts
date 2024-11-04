@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 
+import express from "express";
 import swaggerUi from 'swagger-ui-express';
 import * as yaml from 'js-yaml';
 
@@ -23,6 +24,7 @@ function readYamlFile(filePath: string): OpenApiDocument {
     throw e;
   }
 }
+
 export const generateOpenApiSpec = (): boolean => {
   try {
     const routesYaml = readYamlFile('./src/swagger/routes.yaml');
@@ -45,12 +47,12 @@ export const generateOpenApiSpec = (): boolean => {
     fs.writeFileSync('./src/swagger/swagger.yaml', swaggerYaml);
     return true;
   } catch (error) {
-    logger.error(`Failed to generate openAPI spec: ${error}`)
+    logger.error(`Failed to generate openAPI spec: ${error}`);
     return false;
   }
-}
+};
 
-function generateSwaggerUiInstance(openApiSpecPath: string) {
+function generateSwaggerUiInstance(openApiSpecPath: string): express.RequestHandler {
   const swaggerDocument = readYamlFile(openApiSpecPath);
   const swaggerOptions = {
     customJs: "/customUi.js",
@@ -58,5 +60,6 @@ function generateSwaggerUiInstance(openApiSpecPath: string) {
   };
   return swaggerUi.setup(swaggerDocument, swaggerOptions);
 }
+
 export const openApiSpecPath: string = path.join(__dirname, "../swagger/swagger.yaml");
-export const swaggerUiInstance = generateSwaggerUiInstance(openApiSpecPath);
+export const swaggerUiInstance: express.RequestHandler = generateSwaggerUiInstance(openApiSpecPath);
