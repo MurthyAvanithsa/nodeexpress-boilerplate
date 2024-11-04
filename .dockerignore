@@ -1,0 +1,23 @@
+# Dependencies
+node_modules
+
+# Ignore the dist directory
+dist
+
+# Ignore app.log file
+src/logger/app.log
+
+# Ignore swagger schemas
+src/swagger/schemas/types.feed.yaml
+src/swagger/schemas/types.filter.yaml
+src/swagger/schemas/types.queue.yaml
+
+# ignore package-lock.json
+package-lock.json
+
+# ignore .env file
+src/prisma/.env
+
+# yarn.lock file is automatically generated and used to lock the versions of dependencies in a project, ensuring consistent installs across different environments.
+yarn.lock
+
